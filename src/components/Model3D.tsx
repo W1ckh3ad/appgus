@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect } from 'react';
-import { Statue } from '../App';
-import { Move, RotateCw } from 'lucide-react';
+import { Move, RotateCw } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Statue } from "../App";
 
 type Model3DProps = {
   statue: Statue;
@@ -16,22 +16,22 @@ export function Model3D({ statue, darkMode }: Model3DProps) {
 
   const handleMouseDown = (e: React.MouseEvent | React.TouchEvent) => {
     setIsDragging(true);
-    const pos = 'touches' in e ? e.touches[0] : e;
+    const pos = "touches" in e ? e.touches[0] : e;
     lastPos.current = { x: pos.clientX, y: pos.clientY };
   };
 
   const handleMouseMove = (e: React.MouseEvent | React.TouchEvent) => {
     if (!isDragging) return;
-    
-    const pos = 'touches' in e ? e.touches[0] : e;
+
+    const pos = "touches" in e ? e.touches[0] : e;
     const deltaX = pos.clientX - lastPos.current.x;
     const deltaY = pos.clientY - lastPos.current.y;
-    
-    setRotation(prev => ({
+
+    setRotation((prev) => ({
       x: prev.x + deltaY * 0.5,
-      y: prev.y + deltaX * 0.5
+      y: prev.y + deltaX * 0.5,
     }));
-    
+
     lastPos.current = { x: pos.clientX, y: pos.clientY };
   };
 
@@ -41,22 +41,22 @@ export function Model3D({ statue, darkMode }: Model3DProps) {
 
   useEffect(() => {
     const handleGlobalMouseUp = () => setIsDragging(false);
-    window.addEventListener('mouseup', handleGlobalMouseUp);
-    window.addEventListener('touchend', handleGlobalMouseUp);
+    window.addEventListener("mouseup", handleGlobalMouseUp);
+    window.addEventListener("touchend", handleGlobalMouseUp);
     return () => {
-      window.removeEventListener('mouseup', handleGlobalMouseUp);
-      window.removeEventListener('touchend', handleGlobalMouseUp);
+      window.removeEventListener("mouseup", handleGlobalMouseUp);
+      window.removeEventListener("touchend", handleGlobalMouseUp);
     };
   }, []);
 
   const handleWheel = (e: React.WheelEvent) => {
     e.preventDefault();
-    setScale(prev => Math.max(0.5, Math.min(2, prev - e.deltaY * 0.001)));
+    setScale((prev) => Math.max(0.5, Math.min(2, prev - e.deltaY * 0.001)));
   };
 
   const getStatueModel = () => {
     switch (statue.id) {
-      case 'david':
+      case "david":
         return (
           <div className="statue-model">
             {/* Head */}
@@ -76,7 +76,7 @@ export function Model3D({ statue, darkMode }: Model3DProps) {
             <div className="absolute bottom-[5%] left-1/2 -translate-x-1/2 w-32 h-12 bg-gradient-to-br from-neutral-300 to-neutral-400 rounded-lg shadow-2xl" />
           </div>
         );
-      case 'venus':
+      case "venus":
         return (
           <div className="statue-model">
             {/* Head */}
@@ -93,7 +93,7 @@ export function Model3D({ statue, darkMode }: Model3DProps) {
             <div className="absolute bottom-[5%] left-1/2 -translate-x-1/2 w-36 h-10 bg-gradient-to-br from-neutral-300 to-neutral-400 rounded-lg shadow-2xl" />
           </div>
         );
-      case 'thinker':
+      case "thinker":
         return (
           <div className="statue-model">
             {/* Head (leaning) */}
@@ -106,10 +106,15 @@ export function Model3D({ statue, darkMode }: Model3DProps) {
             <div className="absolute top-[60%] left-[40%] w-12 h-20 bg-gradient-to-br from-amber-700 to-amber-800 rounded-full shadow-lg" />
             <div className="absolute top-[60%] left-[52%] w-12 h-20 bg-gradient-to-br from-amber-700 to-amber-800 rounded-full shadow-lg" />
             {/* Rock Base */}
-            <div className="absolute bottom-[8%] left-1/2 -translate-x-1/2 w-40 h-16 bg-gradient-to-br from-stone-500 to-stone-600 shadow-2xl transform skew-x-2" style={{ clipPath: 'polygon(10% 0%, 90% 0%, 100% 100%, 0% 100%)' }} />
+            <div
+              className="absolute bottom-[8%] left-1/2 -translate-x-1/2 w-40 h-16 bg-gradient-to-br from-stone-500 to-stone-600 shadow-2xl transform skew-x-2"
+              style={{
+                clipPath: "polygon(10% 0%, 90% 0%, 100% 100%, 0% 100%)",
+              }}
+            />
           </div>
         );
-      case 'winged-victory':
+      case "winged-victory":
         return (
           <div className="statue-model">
             {/* Head area (missing in original) */}
@@ -117,13 +122,33 @@ export function Model3D({ statue, darkMode }: Model3DProps) {
             {/* Torso */}
             <div className="absolute top-[22%] left-1/2 -translate-x-1/2 w-20 h-28 bg-gradient-to-br from-stone-200 to-stone-300 shadow-xl" />
             {/* Flowing Dress */}
-            <div className="absolute top-[48%] left-1/2 -translate-x-1/2 w-24 h-32 bg-gradient-to-br from-stone-100 to-stone-200 shadow-lg transform rotate-2" style={{ clipPath: 'polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%)' }} />
+            <div
+              className="absolute top-[48%] left-1/2 -translate-x-1/2 w-24 h-32 bg-gradient-to-br from-stone-100 to-stone-200 shadow-lg transform rotate-2"
+              style={{
+                clipPath: "polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%)",
+              }}
+            />
             {/* Left Wing */}
-            <div className="absolute top-[25%] left-[20%] w-24 h-36 bg-gradient-to-br from-slate-50 to-slate-200 shadow-2xl transform -rotate-12 origin-right" style={{ clipPath: 'polygon(0% 20%, 100% 0%, 100% 80%, 0% 100%)' }} />
+            <div
+              className="absolute top-[25%] left-[20%] w-24 h-36 bg-gradient-to-br from-slate-50 to-slate-200 shadow-2xl transform -rotate-12 origin-right"
+              style={{
+                clipPath: "polygon(0% 20%, 100% 0%, 100% 80%, 0% 100%)",
+              }}
+            />
             {/* Right Wing */}
-            <div className="absolute top-[25%] right-[20%] w-24 h-36 bg-gradient-to-br from-slate-50 to-slate-200 shadow-2xl transform rotate-12 origin-left" style={{ clipPath: 'polygon(0% 0%, 100% 20%, 100% 100%, 0% 80%)' }} />
+            <div
+              className="absolute top-[25%] right-[20%] w-24 h-36 bg-gradient-to-br from-slate-50 to-slate-200 shadow-2xl transform rotate-12 origin-left"
+              style={{
+                clipPath: "polygon(0% 0%, 100% 20%, 100% 100%, 0% 80%)",
+              }}
+            />
             {/* Ship Prow Base */}
-            <div className="absolute bottom-[5%] left-1/2 -translate-x-1/2 w-32 h-20 bg-gradient-to-br from-neutral-400 to-neutral-500 shadow-2xl" style={{ clipPath: 'polygon(30% 0%, 70% 0%, 100% 100%, 0% 100%)' }} />
+            <div
+              className="absolute bottom-[5%] left-1/2 -translate-x-1/2 w-32 h-20 bg-gradient-to-br from-neutral-400 to-neutral-500 shadow-2xl"
+              style={{
+                clipPath: "polygon(30% 0%, 70% 0%, 100% 100%, 0% 100%)",
+              }}
+            />
           </div>
         );
       default:
@@ -148,7 +173,7 @@ export function Model3D({ statue, darkMode }: Model3DProps) {
           className="relative w-64 h-96 transition-transform"
           style={{
             transform: `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg) scale(${scale})`,
-            transformStyle: 'preserve-3d',
+            transformStyle: "preserve-3d",
           }}
         >
           {getStatueModel()}
@@ -167,11 +192,15 @@ export function Model3D({ statue, darkMode }: Model3DProps) {
       <div className="absolute top-4 left-4 bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-lg p-3 shadow-lg">
         <div className="flex items-center gap-2 mb-1">
           <Move className="w-4 h-4 text-neutral-600 dark:text-neutral-400" />
-          <span className="text-sm text-neutral-700 dark:text-neutral-300">Drag to rotate</span>
+          <span className="text-sm text-neutral-700 dark:text-neutral-300">
+            Zum Drehen ziehen
+          </span>
         </div>
         <div className="flex items-center gap-2">
           <RotateCw className="w-4 h-4 text-neutral-600 dark:text-neutral-400" />
-          <span className="text-sm text-neutral-700 dark:text-neutral-300">Scroll to zoom</span>
+          <span className="text-sm text-neutral-700 dark:text-neutral-300">
+            Zum Zoomen scrollen
+          </span>
         </div>
       </div>
     </div>

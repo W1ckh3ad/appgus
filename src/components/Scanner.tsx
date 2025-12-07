@@ -20,17 +20,17 @@ export function Scanner({ onScan, darkMode }: ScannerProps) {
       }
       setError(null);
     } else {
-      setError("Please enter a valid code");
+      setError("Bitte gib einen gültigen Code ein");
     }
   };
 
   const quickScanOptions = [
     { label: "David", value: "david" },
     { label: "Venus de Milo", value: "venus" },
-    { label: "The Thinker", value: "thinker" },
-    { label: "Winged Victory", value: "winged-victory" },
-    { label: "Discobolus", value: "discobolus" },
-    { label: "Laocoön", value: "laocoon" },
+    { label: "Der Denker", value: "thinker" },
+    { label: "Geflügelter Sieg", value: "winged-victory" },
+    { label: "Diskobolos", value: "discobolus" },
+    { label: "Laokoon", value: "laocoon" },
   ];
 
   return (
@@ -38,10 +38,10 @@ export function Scanner({ onScan, darkMode }: ScannerProps) {
       {/* Header */}
       <div className="p-6 border-b border-neutral-200 dark:border-neutral-700 shrink-0">
         <h1 className="text-center mb-2 text-neutral-900 dark:text-white">
-          Scan QR Code
+          QR-Code scannen
         </h1>
         <p className="text-center text-neutral-600 dark:text-neutral-400 text-sm">
-          Position the QR code within the frame to scan
+          Positioniere den QR-Code innerhalb des Rahmens zum Scannen
         </p>
       </div>
 
@@ -74,13 +74,14 @@ export function Scanner({ onScan, darkMode }: ScannerProps) {
             <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
             <div>
               <p className="text-sm text-blue-900 dark:text-blue-200 mb-2">
-                Demo Mode: Enter a statue code or use quick scan buttons below
+                Demo-Modus: Gib einen Statuencode ein oder nutze die
+                Schnellscan-Tasten unten
               </p>
               <div className="flex gap-2">
                 <input
                   ref={inputRef}
                   type="text"
-                  placeholder="e.g., david"
+                  placeholder="z. B. david"
                   className="flex-1 px-3 py-2 border border-blue-300 dark:border-blue-700 rounded-lg text-sm bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white"
                   onKeyDown={(e) => e.key === "Enter" && handleManualInput()}
                 />
@@ -88,7 +89,7 @@ export function Scanner({ onScan, darkMode }: ScannerProps) {
                   onClick={handleManualInput}
                   className="px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-lg text-sm hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
                 >
-                  Scan
+                  Scannen
                 </button>
               </div>
             </div>
@@ -104,7 +105,7 @@ export function Scanner({ onScan, darkMode }: ScannerProps) {
         {/* Quick Scan Options */}
         <div className="w-full max-w-sm">
           <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-3">
-            Quick Scan:
+            Schnellscan:
           </p>
           <div className="grid grid-cols-2 gap-3">
             {quickScanOptions.map((option) => (

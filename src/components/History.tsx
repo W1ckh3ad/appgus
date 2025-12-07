@@ -15,12 +15,12 @@ function formatTimestamp(timestamp: number): string {
   const hours = Math.floor(diff / 3600000);
   const days = Math.floor(diff / 86400000);
 
-  if (minutes < 1) return "Just now";
-  if (minutes < 60) return `${minutes}m ago`;
-  if (hours < 24) return `${hours}h ago`;
-  if (days < 7) return `${days}d ago`;
+  if (minutes < 1) return "Gerade eben";
+  if (minutes < 60) return `${minutes} Min.`;
+  if (hours < 24) return `${hours} Std.`;
+  if (days < 7) return `${days} Tg.`;
 
-  return new Date(timestamp).toLocaleDateString();
+  return new Date(timestamp).toLocaleDateString("de-DE");
 }
 
 export function History({ items, onSelect, darkMode }: HistoryProps) {
@@ -28,9 +28,9 @@ export function History({ items, onSelect, darkMode }: HistoryProps) {
     <div className="h-full flex flex-col bg-white dark:bg-neutral-900 overflow-hidden">
       {/* Header */}
       <div className="p-6 border-b border-neutral-200 dark:border-neutral-700 shrink-0">
-        <h1 className="text-neutral-900 dark:text-white">Scan History</h1>
+        <h1 className="text-neutral-900 dark:text-white">Scanverlauf</h1>
         <p className="text-neutral-600 dark:text-neutral-400 text-sm mt-1">
-          {items.length} {items.length === 1 ? "statue" : "statues"} scanned
+          {items.length} {items.length === 1 ? "Statue" : "Statuen"} gescannt
         </p>
       </div>
 
@@ -40,10 +40,10 @@ export function History({ items, onSelect, darkMode }: HistoryProps) {
           <div className="h-full flex flex-col items-center justify-center p-6 text-center">
             <HistoryIcon className="w-20 h-20 text-neutral-300 dark:text-neutral-600 mb-4" />
             <h2 className="text-neutral-600 dark:text-neutral-400 mb-2">
-              No Scan History
+              Kein Scanverlauf
             </h2>
             <p className="text-neutral-500 dark:text-neutral-500 text-sm">
-              Your scanned statues will appear here
+              Deine gescannten Statuen erscheinen hier
             </p>
           </div>
         ) : (

@@ -126,7 +126,7 @@ export function StatueViewer({
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div>
                   <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">
-                    Artist
+                    Künstler
                   </p>
                   <p className="text-neutral-900 dark:text-white">
                     {statue.artist}
@@ -134,7 +134,7 @@ export function StatueViewer({
                 </div>
                 <div>
                   <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">
-                    Period
+                    Epoche
                   </p>
                   <p className="text-neutral-900 dark:text-white">
                     {statue.period}
@@ -142,7 +142,7 @@ export function StatueViewer({
                 </div>
                 <div>
                   <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">
-                    Year
+                    Entstehungsjahr
                   </p>
                   <p className="text-neutral-900 dark:text-white">
                     {statue.year}
@@ -150,7 +150,7 @@ export function StatueViewer({
                 </div>
                 <div>
                   <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">
-                    Current Location
+                    Heutiger Standort
                   </p>
                   <p className="text-neutral-900 dark:text-white text-sm">
                     {statue.location}
@@ -164,7 +164,7 @@ export function StatueViewer({
                   <MapPin className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
                   <div className="flex-1">
                     <p className="text-sm text-blue-900 dark:text-blue-300 mb-1">
-                      Discovery Location
+                      Fundort
                     </p>
                     <p className="text-blue-800 dark:text-blue-200 mb-2">
                       {statue.foundLocation}
@@ -173,7 +173,7 @@ export function StatueViewer({
                       onClick={openGoogleMaps}
                       className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline"
                     >
-                      View on Google Maps →
+                      Auf Google Maps ansehen ->
                     </button>
                   </div>
                 </div>
@@ -185,7 +185,7 @@ export function StatueViewer({
                   <div className="flex items-center gap-2 mb-3">
                     <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-500" />
                     <h3 className="text-neutral-900 dark:text-white">
-                      Damage History
+                      Schadensverlauf
                     </h3>
                   </div>
                   <div className="space-y-4">
@@ -203,7 +203,7 @@ export function StatueViewer({
                         <div className="aspect-video rounded-lg overflow-hidden">
                           <img
                             src={damage.imageUrl}
-                            alt={`${damage.part} reference`}
+                            alt={`${damage.part} Referenz`}
                             className="w-full h-full object-cover"
                           />
                         </div>
@@ -215,7 +215,7 @@ export function StatueViewer({
 
               <div className="mb-6">
                 <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-2">
-                  About
+                  Über die Statue
                 </p>
                 <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed">
                   {statue.description}

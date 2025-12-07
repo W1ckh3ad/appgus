@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect } from 'react';
-import { X, Send, Sparkles } from 'lucide-react';
-import { Statue } from '../App';
+import { Send, Sparkles, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Statue } from "../App";
 
 type ChatbotProps = {
   statue: Statue;
@@ -9,23 +9,23 @@ type ChatbotProps = {
 };
 
 type Message = {
-  role: 'user' | 'assistant';
+  role: "user" | "assistant";
   content: string;
 };
 
 export function Chatbot({ statue, onClose, darkMode }: ChatbotProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
-      role: 'assistant',
-      content: `Hello! I am ${statue.name}, created by ${statue.artist}. Ask me anything about my history, creation, or cultural significance!`
-    }
+      role: "assistant",
+      content: `Hallo! Ich bin ${statue.name}, geschaffen von ${statue.artist}. Frag mich gern nach meiner Geschichte, Entstehung oder kulturellen Bedeutung!`,
+    },
   ]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
@@ -34,86 +34,179 @@ export function Chatbot({ statue, onClose, darkMode }: ChatbotProps) {
 
   const generateResponse = (question: string): string => {
     const lowerQuestion = question.toLowerCase();
+    const includesWhen =
+      lowerQuestion.includes("when") || lowerQuestion.includes("wann");
+    const includesCreated =
+      lowerQuestion.includes("created") ||
+      lowerQuestion.includes("made") ||
+      lowerQuestion.includes("built") ||
+      lowerQuestion.includes("geschaffen") ||
+      lowerQuestion.includes("erschaffen") ||
+      lowerQuestion.includes("gebaut");
+    const includesWho =
+      lowerQuestion.includes("who") || lowerQuestion.includes("wer");
+    const includesWhere =
+      lowerQuestion.includes("where") || lowerQuestion.includes("wo");
+    const includesFound =
+      lowerQuestion.includes("found") ||
+      lowerQuestion.includes("discovered") ||
+      lowerQuestion.includes("gefunden") ||
+      lowerQuestion.includes("entdeckt");
+    const includesNow =
+      lowerQuestion.includes("now") ||
+      lowerQuestion.includes("located") ||
+      lowerQuestion.includes("see") ||
+      lowerQuestion.includes("jetzt") ||
+      lowerQuestion.includes("heute") ||
+      lowerQuestion.includes("stehen") ||
+      lowerQuestion.includes("ansehen");
+    const includesDamage =
+      lowerQuestion.includes("damage") ||
+      lowerQuestion.includes("missing") ||
+      lowerQuestion.includes("broken") ||
+      lowerQuestion.includes("arm") ||
+      lowerQuestion.includes("head") ||
+      lowerQuestion.includes("schaden") ||
+      lowerQuestion.includes("beschädigt") ||
+      lowerQuestion.includes("fehl") ||
+      lowerQuestion.includes("kopf");
+    const includesMaterial =
+      lowerQuestion.includes("material") ||
+      lowerQuestion.includes("made of") ||
+      lowerQuestion.includes("marble") ||
+      lowerQuestion.includes("bronze") ||
+      lowerQuestion.includes("woraus") ||
+      lowerQuestion.includes("marmor") ||
+      lowerQuestion.includes("aus welchem");
+    const includesMeaning =
+      lowerQuestion.includes("meaning") ||
+      lowerQuestion.includes("represent") ||
+      lowerQuestion.includes("symbolize") ||
+      lowerQuestion.includes("bedeut") ||
+      lowerQuestion.includes("symbol");
+    const includesSize =
+      lowerQuestion.includes("size") ||
+      lowerQuestion.includes("big") ||
+      lowerQuestion.includes("tall") ||
+      lowerQuestion.includes("height") ||
+      lowerQuestion.includes("groß") ||
+      lowerQuestion.includes("gross") ||
+      lowerQuestion.includes("höhe") ||
+      lowerQuestion.includes("hoch");
+    const includesPeriod =
+      lowerQuestion.includes("period") ||
+      lowerQuestion.includes("era") ||
+      lowerQuestion.includes("time") ||
+      lowerQuestion.includes("epoche") ||
+      lowerQuestion.includes("zeit");
+    const includesTechnique =
+      lowerQuestion.includes("technique") ||
+      (lowerQuestion.includes("how") && lowerQuestion.includes("made")) ||
+      lowerQuestion.includes("technik") ||
+      (lowerQuestion.includes("wie") && lowerQuestion.includes("gemacht")) ||
+      lowerQuestion.includes("angefertigt");
+    const includesThank =
+      lowerQuestion.includes("thank") || lowerQuestion.includes("danke");
+    const includesHello =
+      lowerQuestion.includes("hello") ||
+      lowerQuestion.includes("hi ") ||
+      lowerQuestion.startsWith("hi") ||
+      lowerQuestion.includes("hey") ||
+      lowerQuestion.includes("hallo") ||
+      lowerQuestion.includes("servus") ||
+      lowerQuestion.includes("moin");
 
     // Context-aware responses based on the question
-    if (lowerQuestion.includes('when') && (lowerQuestion.includes('created') || lowerQuestion.includes('made') || lowerQuestion.includes('built'))) {
-      return `I was created during the ${statue.period} period, specifically in ${statue.year}. This was a remarkable time for art and sculpture!`;
+    if (includesWhen && includesCreated) {
+      return `Ich entstand in der Epoche ${statue.period}, genauer gesagt im Jahr ${statue.year}. Es war eine bemerkenswerte Zeit für Kunst und Bildhauerei!`;
     }
-    
-    if (lowerQuestion.includes('who') && (lowerQuestion.includes('created') || lowerQuestion.includes('made') || lowerQuestion.includes('artist'))) {
-      return `I was created by ${statue.artist}, a masterful sculptor of the ${statue.period} period. Their skill and vision brought me to life!`;
+
+    if (
+      includesWho &&
+      (includesCreated ||
+        lowerQuestion.includes("artist") ||
+        lowerQuestion.includes("künstler"))
+    ) {
+      return `Geschaffen wurde ich von ${statue.artist}, einer herausragenden Persönlichkeit der Epoche ${statue.period}. Ihr Können und ihre Vision haben mich zum Leben erweckt.`;
     }
-    
-    if (lowerQuestion.includes('where') && (lowerQuestion.includes('found') || lowerQuestion.includes('discovered'))) {
-      return `I was found in ${statue.foundLocation}. You can see the exact location on Google Maps from my information page!`;
+
+    if (includesWhere && includesFound) {
+      return `Gefunden wurde ich in ${statue.foundLocation}. Über meinen Info-Bereich kannst du den Ort direkt auf Google Maps ansehen.`;
     }
-    
-    if (lowerQuestion.includes('where') && (lowerQuestion.includes('now') || lowerQuestion.includes('located') || lowerQuestion.includes('see'))) {
-      return `You can find me at ${statue.location}. I've been preserved there so people from all over the world can admire me.`;
+
+    if (includesWhere && includesNow) {
+      return `Aktuell findest du mich im ${statue.location}. Dort werde ich bewahrt, damit Menschen aus aller Welt mich bestaunen können.`;
     }
-    
-    if (statue.damages && (lowerQuestion.includes('damage') || lowerQuestion.includes('missing') || lowerQuestion.includes('broken') || lowerQuestion.includes('arm') || lowerQuestion.includes('head'))) {
-      const damageParts = statue.damages.map(d => d.part.toLowerCase()).join(' and ');
-      return `Over the centuries, I've lost my ${damageParts}. ${statue.damages[0].description} Despite this, I'm still considered a masterpiece!`;
+
+    if (statue.damages && includesDamage) {
+      const damageParts = statue.damages
+        .map((d) => d.part.toLowerCase())
+        .join(" und ");
+      return `Im Laufe der Jahrhunderte habe ich meine ${damageParts} verloren. ${statue.damages[0].description} Trotzdem gelte ich weiterhin als Meisterwerk!`;
     }
-    
-    if (lowerQuestion.includes('material') || lowerQuestion.includes('made of') || lowerQuestion.includes('marble') || lowerQuestion.includes('bronze')) {
-      return `I'm crafted from marble, a material prized by sculptors of the ${statue.period} period for its beauty and workability. The marble was carefully selected and carved with incredible precision.`;
+
+    if (includesMaterial) {
+      return `Ich bin aus Marmor gearbeitet, einem in der Epoche ${statue.period} besonders geschätzten Material, weil es Schönheit und gute Bearbeitbarkeit verbindet. Der Stein wurde sorgfältig ausgewählt und mit großer Präzision geformt.`;
     }
-    
-    if (lowerQuestion.includes('meaning') || lowerQuestion.includes('represent') || lowerQuestion.includes('symbolize')) {
-      return `${statue.description} I represent not just artistic skill, but also the cultural values and beliefs of my time.`;
+
+    if (includesMeaning) {
+      return `${statue.description} Ich stehe nicht nur für künstlerisches Können, sondern auch für die Werte und Vorstellungen meiner Zeit.`;
     }
-    
-    if (lowerQuestion.includes('size') || lowerQuestion.includes('big') || lowerQuestion.includes('tall') || lowerQuestion.includes('height')) {
-      if (statue.id === 'david') {
-        return `I stand at an impressive 17 feet (5.17 meters) tall! I was carved from a single block of marble, which makes my size even more remarkable.`;
+
+    if (includesSize) {
+      if (statue.id === "david") {
+        return `Ich bin beeindruckende 17 Fuß (5,17 Meter) groß! Ich wurde aus einem einzigen Marmorblock gehauen, was meine Dimensionen noch außergewöhnlicher macht.`;
       }
-      return `I'm a life-sized sculpture, carefully proportioned according to the artistic principles of the ${statue.period} period.`;
-    }
-    
-    if (lowerQuestion.includes('period') || lowerQuestion.includes('era') || lowerQuestion.includes('time')) {
-      return `I'm from the ${statue.period} period, created in ${statue.year}. This was an incredible time in art history, with major developments in sculpture and artistic technique.`;
-    }
-    
-    if (lowerQuestion.includes('technique') || lowerQuestion.includes('how') && lowerQuestion.includes('made')) {
-      return `I was created using traditional sculpting techniques of the ${statue.period} period. My creator, ${statue.artist}, used chisels, points, and careful planning to transform raw marble into the form you see today.`;
+      return `Ich habe Lebensgröße und wurde nach den Gestaltungsprinzipien der Epoche ${statue.period} sorgfältig proportioniert.`;
     }
 
-    if (lowerQuestion.includes('thank')) {
-      return `You're very welcome! I'm honored to share my story with you. Feel free to ask anything else!`;
+    if (includesPeriod) {
+      return `Ich entstamme der Epoche ${statue.period} und wurde ${statue.year} geschaffen. Diese Zeit brachte bedeutende Entwicklungen in der Kunst- und Bildhauergeschichte mit sich.`;
     }
 
-    if (lowerQuestion.includes('hello') || lowerQuestion.includes('hi ') || lowerQuestion.includes('hey')) {
-      return `Greetings! I'm delighted you're interested in learning about me. What would you like to know?`;
+    if (includesTechnique) {
+      return `Ich entstand mit traditionellen Bildhauertechniken der Epoche ${statue.period}. Mein Schöpfer ${statue.artist} nutzte Meißel, Spitzen und viel Planung, um den Rohmarmor in meine heutige Form zu verwandeln.`;
+    }
+
+    if (includesThank) {
+      return `Sehr gern! Es freut mich, meine Geschichte mit dir zu teilen. Frag ruhig weiter!`;
+    }
+
+    if (includesHello) {
+      return `Willkommen! Schön, dass du mehr über mich erfahren möchtest. Was interessiert dich?`;
     }
 
     // Default response
-    return `That's an interesting question about ${statue.name}! Let me tell you: ${statue.description.split('.')[0]}. Is there something specific you'd like to know about my creation, history, or significance?`;
+    return `Spannende Frage zu ${statue.name}! Hier ein erster Einblick: ${
+      statue.description.split(".")[0]
+    }. Möchtest du etwas Bestimmtes über meine Entstehung, Geschichte oder Bedeutung erfahren?`;
   };
 
   const handleSend = () => {
     if (!input.trim()) return;
 
-    const userMessage: Message = { role: 'user', content: input };
-    setMessages(prev => [...prev, userMessage]);
-    setInput('');
+    const userMessage: Message = { role: "user", content: input };
+    setMessages((prev) => [...prev, userMessage]);
+    setInput("");
     setIsTyping(true);
 
     // Simulate typing delay
     setTimeout(() => {
       const response = generateResponse(input);
-      const assistantMessage: Message = { role: 'assistant', content: response };
-      setMessages(prev => [...prev, assistantMessage]);
+      const assistantMessage: Message = {
+        role: "assistant",
+        content: response,
+      };
+      setMessages((prev) => [...prev, assistantMessage]);
       setIsTyping(false);
     }, 1000 + Math.random() * 1000);
   };
 
   const quickQuestions = [
-    'When were you created?',
-    'Who made you?',
-    'Where were you found?',
-    'Tell me about your damages'
+    "Wann wurdest du geschaffen?",
+    "Wer hat dich erschaffen?",
+    "Wo wurdest du gefunden?",
+    "Erzähl mir von deinen Schäden",
   ];
 
   const handleQuickQuestion = (question: string) => {
@@ -129,8 +222,8 @@ export function Chatbot({ statue, onClose, darkMode }: ChatbotProps) {
             <Sparkles className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-white">Chat with {statue.name}</h2>
-            <p className="text-sm text-white/90">Ask me anything!</p>
+            <h2 className="text-white">Chat mit {statue.name}</h2>
+            <p className="text-sm text-white/90">Frag mich alles!</p>
           </div>
         </div>
         <button
@@ -146,13 +239,15 @@ export function Chatbot({ statue, onClose, darkMode }: ChatbotProps) {
         {messages.map((message, index) => (
           <div
             key={index}
-            className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+            className={`flex ${
+              message.role === "user" ? "justify-end" : "justify-start"
+            }`}
           >
             <div
               className={`max-w-[80%] rounded-2xl px-4 py-3 ${
-                message.role === 'user'
-                  ? 'bg-blue-600 dark:bg-blue-700 text-white rounded-br-sm'
-                  : 'bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white rounded-bl-sm shadow'
+                message.role === "user"
+                  ? "bg-blue-600 dark:bg-blue-700 text-white rounded-br-sm"
+                  : "bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white rounded-bl-sm shadow"
               }`}
             >
               <p className="text-sm leading-relaxed">{message.content}</p>
@@ -164,9 +259,18 @@ export function Chatbot({ statue, onClose, darkMode }: ChatbotProps) {
           <div className="flex justify-start">
             <div className="bg-white dark:bg-neutral-800 rounded-2xl rounded-bl-sm px-4 py-3 shadow">
               <div className="flex gap-1">
-                <div className="w-2 h-2 bg-neutral-400 dark:bg-neutral-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                <div className="w-2 h-2 bg-neutral-400 dark:bg-neutral-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                <div className="w-2 h-2 bg-neutral-400 dark:bg-neutral-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                <div
+                  className="w-2 h-2 bg-neutral-400 dark:bg-neutral-500 rounded-full animate-bounce"
+                  style={{ animationDelay: "0ms" }}
+                />
+                <div
+                  className="w-2 h-2 bg-neutral-400 dark:bg-neutral-500 rounded-full animate-bounce"
+                  style={{ animationDelay: "150ms" }}
+                />
+                <div
+                  className="w-2 h-2 bg-neutral-400 dark:bg-neutral-500 rounded-full animate-bounce"
+                  style={{ animationDelay: "300ms" }}
+                />
               </div>
             </div>
           </div>
@@ -177,7 +281,9 @@ export function Chatbot({ statue, onClose, darkMode }: ChatbotProps) {
       {/* Quick Questions */}
       {messages.length === 1 && (
         <div className="px-4 pb-2 bg-neutral-50 dark:bg-neutral-900">
-          <p className="text-xs text-neutral-600 dark:text-neutral-400 mb-2">Quick questions:</p>
+          <p className="text-xs text-neutral-600 dark:text-neutral-400 mb-2">
+            Schnellfragen:
+          </p>
           <div className="flex gap-2 overflow-x-auto pb-2">
             {quickQuestions.map((question, index) => (
               <button
@@ -199,8 +305,8 @@ export function Chatbot({ statue, onClose, darkMode }: ChatbotProps) {
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-            placeholder="Ask a question..."
+            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            placeholder="Stell eine Frage..."
             className="flex-1 px-4 py-3 border border-neutral-300 dark:border-neutral-600 rounded-full focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 transition-colors bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white"
           />
           <button

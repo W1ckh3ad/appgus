@@ -12,9 +12,12 @@ export function Bookmarks({ statues, onSelect, darkMode }: BookmarksProps) {
     <div className="h-full flex flex-col bg-white dark:bg-neutral-900 overflow-hidden">
       {/* Header */}
       <div className="p-6 border-b border-neutral-200 dark:border-neutral-700 shrink-0">
-        <h1 className="text-neutral-900 dark:text-white">Saved Statues</h1>
+        <h1 className="text-neutral-900 dark:text-white">
+          Gespeicherte Statuen
+        </h1>
         <p className="text-neutral-600 dark:text-neutral-400 text-sm mt-1">
-          {statues.length} {statues.length === 1 ? "statue" : "statues"} saved
+          {statues.length} {statues.length === 1 ? "Statue" : "Statuen"}{" "}
+          gespeichert
         </p>
       </div>
 
@@ -24,10 +27,10 @@ export function Bookmarks({ statues, onSelect, darkMode }: BookmarksProps) {
           <div className="h-full flex flex-col items-center justify-center p-6 text-center">
             <BookmarkX className="w-20 h-20 text-neutral-300 dark:text-neutral-600 mb-4" />
             <h2 className="text-neutral-600 dark:text-neutral-400 mb-2">
-              No Saved Statues
+              Keine gespeicherten Statuen
             </h2>
             <p className="text-neutral-500 dark:text-neutral-500 text-sm">
-              Bookmark statues to easily access them later
+              Markiere Statuen, um später schnell darauf zuzugreifen
             </p>
           </div>
         ) : (
