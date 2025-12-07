@@ -4,9 +4,11 @@ import {
   Info,
   MapPin,
   MessageCircle,
+  Palette,
+  Sparkles,
   X,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { Statue } from "../App";
 import { Chatbot } from "./Chatbot";
 import { Model3D } from "./Model3D";
@@ -40,6 +42,45 @@ export function StatueViewer({
     window.open(url, "_blank");
   };
 
+  const renderNarrativeSection = (
+    title: string,
+    data: Statue["mythologie"],
+    icon: ReactNode
+  ) => {
+    if (!data) return null;
+
+    return (
+      <div className="mb-6">
+        <div className="flex items-center gap-2 mb-3">
+          <div className="p-2 rounded-full bg-neutral-100 dark:bg-neutral-700">
+            {icon}
+          </div>
+          <h3 className="text-neutral-900 dark:text-white">{title}</h3>
+        </div>
+        <p className="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed">
+          {data.description}
+        </p>
+        {data.images?.length ? (
+          <div className="grid grid-cols-2 gap-3 mt-4">
+            {data.images.map((src, index) => (
+              <div
+                key={`${title}-image-${index}`}
+                className="aspect-video rounded-lg overflow-hidden"
+              >
+                <img
+                  src={src}
+                  alt={`${title} Referenz ${index + 1}`}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+            ))}
+          </div>
+        ) : null}
+      </div>
+    );
+  };
+
   return (
     <div className="h-full flex flex-col relative">
       {/* Header */}
@@ -47,7 +88,7 @@ export function StatueViewer({
         <div className="flex-1">
           <h2 className="text-neutral-900 dark:text-white">{statue.name}</h2>
           <p className="text-sm text-neutral-600 dark:text-neutral-400">
-            {statue.artist}
+            {statue.material}
           </p>
         </div>
         <button
@@ -116,10 +157,10 @@ export function StatueViewer({
             <div className="grid grid-cols-2 gap-4 mb-6">
               <div>
                 <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">
-                  Künstler
+                  Material
                 </p>
                 <p className="text-neutral-900 dark:text-white">
-                  {statue.artist}
+                  {statue.material}
                 </p>
               </div>
               <div>
@@ -165,6 +206,23 @@ export function StatueViewer({
                   >
                     Auf Google Maps ansehen &rarr;
                   </button>
+                  {statue.foundLocationImages?.length ? (
+                    <div className="grid grid-cols-2 gap-3 mt-4">
+                      {statue.foundLocationImages.map((src, index) => (
+                        <div
+                          key={`found-${index}`}
+                          className="aspect-video rounded-lg overflow-hidden"
+                        >
+                          <img
+                            src={src}
+                            alt={`Fundort ${index + 1}`}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -201,6 +259,18 @@ export function StatueViewer({
                   ))}
                 </div>
               </div>
+            )}
+
+            {renderNarrativeSection(
+              "Mythologie",
+              statue.mythologie,
+              <Sparkles className="w-5 h-5 text-purple-600 dark:text-purple-300" />
+            )}
+
+            {renderNarrativeSection(
+              "Kunstepoche",
+              statue.kunstepoche,
+              <Palette className="w-5 h-5 text-blue-600 dark:text-blue-300" />
             )}
 
             <div className="mb-6">
