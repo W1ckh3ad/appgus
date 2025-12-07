@@ -31,6 +31,7 @@ export function Scanner({ onScan, darkMode }: ScannerProps) {
     { label: "Geflügelter Sieg", value: "winged-victory" },
     { label: "Diskobolos", value: "discobolus" },
     { label: "Laokoon", value: "laocoon" },
+    { label: "Satyr & Hermaphrodit", value: "satyr-hermaphrodit" },
   ];
 
   return (
