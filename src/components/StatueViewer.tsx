@@ -94,155 +94,136 @@ export function StatueViewer({
 
       {/* Information Drawer */}
       {!chatOpen && (
-        <>
-          <div
-            className={`absolute inset-x-0 bottom-0 bg-white dark:bg-neutral-800 rounded-t-3xl shadow-2xl transition-transform duration-300 ease-out ${
-              drawerOpen ? "translate-y-0" : "translate-y-full"
-            }`}
-            style={{ maxHeight: "85%" }}
+        <div
+          className={`absolute inset-0 bg-white dark:bg-neutral-800 transition-transform duration-300 ease-out ${
+            drawerOpen ? "translate-y-0" : "translate-y-full"
+          }`}
+        >
+          {/* Close Button */}
+          <button
+            onClick={() => setDrawerOpen(false)}
+            className="absolute top-4 right-4 p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors z-10"
           >
-            {/* Handle */}
-            <div className="flex justify-center pt-3 pb-2">
-              <div className="w-12 h-1.5 bg-neutral-300 dark:bg-neutral-600 rounded-full" />
+            <X className="w-5 h-5 text-neutral-600 dark:text-neutral-300" />
+          </button>
+
+          {/* Content */}
+          <div className="h-full overflow-y-auto p-6 pt-12">
+            <h2 className="mb-2 text-neutral-900 dark:text-white">
+              {statue.name}
+            </h2>
+
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              <div>
+                <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">
+                  Künstler
+                </p>
+                <p className="text-neutral-900 dark:text-white">
+                  {statue.artist}
+                </p>
+              </div>
+              <div>
+                <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">
+                  Epoche
+                </p>
+                <p className="text-neutral-900 dark:text-white">
+                  {statue.period}
+                </p>
+              </div>
+              <div>
+                <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">
+                  Entstehungsjahr
+                </p>
+                <p className="text-neutral-900 dark:text-white">
+                  {statue.year}
+                </p>
+              </div>
+              <div>
+                <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">
+                  Heutiger Standort
+                </p>
+                <p className="text-neutral-900 dark:text-white text-sm">
+                  {statue.location}
+                </p>
+              </div>
             </div>
 
-            {/* Close Button */}
-            <button
-              onClick={() => setDrawerOpen(false)}
-              className="absolute top-4 right-4 p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
-            >
-              <X className="w-5 h-5 text-neutral-600 dark:text-neutral-300" />
-            </button>
-
-            {/* Content */}
-            <div
-              className="overflow-y-auto p-6"
-              style={{ maxHeight: "calc(85vh - 60px)" }}
-            >
-              <h2 className="mb-2 text-neutral-900 dark:text-white">
-                {statue.name}
-              </h2>
-
-              <div className="grid grid-cols-2 gap-4 mb-6">
-                <div>
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">
-                    Künstler
+            {/* Found Location */}
+            <div className="mb-6 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
+              <div className="flex items-start gap-3">
+                <MapPin className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <p className="text-sm text-blue-900 dark:text-blue-300 mb-1">
+                    Fundort
                   </p>
-                  <p className="text-neutral-900 dark:text-white">
-                    {statue.artist}
+                  <p className="text-blue-800 dark:text-blue-200 mb-2">
+                    {statue.foundLocation}
                   </p>
-                </div>
-                <div>
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">
-                    Epoche
-                  </p>
-                  <p className="text-neutral-900 dark:text-white">
-                    {statue.period}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">
-                    Entstehungsjahr
-                  </p>
-                  <p className="text-neutral-900 dark:text-white">
-                    {statue.year}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">
-                    Heutiger Standort
-                  </p>
-                  <p className="text-neutral-900 dark:text-white text-sm">
-                    {statue.location}
-                  </p>
+                  <button
+                    onClick={openGoogleMaps}
+                    className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline"
+                  >
+                    Auf Google Maps ansehen →
+                  </button>
                 </div>
               </div>
+            </div>
 
-              {/* Found Location */}
-              <div className="mb-6 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
-                <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
-                  <div className="flex-1">
-                    <p className="text-sm text-blue-900 dark:text-blue-300 mb-1">
-                      Fundort
-                    </p>
-                    <p className="text-blue-800 dark:text-blue-200 mb-2">
-                      {statue.foundLocation}
-                    </p>
-                    <button
-                      onClick={openGoogleMaps}
-                      className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline"
-                    >
-                      Auf Google Maps ansehen ->
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Damages Section */}
-              {statue.damages && statue.damages.length > 0 && (
-                <div className="mb-6">
-                  <div className="flex items-center gap-2 mb-3">
-                    <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-500" />
-                    <h3 className="text-neutral-900 dark:text-white">
-                      Schadensverlauf
-                    </h3>
-                  </div>
-                  <div className="space-y-4">
-                    {statue.damages.map((damage, index) => (
-                      <div
-                        key={index}
-                        className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-xl p-4"
-                      >
-                        <p className="text-amber-900 dark:text-amber-300 mb-2">
-                          {damage.part}
-                        </p>
-                        <p className="text-sm text-amber-800 dark:text-amber-200 mb-3">
-                          {damage.description}
-                        </p>
-                        <div className="aspect-video rounded-lg overflow-hidden">
-                          <img
-                            src={damage.imageUrl}
-                            alt={`${damage.part} Referenz`}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
+            {/* Damages Section */}
+            {statue.damages && statue.damages.length > 0 && (
               <div className="mb-6">
-                <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-2">
-                  Über die Statue
-                </p>
-                <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed">
-                  {statue.description}
-                </p>
+                <div className="flex items-center gap-2 mb-3">
+                  <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-500" />
+                  <h3 className="text-neutral-900 dark:text-white">
+                    Schadensverlauf
+                  </h3>
+                </div>
+                <div className="space-y-4">
+                  {statue.damages.map((damage, index) => (
+                    <div
+                      key={index}
+                      className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-xl p-4"
+                    >
+                      <p className="text-amber-900 dark:text-amber-300 mb-2">
+                        {damage.part}
+                      </p>
+                      <p className="text-sm text-amber-800 dark:text-amber-200 mb-3">
+                        {damage.description}
+                      </p>
+                      <div className="aspect-video rounded-lg overflow-hidden">
+                        <img
+                          src={damage.imageUrl}
+                          alt={`${damage.part} Referenz`}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
+            )}
 
-              <div className="aspect-video rounded-xl overflow-hidden mb-6">
-                <img
-                  src={statue.imageUrl}
-                  alt={statue.name}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-
-              {/* Recommendations */}
-              <Recommendations currentStatue={statue} darkMode={darkMode} />
+            <div className="mb-6">
+              <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-2">
+                Über die Statue
+              </p>
+              <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed">
+                {statue.description}
+              </p>
             </div>
-          </div>
 
-          {/* Backdrop */}
-          {drawerOpen && (
-            <div
-              className="absolute inset-0 bg-black/20 dark:bg-black/40"
-              onClick={() => setDrawerOpen(false)}
-            />
-          )}
-        </>
+            <div className="aspect-video rounded-xl overflow-hidden mb-6">
+              <img
+                src={statue.imageUrl}
+                alt={statue.name}
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            {/* Recommendations */}
+            <Recommendations currentStatue={statue} darkMode={darkMode} />
+          </div>
+        </div>
       )}
 
       {/* Chatbot */}
@@ -251,14 +232,6 @@ export function StatueViewer({
           statue={statue}
           onClose={() => setChatOpen(false)}
           darkMode={darkMode}
-        />
-      )}
-
-      {/* Backdrop */}
-      {drawerOpen && (
-        <div
-          className="absolute inset-0 bg-black/20 dark:bg-black/40"
-          onClick={() => setDrawerOpen(false)}
         />
       )}
     </div>
