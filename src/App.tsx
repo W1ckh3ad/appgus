@@ -5,6 +5,23 @@ import { History } from "./components/History";
 import { Scanner } from "./components/Scanner";
 import { StatueViewer } from "./components/StatueViewer";
 
+export type Vector3Tuple = [number, number, number];
+
+export type StatueModelConfig = {
+  file: string;
+  scale?: number;
+  position?: Vector3Tuple;
+  rotation?: Vector3Tuple;
+  camera?: {
+    position?: Vector3Tuple;
+    fov?: number;
+  };
+  controls?: {
+    minDistance?: number;
+    maxDistance?: number;
+  };
+};
+
 export type Statue = {
   id: string;
   name: string;
@@ -21,6 +38,27 @@ export type Statue = {
     description: string;
     imageUrl: string;
   }>;
+  model?: StatueModelConfig;
+};
+
+const createModelConfig = (
+  file: string,
+  overrides?: Partial<StatueModelConfig>
+): StatueModelConfig => {
+  return {
+    file,
+    scale: overrides?.scale ?? 1,
+    position: (overrides?.position ?? [0, -1.2, 0]) as Vector3Tuple,
+    rotation: (overrides?.rotation ?? [0, 0, 0]) as Vector3Tuple,
+    camera: {
+      position: (overrides?.camera?.position ?? [0, 1.4, 4.5]) as Vector3Tuple,
+      fov: overrides?.camera?.fov ?? 40,
+    },
+    controls: {
+      minDistance: overrides?.controls?.minDistance ?? 1.5,
+      maxDistance: overrides?.controls?.maxDistance ?? 6,
+    },
+  };
 };
 
 const statuesData: Record<string, Statue> = {
@@ -37,6 +75,10 @@ const statuesData: Record<string, Statue> = {
       "https://images.unsplash.com/photo-1564951434112-64d74cc2a2d7?w=800",
     foundLocation: "Florenz, Italien",
     foundCoordinates: { lat: 43.7696, lng: 11.2558 },
+    model: createModelConfig("/models/david.glb", {
+      position: [0, -1.6, 0],
+      scale: 1.1,
+    }),
   },
   venus: {
     id: "venus",
@@ -60,6 +102,10 @@ const statuesData: Record<string, Statue> = {
           "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=800",
       },
     ],
+    model: createModelConfig("/models/venus.glb", {
+      position: [0, -1.4, 0],
+      scale: 1.05,
+    }),
   },
   thinker: {
     id: "thinker",
@@ -74,6 +120,11 @@ const statuesData: Record<string, Statue> = {
       "https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?w=800",
     foundLocation: "Paris, Frankreich (Entstehung)",
     foundCoordinates: { lat: 48.8566, lng: 2.3522 },
+    model: createModelConfig("/models/thinker.glb", {
+      position: [0, -1.1, 0],
+      scale: 1,
+      controls: { minDistance: 1.2, maxDistance: 5 },
+    }),
   },
   "winged-victory": {
     id: "winged-victory",
@@ -104,6 +155,11 @@ const statuesData: Record<string, Statue> = {
           "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=800",
       },
     ],
+    model: createModelConfig("/models/winged-victory.glb", {
+      position: [0, -1.3, 0],
+      scale: 1.15,
+      camera: { position: [0, 1.2, 5], fov: 38 },
+    }),
   },
   discobolus: {
     id: "discobolus",
@@ -118,6 +174,10 @@ const statuesData: Record<string, Statue> = {
       "https://images.unsplash.com/photo-1575912180747-2a9b04de8870?w=800",
     foundLocation: "Hadrians Villa, Tivoli, Italien",
     foundCoordinates: { lat: 41.9409, lng: 12.7739 },
+    model: createModelConfig("/models/discobolus.glb", {
+      position: [0, -1.2, 0],
+      controls: { minDistance: 1.4, maxDistance: 5.5 },
+    }),
   },
   laocoon: {
     id: "laocoon",

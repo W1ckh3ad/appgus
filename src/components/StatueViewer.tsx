@@ -163,7 +163,7 @@ export function StatueViewer({
                     onClick={openGoogleMaps}
                     className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline"
                   >
-                    Auf Google Maps ansehen →
+                    Auf Google Maps ansehen &rarr;
                   </button>
                 </div>
               </div>
