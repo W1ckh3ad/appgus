@@ -315,6 +315,58 @@ const statuesData: Record<string, Statue> = {
       ],
     },
   },
+  "satyr-hermaphrodit": {
+    id: "satyr-hermaphrodit",
+    name: "Satyr und Hermaphrodit",
+    description:
+      "Ein Satyr versucht, sich an dem Zwitterwesen Hermaphroditos gewaltsam zu vergehen, wird von diesem aber abgewehrt. Diese Szene beleuchtet die Spannung zwischen ungezügeltem dionysischem Begehren und sozialer Ordnung: Die erfolglose Annäherung stellt die gesellschaftliche Balance wieder her.",
+    period: "Hellenismus",
+    location:
+      "Dresden, Staatliche Kunstsammlungen, Skulpturensammlung (Albertinum) Inv. Hm 155",
+    year: "Römische Kopie nach einem griechischen Original aus dem 2. Jh. v. Chr.",
+    imageUrl: "/images/statues/satyr_hermaphrodit_main.jpg",
+    material: "Marmor",
+    foundLocation: "Italien, Tivoli, Sammlung Albani",
+    foundCoordinates: { lat: 41.91598, lng: 12.5002 },
+    foundLocationImages: [
+      "/images/locations/tivoli_1.jpg",
+      "/images/locations/tivoli_2.jpg",
+    ],
+    damages: [
+      {
+        part: "Arme und Beine",
+        description:
+          "Die Arme beider Figuren sowie Teile der Beine fehlen – typische Bruchstellen bei antiken Skulpturen.",
+        imageUrl: "/images/statues/satyr_hermaphrodit_damage_1.jpg",
+      },
+    ],
+    model: createModelConfig("/models/satyr-hermaphrodit.glb", {
+      scale: 1.5,
+      position: [0, -1, 0],
+      rotation: [0, 0.5, 0],
+      camera: {
+        position: [0, 1, 5],
+        fov: 45,
+      },
+      controls: {
+        minDistance: 2,
+        maxDistance: 10,
+      },
+    }),
+    mythologie: {
+      description:
+        "Satyrn sind Begleiter des Dionysos und verkörpern unkontrollierte Triebe, Rausch und Grenzüberschreitung. Hermaphroditos – Sohn von Hermes und Aphrodite – vereinte sich mit der Nymphe Salmakis zu einem zweigeschlechtlichen Wesen und steht für die Auflösung klarer Geschlechtergrenzen.",
+      images: [
+        "/images/mythology/satyrn.jpg",
+        "/images/mythology/hermaphroditos.jpg",
+      ],
+    },
+    kunstepoche: {
+      description:
+        "Der Hellenismus liebt emotionale, theatrale Szenen sowie überraschende Motive, die Realismus, Detailfreude und erotische Themen verbinden. Künstler suchten nach psychologischer Tiefe und spielten mit ambivalenten Figuren wie Satyrn und Hermaphroditen.",
+      images: ["/images/epochs/hellenismus.jpg"],
+    },
+  },
 };
 
 type View = "home" | "scanner" | "bookmarks" | "history";
@@ -406,7 +458,12 @@ export default function App() {
     <div className="h-screen flex flex-col bg-neutral-50 dark:bg-neutral-900">
       {/* Header with Dark Mode Toggle */}
       <div className="bg-white dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700 px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          <img
+            src="/logo.png"
+            alt="Appgus Logo"
+            className="w-8 h-8 rounded-full border border-neutral-200 dark:border-neutral-700 object-cover"
+          />
           <h1 className="text-lg text-neutral-900 dark:text-white">
             Ausstellungs-Scanner
           </h1>
