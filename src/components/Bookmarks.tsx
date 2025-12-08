@@ -1,23 +1,19 @@
-import { BookmarkX } from "lucide-react";
-import { Statue } from "../App";
+import { BookmarkX } from 'lucide-react';
+import { Statue } from '../App';
 
 type BookmarksProps = {
   statues: Statue[];
   onSelect: (statue: Statue) => void;
-  darkMode: boolean;
 };
 
-export function Bookmarks({ statues, onSelect, darkMode }: BookmarksProps) {
+export function Bookmarks({ statues, onSelect }: BookmarksProps) {
   return (
     <div className="h-full flex flex-col bg-white dark:bg-neutral-900 overflow-hidden">
       {/* Header */}
       <div className="p-6 border-b border-neutral-200 dark:border-neutral-700 shrink-0">
-        <h1 className="text-neutral-900 dark:text-white">
-          Gespeicherte Statuen
-        </h1>
+        <h1 className="text-neutral-900 dark:text-white">Gespeicherte Statuen</h1>
         <p className="text-neutral-600 dark:text-neutral-400 text-sm mt-1">
-          {statues.length} {statues.length === 1 ? "Statue" : "Statuen"}{" "}
-          gespeichert
+          {statues.length} {statues.length === 1 ? 'Statue' : 'Statuen'} gespeichert
         </p>
       </div>
 

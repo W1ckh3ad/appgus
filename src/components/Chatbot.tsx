@@ -1,31 +1,30 @@
-import { Send, Sparkles, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import { Statue } from "../App";
+import { Send, Sparkles, X } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Statue } from '../App';
 
 type ChatbotProps = {
   statue: Statue;
   onClose: () => void;
-  darkMode: boolean;
 };
 
 type Message = {
-  role: "user" | "assistant";
+  role: 'user' | 'assistant';
   content: string;
 };
 
-export function Chatbot({ statue, onClose, darkMode }: ChatbotProps) {
+export function Chatbot({ statue, onClose }: ChatbotProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
-      role: "assistant",
+      role: 'assistant',
       content: `Hallo! Ich bin ${statue.name}, geschaffen von ${statue.artist}. Frag mich gern nach meiner Geschichte, Entstehung oder kulturellen Bedeutung!`,
     },
   ]);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   useEffect(() => {
@@ -34,87 +33,84 @@ export function Chatbot({ statue, onClose, darkMode }: ChatbotProps) {
 
   const generateResponse = (question: string): string => {
     const lowerQuestion = question.toLowerCase();
-    const includesWhen =
-      lowerQuestion.includes("when") || lowerQuestion.includes("wann");
+    const includesWhen = lowerQuestion.includes('when') || lowerQuestion.includes('wann');
     const includesCreated =
-      lowerQuestion.includes("created") ||
-      lowerQuestion.includes("made") ||
-      lowerQuestion.includes("built") ||
-      lowerQuestion.includes("geschaffen") ||
-      lowerQuestion.includes("erschaffen") ||
-      lowerQuestion.includes("gebaut");
-    const includesWho =
-      lowerQuestion.includes("who") || lowerQuestion.includes("wer");
-    const includesWhere =
-      lowerQuestion.includes("where") || lowerQuestion.includes("wo");
+      lowerQuestion.includes('created') ||
+      lowerQuestion.includes('made') ||
+      lowerQuestion.includes('built') ||
+      lowerQuestion.includes('geschaffen') ||
+      lowerQuestion.includes('erschaffen') ||
+      lowerQuestion.includes('gebaut');
+    const includesWho = lowerQuestion.includes('who') || lowerQuestion.includes('wer');
+    const includesWhere = lowerQuestion.includes('where') || lowerQuestion.includes('wo');
     const includesFound =
-      lowerQuestion.includes("found") ||
-      lowerQuestion.includes("discovered") ||
-      lowerQuestion.includes("gefunden") ||
-      lowerQuestion.includes("entdeckt");
+      lowerQuestion.includes('found') ||
+      lowerQuestion.includes('discovered') ||
+      lowerQuestion.includes('gefunden') ||
+      lowerQuestion.includes('entdeckt');
     const includesNow =
-      lowerQuestion.includes("now") ||
-      lowerQuestion.includes("located") ||
-      lowerQuestion.includes("see") ||
-      lowerQuestion.includes("jetzt") ||
-      lowerQuestion.includes("heute") ||
-      lowerQuestion.includes("stehen") ||
-      lowerQuestion.includes("ansehen");
+      lowerQuestion.includes('now') ||
+      lowerQuestion.includes('located') ||
+      lowerQuestion.includes('see') ||
+      lowerQuestion.includes('jetzt') ||
+      lowerQuestion.includes('heute') ||
+      lowerQuestion.includes('stehen') ||
+      lowerQuestion.includes('ansehen');
     const includesDamage =
-      lowerQuestion.includes("damage") ||
-      lowerQuestion.includes("missing") ||
-      lowerQuestion.includes("broken") ||
-      lowerQuestion.includes("arm") ||
-      lowerQuestion.includes("head") ||
-      lowerQuestion.includes("schaden") ||
-      lowerQuestion.includes("beschädigt") ||
-      lowerQuestion.includes("fehl") ||
-      lowerQuestion.includes("kopf");
+      lowerQuestion.includes('damage') ||
+      lowerQuestion.includes('missing') ||
+      lowerQuestion.includes('broken') ||
+      lowerQuestion.includes('arm') ||
+      lowerQuestion.includes('head') ||
+      lowerQuestion.includes('schaden') ||
+      lowerQuestion.includes('beschädigt') ||
+      lowerQuestion.includes('fehl') ||
+      lowerQuestion.includes('kopf');
     const includesMaterial =
-      lowerQuestion.includes("material") ||
-      lowerQuestion.includes("made of") ||
-      lowerQuestion.includes("marble") ||
-      lowerQuestion.includes("bronze") ||
-      lowerQuestion.includes("woraus") ||
-      lowerQuestion.includes("marmor") ||
-      lowerQuestion.includes("aus welchem");
+      lowerQuestion.includes('material') ||
+      lowerQuestion.includes('made of') ||
+      lowerQuestion.includes('marble') ||
+      lowerQuestion.includes('bronze') ||
+      lowerQuestion.includes('woraus') ||
+      lowerQuestion.includes('marmor') ||
+      lowerQuestion.includes('aus welchem');
     const includesMeaning =
-      lowerQuestion.includes("meaning") ||
-      lowerQuestion.includes("represent") ||
-      lowerQuestion.includes("symbolize") ||
-      lowerQuestion.includes("bedeut") ||
-      lowerQuestion.includes("symbol");
+      lowerQuestion.includes('meaning') ||
+      lowerQuestion.includes('represent') ||
+      lowerQuestion.includes('symbolize') ||
+      lowerQuestion.includes('bedeut') ||
+      lowerQuestion.includes('symbol');
     const includesSize =
-      lowerQuestion.includes("size") ||
-      lowerQuestion.includes("big") ||
-      lowerQuestion.includes("tall") ||
-      lowerQuestion.includes("height") ||
-      lowerQuestion.includes("groß") ||
-      lowerQuestion.includes("gross") ||
-      lowerQuestion.includes("höhe") ||
-      lowerQuestion.includes("hoch");
+      lowerQuestion.includes('size') ||
+      lowerQuestion.includes('big') ||
+      lowerQuestion.includes('tall') ||
+      lowerQuestion.includes('height') ||
+      lowerQuestion.includes('groß') ||
+      lowerQuestion.includes('gross') ||
+      lowerQuestion.includes('höhe') ||
+      lowerQuestion.includes('hoch');
     const includesPeriod =
-      lowerQuestion.includes("period") ||
-      lowerQuestion.includes("era") ||
-      lowerQuestion.includes("time") ||
-      lowerQuestion.includes("epoche") ||
-      lowerQuestion.includes("zeit");
+      lowerQuestion.includes('period') ||
+      lowerQuestion.includes('era') ||
+      lowerQuestion.includes('time') ||
+      lowerQuestion.includes('epoche') ||
+      lowerQuestion.includes('zeit');
     const includesTechnique =
-      lowerQuestion.includes("technique") ||
-      (lowerQuestion.includes("how") && lowerQuestion.includes("made")) ||
-      lowerQuestion.includes("technik") ||
-      (lowerQuestion.includes("wie") && lowerQuestion.includes("gemacht")) ||
-      lowerQuestion.includes("angefertigt");
+      lowerQuestion.includes('technique') ||
+      (lowerQuestion.includes('how') && lowerQuestion.includes('made')) ||
+      lowerQuestion.includes('technik') ||
+      (lowerQuestion.includes('wie') && lowerQuestion.includes('gemacht')) ||
+      lowerQuestion.includes('angefertigt');
     const includesThank =
-      lowerQuestion.includes("thank") || lowerQuestion.includes("danke");
+      lowerQuestion.includes('thank') || lowerQuestion.includes('danke');
     const includesHello =
-      lowerQuestion.includes("hello") ||
-      lowerQuestion.includes("hi ") ||
-      lowerQuestion.startsWith("hi") ||
-      lowerQuestion.includes("hey") ||
-      lowerQuestion.includes("hallo") ||
-      lowerQuestion.includes("servus") ||
-      lowerQuestion.includes("moin");
+      lowerQuestion.includes('hello') ||
+      lowerQuestion.includes('hi ') ||
+      lowerQuestion.startsWith('hi') ||
+      lowerQuestion.includes('hey') ||
+      lowerQuestion.includes('hallo') ||
+      lowerQuestion.includes('servus') ||
+      lowerQuestion.includes('moin');
 
     // Context-aware responses based on the question
     if (includesWhen && includesCreated) {
@@ -124,8 +120,8 @@ export function Chatbot({ statue, onClose, darkMode }: ChatbotProps) {
     if (
       includesWho &&
       (includesCreated ||
-        lowerQuestion.includes("artist") ||
-        lowerQuestion.includes("künstler"))
+        lowerQuestion.includes('artist') ||
+        lowerQuestion.includes('künstler'))
     ) {
       return `Geschaffen wurde ich von ${statue.artist}, einer herausragenden Persönlichkeit der Epoche ${statue.period}. Ihr Können und ihre Vision haben mich zum Leben erweckt.`;
     }
@@ -139,9 +135,7 @@ export function Chatbot({ statue, onClose, darkMode }: ChatbotProps) {
     }
 
     if (statue.damages && includesDamage) {
-      const damageParts = statue.damages
-        .map((d) => d.part.toLowerCase())
-        .join(" und ");
+      const damageParts = statue.damages.map((d) => d.part.toLowerCase()).join(' und ');
       return `Im Laufe der Jahrhunderte habe ich meine ${damageParts} verloren. ${statue.damages[0].description} Trotzdem gelte ich weiterhin als Meisterwerk!`;
     }
 
@@ -154,7 +148,7 @@ export function Chatbot({ statue, onClose, darkMode }: ChatbotProps) {
     }
 
     if (includesSize) {
-      if (statue.id === "david") {
+      if (statue.id === 'david') {
         return `Ich bin beeindruckende 17 Fuß (5,17 Meter) groß! Ich wurde aus einem einzigen Marmorblock gehauen, was meine Dimensionen noch außergewöhnlicher macht.`;
       }
       return `Ich habe Lebensgröße und wurde nach den Gestaltungsprinzipien der Epoche ${statue.period} sorgfältig proportioniert.`;
@@ -178,35 +172,38 @@ export function Chatbot({ statue, onClose, darkMode }: ChatbotProps) {
 
     // Default response
     return `Spannende Frage zu ${statue.name}! Hier ein erster Einblick: ${
-      statue.description.split(".")[0]
+      statue.description.split('.')[0]
     }. Möchtest du etwas Bestimmtes über meine Entstehung, Geschichte oder Bedeutung erfahren?`;
   };
 
   const handleSend = () => {
     if (!input.trim()) return;
 
-    const userMessage: Message = { role: "user", content: input };
+    const userMessage: Message = { role: 'user', content: input };
     setMessages((prev) => [...prev, userMessage]);
-    setInput("");
+    setInput('');
     setIsTyping(true);
 
     // Simulate typing delay
-    setTimeout(() => {
-      const response = generateResponse(input);
-      const assistantMessage: Message = {
-        role: "assistant",
-        content: response,
-      };
-      setMessages((prev) => [...prev, assistantMessage]);
-      setIsTyping(false);
-    }, 1000 + Math.random() * 1000);
+    setTimeout(
+      () => {
+        const response = generateResponse(input);
+        const assistantMessage: Message = {
+          role: 'assistant',
+          content: response,
+        };
+        setMessages((prev) => [...prev, assistantMessage]);
+        setIsTyping(false);
+      },
+      1000 + Math.random() * 1000
+    );
   };
 
   const quickQuestions = [
-    "Wann wurdest du geschaffen?",
-    "Wer hat dich erschaffen?",
-    "Wo wurdest du gefunden?",
-    "Erzähl mir von deinen Schäden",
+    'Wann wurdest du geschaffen?',
+    'Wer hat dich erschaffen?',
+    'Wo wurdest du gefunden?',
+    'Erzähl mir von deinen Schäden',
   ];
 
   const handleQuickQuestion = (question: string) => {
@@ -240,14 +237,14 @@ export function Chatbot({ statue, onClose, darkMode }: ChatbotProps) {
           <div
             key={index}
             className={`flex ${
-              message.role === "user" ? "justify-end" : "justify-start"
+              message.role === 'user' ? 'justify-end' : 'justify-start'
             }`}
           >
             <div
               className={`max-w-[80%] rounded-2xl px-4 py-3 ${
-                message.role === "user"
-                  ? "bg-blue-600 dark:bg-blue-700 text-white rounded-br-sm"
-                  : "bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white rounded-bl-sm shadow"
+                message.role === 'user'
+                  ? 'bg-blue-600 dark:bg-blue-700 text-white rounded-br-sm'
+                  : 'bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white rounded-bl-sm shadow'
               }`}
             >
               <p className="text-sm leading-relaxed">{message.content}</p>
@@ -261,15 +258,15 @@ export function Chatbot({ statue, onClose, darkMode }: ChatbotProps) {
               <div className="flex gap-1">
                 <div
                   className="w-2 h-2 bg-neutral-400 dark:bg-neutral-500 rounded-full animate-bounce"
-                  style={{ animationDelay: "0ms" }}
+                  style={{ animationDelay: '0ms' }}
                 />
                 <div
                   className="w-2 h-2 bg-neutral-400 dark:bg-neutral-500 rounded-full animate-bounce"
-                  style={{ animationDelay: "150ms" }}
+                  style={{ animationDelay: '150ms' }}
                 />
                 <div
                   className="w-2 h-2 bg-neutral-400 dark:bg-neutral-500 rounded-full animate-bounce"
-                  style={{ animationDelay: "300ms" }}
+                  style={{ animationDelay: '300ms' }}
                 />
               </div>
             </div>
@@ -305,7 +302,7 @@ export function Chatbot({ statue, onClose, darkMode }: ChatbotProps) {
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
             placeholder="Stell eine Frage..."
             className="flex-1 px-4 py-3 border border-neutral-300 dark:border-neutral-600 rounded-full focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 transition-colors bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white"
           />

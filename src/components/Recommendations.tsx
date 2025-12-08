@@ -1,117 +1,101 @@
-import React from "react";
-import { Statue } from "../App";
+import { Statue } from '../App';
 
 type RecommendationsProps = {
   currentStatue: Statue;
-  darkMode: boolean;
 };
 
 // Import statues data - in a real app this would come from a prop or context
 const allStatuesData: Record<string, Statue> = {
   david: {
-    id: "david",
-    name: "David",
-    description:
-      "Michelangelos David gilt als Ikone der Renaissance-Bildhauerei.",
-    period: "Renaissance",
+    id: 'david',
+    name: 'David',
+    description: 'Michelangelos David gilt als Ikone der Renaissance-Bildhauerei.',
+    period: 'Renaissance',
     location: "Galleria dell'Accademia, Florenz",
-    artist: "Michelangelo",
-    year: "1501-1504",
-    imageUrl:
-      "https://images.unsplash.com/photo-1564951434112-64d74cc2a2d7?w=800",
-    foundLocation: "Florenz, Italien",
+    artist: 'Michelangelo',
+    year: '1501-1504',
+    imageUrl: 'https://images.unsplash.com/photo-1564951434112-64d74cc2a2d7?w=800',
+    foundLocation: 'Florenz, Italien',
     foundCoordinates: { lat: 43.7696, lng: 11.2558 },
   },
   venus: {
-    id: "venus",
-    name: "Venus de Milo",
+    id: 'venus',
+    name: 'Venus de Milo',
     description:
-      "Die Venus von Milo ist eine hellenistische Darstellung der Göttin Aphrodite.",
-    period: "Hellenistische Epoche",
-    location: "Louvre, Paris",
-    artist: "Alexandros von Antiochia",
-    year: "150-125 v. Chr.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1566305977571-5666677c6e98?w=800",
-    foundLocation: "Insel Milos, Griechenland",
+      'Die Venus von Milo ist eine hellenistische Darstellung der Göttin Aphrodite.',
+    period: 'Hellenistische Epoche',
+    location: 'Louvre, Paris',
+    artist: 'Alexandros von Antiochia',
+    year: '150-125 v. Chr.',
+    imageUrl: 'https://images.unsplash.com/photo-1566305977571-5666677c6e98?w=800',
+    foundLocation: 'Insel Milos, Griechenland',
     foundCoordinates: { lat: 36.7213, lng: 24.4259 },
     damages: [
       {
-        part: "Beide Arme",
-        description: "Die Arme fehlten bereits bei der Entdeckung 1820.",
-        imageUrl:
-          "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=800",
+        part: 'Beide Arme',
+        description: 'Die Arme fehlten bereits bei der Entdeckung 1820.',
+        imageUrl: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=800',
       },
     ],
   },
   thinker: {
-    id: "thinker",
-    name: "Der Denker",
-    description:
-      "Der Denker von Auguste Rodin verkörpert konzentrierte Selbstreflexion.",
-    period: "Moderne",
-    location: "Musée Rodin, Paris",
-    artist: "Auguste Rodin",
-    year: "1880-1882",
-    imageUrl:
-      "https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?w=800",
-    foundLocation: "Paris, Frankreich (Entstehung)",
+    id: 'thinker',
+    name: 'Der Denker',
+    description: 'Der Denker von Auguste Rodin verkörpert konzentrierte Selbstreflexion.',
+    period: 'Moderne',
+    location: 'Musée Rodin, Paris',
+    artist: 'Auguste Rodin',
+    year: '1880-1882',
+    imageUrl: 'https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?w=800',
+    foundLocation: 'Paris, Frankreich (Entstehung)',
     foundCoordinates: { lat: 48.8566, lng: 2.3522 },
   },
-  "winged-victory": {
-    id: "winged-victory",
-    name: "Geflügelter Sieg von Samothrake",
-    description:
-      "Die Nike von Samothrake feiert einen hellenistischen Seesieg.",
-    period: "Hellenistische Epoche",
-    location: "Louvre, Paris",
-    artist: "Unbekannt",
-    year: "200-190 v. Chr.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1565024145823-e88d3ae41642?w=800",
-    foundLocation: "Samothrake, Griechenland",
+  'winged-victory': {
+    id: 'winged-victory',
+    name: 'Geflügelter Sieg von Samothrake',
+    description: 'Die Nike von Samothrake feiert einen hellenistischen Seesieg.',
+    period: 'Hellenistische Epoche',
+    location: 'Louvre, Paris',
+    artist: 'Unbekannt',
+    year: '200-190 v. Chr.',
+    imageUrl: 'https://images.unsplash.com/photo-1565024145823-e88d3ae41642?w=800',
+    foundLocation: 'Samothrake, Griechenland',
     foundCoordinates: { lat: 40.4897, lng: 25.513 },
     damages: [
       {
-        part: "Kopf",
-        description: "Der Kopf der Statue fehlt bis heute.",
-        imageUrl:
-          "https://images.unsplash.com/photo-1578632292335-df3abbb0d586?w=800",
+        part: 'Kopf',
+        description: 'Der Kopf der Statue fehlt bis heute.',
+        imageUrl: 'https://images.unsplash.com/photo-1578632292335-df3abbb0d586?w=800',
       },
     ],
   },
   discobolus: {
-    id: "discobolus",
-    name: "Diskobolos",
-    description: "Der Diskuswerfer zeigt den Höhepunkt klassischer Athletik.",
-    period: "Klassisches Griechenland",
-    location: "Nationalmuseum Rom",
-    artist: "Myron",
-    year: "460-450 v. Chr.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1575912180747-2a9b04de8870?w=800",
-    foundLocation: "Hadrians Villa, Tivoli, Italien",
+    id: 'discobolus',
+    name: 'Diskobolos',
+    description: 'Der Diskuswerfer zeigt den Höhepunkt klassischer Athletik.',
+    period: 'Klassisches Griechenland',
+    location: 'Nationalmuseum Rom',
+    artist: 'Myron',
+    year: '460-450 v. Chr.',
+    imageUrl: 'https://images.unsplash.com/photo-1575912180747-2a9b04de8870?w=800',
+    foundLocation: 'Hadrians Villa, Tivoli, Italien',
     foundCoordinates: { lat: 41.9409, lng: 12.7739 },
   },
   laocoon: {
-    id: "laocoon",
-    name: "Laokoon und seine Söhne",
-    description: "Die Gruppe zeigt Laokoon im Kampf gegen Meeresschlangen.",
-    period: "Hellenistische Epoche",
-    location: "Vatikanische Museen, Vatikanstadt",
-    artist: "Agesander, Athenodoros und Polydoros",
-    year: "200 v. Chr. - 70 n. Chr.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1580674285054-bed31e145f59?w=800",
-    foundLocation: "Rom, Italien",
+    id: 'laocoon',
+    name: 'Laokoon und seine Söhne',
+    description: 'Die Gruppe zeigt Laokoon im Kampf gegen Meeresschlangen.',
+    period: 'Hellenistische Epoche',
+    location: 'Vatikanische Museen, Vatikanstadt',
+    artist: 'Agesander, Athenodoros und Polydoros',
+    year: '200 v. Chr. - 70 n. Chr.',
+    imageUrl: 'https://images.unsplash.com/photo-1580674285054-bed31e145f59?w=800',
+    foundLocation: 'Rom, Italien',
     foundCoordinates: { lat: 41.9028, lng: 12.4964 },
   },
 };
 
-export function Recommendations({
-  currentStatue,
-  darkMode,
-}: RecommendationsProps) {
+export function Recommendations({ currentStatue }: RecommendationsProps) {
   // Calculate recommendations based on period and location
   const getRecommendations = (): Statue[] => {
     const allStatues = Object.values(allStatuesData);
@@ -134,27 +118,29 @@ export function Recommendations({
           statue.foundCoordinates
         );
 
-        if (distance < 500) score += 8; // Within 500km
-        else if (distance < 1000) score += 5; // Within 1000km
+        if (distance < 500)
+          score += 8; // Within 500km
+        else if (distance < 1000)
+          score += 5; // Within 1000km
         else if (distance < 2000) score += 2; // Within 2000km
       }
 
       // Greece/Greek connection
       const currentIsGreek =
-        currentStatue.foundLocation.toLowerCase().includes("greece") ||
-        currentStatue.period.toLowerCase().includes("greek");
+        currentStatue.foundLocation.toLowerCase().includes('greece') ||
+        currentStatue.period.toLowerCase().includes('greek');
       const statueIsGreek =
-        statue.foundLocation.toLowerCase().includes("greece") ||
-        statue.period.toLowerCase().includes("greek");
+        statue.foundLocation.toLowerCase().includes('greece') ||
+        statue.period.toLowerCase().includes('greek');
       if (currentIsGreek && statueIsGreek) score += 5;
 
       // Italy/Roman connection
       const currentIsItalian =
-        currentStatue.foundLocation.toLowerCase().includes("italy") ||
-        currentStatue.foundLocation.toLowerCase().includes("rome");
+        currentStatue.foundLocation.toLowerCase().includes('italy') ||
+        currentStatue.foundLocation.toLowerCase().includes('rome');
       const statueIsItalian =
-        statue.foundLocation.toLowerCase().includes("italy") ||
-        statue.foundLocation.toLowerCase().includes("rome");
+        statue.foundLocation.toLowerCase().includes('italy') ||
+        statue.foundLocation.toLowerCase().includes('rome');
       if (currentIsItalian && statueIsItalian) score += 5;
 
       if (score > 0) {
@@ -203,8 +189,8 @@ export function Recommendations({
         Das könnte dir auch gefallen
       </h3>
       <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
-        Basierend auf der Epoche {currentStatue.period} und Fundorten in der
-        Nähe von {currentStatue.foundLocation}
+        Basierend auf der Epoche {currentStatue.period} und Fundorten in der Nähe von{' '}
+        {currentStatue.foundLocation}
       </p>
       <div className="space-y-3">
         {recommendations.map((statue) => (
@@ -221,9 +207,7 @@ export function Recommendations({
                 />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-neutral-900 dark:text-white mb-1">
-                  {statue.name}
-                </p>
+                <p className="text-neutral-900 dark:text-white mb-1">{statue.name}</p>
                 <p className="text-sm text-neutral-600 dark:text-neutral-400">
                   {statue.artist}
                 </p>

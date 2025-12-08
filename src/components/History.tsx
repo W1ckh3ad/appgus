@@ -1,10 +1,9 @@
-import { History as HistoryIcon } from "lucide-react";
-import { Statue } from "../App";
+import { History as HistoryIcon } from 'lucide-react';
+import { Statue } from '../App';
 
 type HistoryProps = {
   items: Array<{ statue: Statue; timestamp: number }>;
   onSelect: (statue: Statue) => void;
-  darkMode: boolean;
 };
 
 function formatTimestamp(timestamp: number): string {
@@ -15,22 +14,22 @@ function formatTimestamp(timestamp: number): string {
   const hours = Math.floor(diff / 3600000);
   const days = Math.floor(diff / 86400000);
 
-  if (minutes < 1) return "Gerade eben";
+  if (minutes < 1) return 'Gerade eben';
   if (minutes < 60) return `${minutes} Min.`;
   if (hours < 24) return `${hours} Std.`;
   if (days < 7) return `${days} Tg.`;
 
-  return new Date(timestamp).toLocaleDateString("de-DE");
+  return new Date(timestamp).toLocaleDateString('de-DE');
 }
 
-export function History({ items, onSelect, darkMode }: HistoryProps) {
+export function History({ items, onSelect }: HistoryProps) {
   return (
     <div className="h-full flex flex-col bg-white dark:bg-neutral-900 overflow-hidden">
       {/* Header */}
       <div className="p-6 border-b border-neutral-200 dark:border-neutral-700 shrink-0">
         <h1 className="text-neutral-900 dark:text-white">Scanverlauf</h1>
         <p className="text-neutral-600 dark:text-neutral-400 text-sm mt-1">
-          {items.length} {items.length === 1 ? "Statue" : "Statuen"} gescannt
+          {items.length} {items.length === 1 ? 'Statue' : 'Statuen'} gescannt
         </p>
       </div>
 

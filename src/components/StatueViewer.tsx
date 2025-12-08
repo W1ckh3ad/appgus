@@ -1,9 +1,9 @@
-import { Bookmark, Info, MessageCircle, X } from "lucide-react";
-import React, { useEffect, useState } from "react";
-import { Statue } from "../App";
-import { Chatbot } from "./Chatbot";
-import { Model3D } from "./Model3D";
-import { Recommendations } from "./Recommendations";
+import { Bookmark, Info, MessageCircle, X } from 'lucide-react';
+import { useState } from 'react';
+import { Statue } from '../App';
+import { Chatbot } from './Chatbot';
+import { Model3D } from './Model3D';
+import { Recommendations } from './Recommendations';
 
 type StatueViewerProps = {
   statue: Statue;
@@ -21,27 +21,21 @@ export function StatueViewer({
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
 
-  useEffect(() => {
-    if (chatOpen) {
-      setDrawerOpen(false);
-    }
-  }, [chatOpen]);
-
   const openGoogleMaps = () => {
     const { lat, lng } = statue.foundCoordinates;
     const url = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
-    window.open(url, "_blank");
+    window.open(url, '_blank');
   };
 
   const resolveImagePath = (path: string) => {
-    if (path.startsWith("http")) return path;
-    if (path.startsWith("/")) return path;
+    if (path.startsWith('http')) return path;
+    if (path.startsWith('/')) return path;
     return `/${path}`;
   };
 
   const renderNarrativeSection = (
     title: string,
-    data: Statue["mythologie"] | Statue["kunstepoche"],
+    data: Statue['mythologie'] | Statue['kunstepoche'],
     useRichImages = false
   ) => {
     if (!data) return null;
@@ -50,8 +44,9 @@ export function StatueViewer({
       if (!data.images?.length) return null;
 
       if (useRichImages) {
-        const richImages = ((data as Statue["mythologie"])?.images ??
-          []) as NonNullable<NonNullable<Statue["mythologie"]>["images"]>;
+        const richImages = ((data as Statue['mythologie'])?.images ?? []) as NonNullable<
+          NonNullable<Statue['mythologie']>['images']
+        >;
 
         return (
           <div className="grid grid-cols-2 gap-3 mt-4">
@@ -137,14 +132,11 @@ export function StatueViewer({
           onClick={onBookmark}
           className={`p-2 rounded-full border transition-colors ${
             isBookmarked
-              ? "bg-neutral-900 text-white border-neutral-900 dark:bg-white dark:text-neutral-900"
-              : "bg-transparent text-neutral-600 dark:text-neutral-300 border-neutral-400 dark:border-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-700"
+              ? 'bg-neutral-900 text-white border-neutral-900 dark:bg-white dark:text-neutral-900'
+              : 'bg-transparent text-neutral-600 dark:text-neutral-300 border-neutral-400 dark:border-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-700'
           }`}
         >
-          <Bookmark
-            className="w-5 h-5"
-            fill={isBookmarked ? "currentColor" : "none"}
-          />
+          <Bookmark className="w-5 h-5" fill={isBookmarked ? 'currentColor' : 'none'} />
         </button>
       </div>
 
@@ -161,8 +153,8 @@ export function StatueViewer({
             }}
             className={`w-14 h-14 rounded-full shadow-lg transition-all hover:scale-105 flex items-center justify-center ${
               darkMode
-                ? "bg-white/10 text-white hover:bg-white/20"
-                : "bg-white text-neutral-900 border border-neutral-200 hover:bg-neutral-100"
+                ? 'bg-white/10 text-white hover:bg-white/20'
+                : 'bg-white text-neutral-900 border border-neutral-200 hover:bg-neutral-100'
             }`}
           >
             <MessageCircle className="w-6 h-6" />
@@ -174,8 +166,8 @@ export function StatueViewer({
             }}
             className={`w-14 h-14 rounded-full shadow-lg transition-all hover:scale-105 flex items-center justify-center ${
               darkMode
-                ? "bg-neutral-700 text-white hover:bg-neutral-600"
-                : "bg-neutral-900 text-white hover:bg-neutral-800"
+                ? 'bg-neutral-700 text-white hover:bg-neutral-600'
+                : 'bg-neutral-900 text-white hover:bg-neutral-800'
             }`}
           >
             <Info className="w-6 h-6" />
@@ -187,7 +179,7 @@ export function StatueViewer({
       {!chatOpen && (
         <div
           className={`absolute inset-0 bg-white dark:bg-neutral-800 transition-transform duration-300 ease-out ${
-            drawerOpen ? "translate-y-0" : "translate-y-full"
+            drawerOpen ? 'translate-y-0' : 'translate-y-full'
           }`}
         >
           {/* Close Button */}
@@ -200,34 +192,26 @@ export function StatueViewer({
 
           {/* Content */}
           <div className="h-full overflow-y-auto p-6 pt-12">
-            <h2 className="mb-2 text-neutral-900 dark:text-white">
-              {statue.name}
-            </h2>
+            <h2 className="mb-2 text-neutral-900 dark:text-white">{statue.name}</h2>
 
             <div className="grid grid-cols-2 gap-4 mb-6">
               <div>
                 <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">
                   Material
                 </p>
-                <p className="text-neutral-900 dark:text-white">
-                  {statue.material}
-                </p>
+                <p className="text-neutral-900 dark:text-white">{statue.material}</p>
               </div>
               <div>
                 <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">
                   Epoche
                 </p>
-                <p className="text-neutral-900 dark:text-white">
-                  {statue.period}
-                </p>
+                <p className="text-neutral-900 dark:text-white">{statue.period}</p>
               </div>
               <div>
                 <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">
                   Entstehungsjahr
                 </p>
-                <p className="text-neutral-900 dark:text-white">
-                  {statue.year}
-                </p>
+                <p className="text-neutral-900 dark:text-white">{statue.year}</p>
               </div>
               <div>
                 <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">
@@ -303,9 +287,9 @@ export function StatueViewer({
               </div>
             )}
 
-            {renderNarrativeSection("Mythologie", statue.mythologie, true)}
+            {renderNarrativeSection('Mythologie', statue.mythologie, true)}
 
-            {renderNarrativeSection("Kunstepoche", statue.kunstepoche)}
+            {renderNarrativeSection('Kunstepoche', statue.kunstepoche)}
 
             <div className="mb-6">
               <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-2">
@@ -325,19 +309,13 @@ export function StatueViewer({
             </div>
 
             {/* Recommendations */}
-            <Recommendations currentStatue={statue} darkMode={darkMode} />
+            <Recommendations currentStatue={statue} />
           </div>
         </div>
       )}
 
       {/* Chatbot */}
-      {chatOpen && (
-        <Chatbot
-          statue={statue}
-          onClose={() => setChatOpen(false)}
-          darkMode={darkMode}
-        />
-      )}
+      {chatOpen && <Chatbot statue={statue} onClose={() => setChatOpen(false)} />}
     </div>
   );
 }

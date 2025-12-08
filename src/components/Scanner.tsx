@@ -1,12 +1,11 @@
-import { QrCode } from "lucide-react";
-import React, { useRef, useState } from "react";
+import { QrCode } from 'lucide-react';
+import { useRef, useState } from 'react';
 
 type ScannerProps = {
   onScan: (data: string) => void;
-  darkMode: boolean;
 };
 
-export function Scanner({ onScan, darkMode }: ScannerProps) {
+export function Scanner({ onScan }: ScannerProps) {
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -16,22 +15,22 @@ export function Scanner({ onScan, darkMode }: ScannerProps) {
     if (value) {
       onScan(value);
       if (inputRef.current) {
-        inputRef.current.value = "";
+        inputRef.current.value = '';
       }
       setError(null);
     } else {
-      setError("Bitte gib einen gültigen Code ein");
+      setError('Bitte gib einen gültigen Code ein');
     }
   };
 
   const quickScanOptions = [
-    { label: "David", value: "david" },
-    { label: "Venus de Milo", value: "venus" },
-    { label: "Der Denker", value: "thinker" },
-    { label: "Geflügelter Sieg", value: "winged-victory" },
-    { label: "Diskobolos", value: "discobolus" },
-    { label: "Laokoon", value: "laocoon" },
-    { label: "Satyr & Hermaphrodit", value: "satyr-hermaphrodit" },
+    { label: 'David', value: 'david' },
+    { label: 'Venus de Milo', value: 'venus' },
+    { label: 'Der Denker', value: 'thinker' },
+    { label: 'Geflügelter Sieg', value: 'winged-victory' },
+    { label: 'Diskobolos', value: 'discobolus' },
+    { label: 'Laokoon', value: 'laocoon' },
+    { label: 'Satyr & Hermaphrodit', value: 'satyr-hermaphrodit' },
   ];
 
   return (
@@ -72,8 +71,7 @@ export function Scanner({ onScan, darkMode }: ScannerProps) {
         {/* Demo Instructions */}
         <div className="w-full max-w-sm border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 p-4 mb-6">
           <p className="text-sm text-neutral-700 dark:text-neutral-200 mb-3">
-            Demo-Modus: Gib einen Statuencode ein oder nutze die
-            Schnellscan-Tasten unten.
+            Demo-Modus: Gib einen Statuencode ein oder nutze die Schnellscan-Tasten unten.
           </p>
           <div className="flex gap-2">
             <input
@@ -81,7 +79,7 @@ export function Scanner({ onScan, darkMode }: ScannerProps) {
               type="text"
               placeholder="z. B. david"
               className="flex-1 px-3 py-2 border border-neutral-300 dark:border-neutral-600 text-sm bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white"
-              onKeyDown={(e) => e.key === "Enter" && handleManualInput()}
+              onKeyDown={(e) => e.key === 'Enter' && handleManualInput()}
             />
             <button
               onClick={handleManualInput}

@@ -5,16 +5,18 @@ import {
   OrbitControls,
   useGLTF,
   useProgress,
-} from "@react-three/drei";
-import { Canvas } from "@react-three/fiber";
-import { Move, RotateCw } from "lucide-react";
-import { Suspense, useEffect, useMemo } from "react";
-import { Statue } from "../App";
+} from '@react-three/drei';
+import { Canvas } from '@react-three/fiber';
+import { Move, RotateCw } from 'lucide-react';
+import { Suspense, useEffect, useMemo } from 'react';
+import { Statue, StatueModelConfig } from '../App';
 
 type Model3DProps = {
   statue: Statue;
   darkMode: boolean;
 };
+
+type LoadedModelConfig = StatueModelConfig & { file: string };
 
 function CanvasLoader() {
   const { progress } = useProgress();
@@ -27,10 +29,8 @@ function CanvasLoader() {
   );
 }
 
-function StatueMesh({ statue }: { statue: Statue }) {
-  if (!statue.model?.file) return null;
-
-  const gltf = useGLTF(statue.model.file);
+function StatueMesh({ model }: { model: LoadedModelConfig }) {
+  const gltf = useGLTF(model.file);
   const clonedScene = useMemo(() => gltf.scene.clone(), [gltf.scene]);
 
   useEffect(() => {
@@ -44,9 +44,9 @@ function StatueMesh({ statue }: { statue: Statue }) {
     <primitive
       object={clonedScene}
       dispose={null}
-      scale={statue.model.scale ?? 1}
-      position={statue.model.position ?? [0, -1.2, 0]}
-      rotation={statue.model.rotation ?? [0, 0, 0]}
+      scale={model.scale ?? 1}
+      position={model.position ?? [0, -1.2, 0]}
+      rotation={model.rotation ?? [0, 0, 0]}
     />
   );
 }
@@ -59,7 +59,7 @@ export function Model3D({ statue, darkMode }: Model3DProps) {
   }, [statue.model?.file]);
 
   const hasModel = Boolean(statue.model?.file);
-  const viewerBackground = darkMode ? "#05050a" : "#f3f4f6";
+  const viewerBackground = darkMode ? '#05050a' : '#f3f4f6';
   const cameraPosition = statue.model?.camera?.position ?? [0, 1.4, 4.5];
   const cameraFov = statue.model?.camera?.fov ?? 40;
   const controls = statue.model?.controls ?? {
@@ -72,7 +72,7 @@ export function Model3D({ statue, darkMode }: Model3DProps) {
       {hasModel ? (
         <Canvas
           className="w-full h-full"
-          style={{ touchAction: "none" }}
+          style={{ touchAction: 'none' }}
           shadows
           dpr={[1, 1.5]}
           camera={{ position: cameraPosition, fov: cameraFov }}
@@ -94,14 +94,14 @@ export function Model3D({ statue, darkMode }: Model3DProps) {
               intensity={0.7}
               castShadow
             />
-            <StatueMesh statue={statue} />
+            <StatueMesh model={statue.model as LoadedModelConfig} />
             <ContactShadows
               opacity={0.35}
               scale={12}
               blur={2.8}
               far={8}
               resolution={1024}
-              color={darkMode ? "#050505" : "#585858"}
+              color={darkMode ? '#050505' : '#585858'}
             />
             <Environment preset="studio" />
             <OrbitControls
@@ -121,8 +121,8 @@ export function Model3D({ statue, darkMode }: Model3DProps) {
             Kein 3D-Modell gefunden
           </p>
           <p className="text-sm text-neutral-500 dark:text-neutral-400">
-            Lege die entsprechende GLB-Datei unter <code>/public/models</code>{" "}
-            ab und aktualisiere die <span className="font-medium">model</span>
+            Lege die entsprechende GLB-Datei unter <code>/public/models</code> ab und
+            aktualisiere die <span className="font-medium">model</span>
             -Konfiguration für diese Statue.
           </p>
         </div>
