@@ -148,8 +148,8 @@
     --font-weight-normal: 400;
     --font-weight-medium: 500;
     --leading-relaxed: 1.625;
-    --radius-2xl: 1rem;
-    --radius-3xl: 1.5rem;
+    --radius-2xl: 0px;
+    --radius-3xl: 0px;
     --ease-out: cubic-bezier(0, 0, 0.2, 1);
     --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
     --animate-bounce: bounce 1s infinite;
@@ -1059,7 +1059,7 @@
   }
 
   .rounded-2xl {
-    border-radius: var(--radius-2xl);
+    border-radius: 0px;
   }
 
   .rounded-full {
@@ -1067,49 +1067,49 @@
   }
 
   .rounded-lg {
-    border-radius: var(--radius);
+    border-radius: 0px;
   }
 
   .rounded-xl {
-    border-radius: calc(var(--radius) + 4px);
+    border-radius: 0px;
   }
 
   .rounded-t-2xl {
-    border-top-left-radius: var(--radius-2xl);
-    border-top-right-radius: var(--radius-2xl);
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
   }
 
   .rounded-t-3xl {
-    border-top-left-radius: var(--radius-3xl);
-    border-top-right-radius: var(--radius-3xl);
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
   }
 
   .rounded-t-full {
-    border-top-left-radius: 3.40282e38px;
-    border-top-right-radius: 3.40282e38px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
   }
 
   .rounded-t-xl {
-    border-top-left-radius: calc(var(--radius) + 4px);
-    border-top-right-radius: calc(var(--radius) + 4px);
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
   }
 
   .rounded-b-3xl {
-    border-bottom-right-radius: var(--radius-3xl);
-    border-bottom-left-radius: var(--radius-3xl);
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
   }
 
   .rounded-b-full {
-    border-bottom-right-radius: 3.40282e38px;
-    border-bottom-left-radius: 3.40282e38px;
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
   }
 
   .rounded-br-sm {
-    border-bottom-right-radius: calc(var(--radius) - 4px);
+    border-bottom-right-radius: 0px;
   }
 
   .rounded-bl-sm {
-    border-bottom-left-radius: calc(var(--radius) - 4px);
+    border-bottom-left-radius: 0px;
   }
 
   .border {
@@ -2188,7 +2188,7 @@
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --radius: 0.625rem;
+  --radius: 0px;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: #030213;

@@ -1,4 +1,4 @@
-import { Sparkles } from "lucide-react";
+import React from "react";
 import { Statue } from "../App";
 
 type RecommendationsProps = {
@@ -199,12 +199,9 @@ export function Recommendations({
 
   return (
     <div className="border-t border-neutral-200 dark:border-neutral-700 pt-6">
-      <div className="flex items-center gap-2 mb-4">
-        <Sparkles className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-        <h3 className="text-neutral-900 dark:text-white">
-          Das könnte dir auch gefallen
-        </h3>
-      </div>
+      <h3 className="text-neutral-900 dark:text-white tracking-wide uppercase text-xs mb-4">
+        Das könnte dir auch gefallen
+      </h3>
       <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
         Basierend auf der Epoche {currentStatue.period} und Fundorten in der
         Nähe von {currentStatue.foundLocation}
@@ -213,7 +210,7 @@ export function Recommendations({
         {recommendations.map((statue) => (
           <div
             key={statue.id}
-            className="bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl p-3 hover:border-purple-500 dark:hover:border-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950 transition-all cursor-pointer"
+            className="bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl p-3 hover:border-neutral-900 dark:hover:border-white/40 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all cursor-pointer"
           >
             <div className="flex gap-3">
               <div className="w-16 h-16 rounded-lg overflow-hidden bg-neutral-200 dark:bg-neutral-800 flex-shrink-0">

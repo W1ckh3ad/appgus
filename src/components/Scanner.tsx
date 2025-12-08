@@ -1,5 +1,5 @@
-import { AlertCircle, QrCode } from "lucide-react";
-import { useRef, useState } from "react";
+import { QrCode } from "lucide-react";
+import React, { useRef, useState } from "react";
 
 type ScannerProps = {
   onScan: (data: string) => void;
@@ -58,42 +58,37 @@ export function Scanner({ onScan, darkMode }: ScannerProps) {
           <div className="absolute inset-0 flex items-center justify-center p-12">
             <div className="relative w-full h-full">
               {/* Corner brackets */}
-              <div className="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-blue-500 dark:border-blue-400" />
-              <div className="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-blue-500 dark:border-blue-400" />
-              <div className="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-blue-500 dark:border-blue-400" />
-              <div className="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-blue-500 dark:border-blue-400" />
+              <div className="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-white/80 dark:border-white/40" />
+              <div className="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-white/80 dark:border-white/40" />
+              <div className="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-white/80 dark:border-white/40" />
+              <div className="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-white/80 dark:border-white/40" />
 
               {/* Scanning line animation */}
-              <div className="absolute inset-x-0 top-0 h-1 bg-blue-500 dark:bg-blue-400 animate-scan" />
+              <div className="absolute inset-x-0 top-0 h-1 bg-white/70 dark:bg-white/40 animate-scan" />
             </div>
           </div>
         </div>
 
         {/* Demo Instructions */}
-        <div className="w-full max-w-sm bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
-          <div className="flex gap-3">
-            <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
-            <div>
-              <p className="text-sm text-blue-900 dark:text-blue-200 mb-2">
-                Demo-Modus: Gib einen Statuencode ein oder nutze die
-                Schnellscan-Tasten unten
-              </p>
-              <div className="flex gap-2">
-                <input
-                  ref={inputRef}
-                  type="text"
-                  placeholder="z. B. david"
-                  className="flex-1 px-3 py-2 border border-blue-300 dark:border-blue-700 rounded-lg text-sm bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white"
-                  onKeyDown={(e) => e.key === "Enter" && handleManualInput()}
-                />
-                <button
-                  onClick={handleManualInput}
-                  className="px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-lg text-sm hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
-                >
-                  Scannen
-                </button>
-              </div>
-            </div>
+        <div className="w-full max-w-sm border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 p-4 mb-6">
+          <p className="text-sm text-neutral-700 dark:text-neutral-200 mb-3">
+            Demo-Modus: Gib einen Statuencode ein oder nutze die
+            Schnellscan-Tasten unten.
+          </p>
+          <div className="flex gap-2">
+            <input
+              ref={inputRef}
+              type="text"
+              placeholder="z. B. david"
+              className="flex-1 px-3 py-2 border border-neutral-300 dark:border-neutral-600 text-sm bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white"
+              onKeyDown={(e) => e.key === "Enter" && handleManualInput()}
+            />
+            <button
+              onClick={handleManualInput}
+              className="px-4 py-2 bg-neutral-900 text-white text-sm hover:bg-neutral-800 transition-colors"
+            >
+              Scannen
+            </button>
           </div>
         </div>
 
@@ -113,7 +108,7 @@ export function Scanner({ onScan, darkMode }: ScannerProps) {
               <button
                 key={option.value}
                 onClick={() => onScan(option.value)}
-                className="px-4 py-3 bg-white dark:bg-neutral-800 border-2 border-neutral-200 dark:border-neutral-700 rounded-lg hover:border-blue-500 dark:hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950 transition-all text-sm text-neutral-900 dark:text-white"
+                className="px-4 py-3 bg-white dark:bg-neutral-800 border-2 border-neutral-200 dark:border-neutral-700 rounded-lg hover:border-neutral-900 dark:hover:border-white hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-all text-sm text-neutral-900 dark:text-white"
               >
                 {option.label}
               </button>

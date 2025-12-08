@@ -1,14 +1,5 @@
-import {
-  AlertTriangle,
-  Bookmark,
-  Info,
-  MapPin,
-  MessageCircle,
-  Palette,
-  Sparkles,
-  X,
-} from "lucide-react";
-import { ReactNode, useEffect, useState } from "react";
+import { Bookmark, Info, MessageCircle, X } from "lucide-react";
+import React, { useEffect, useState } from "react";
 import { Statue } from "../App";
 import { Chatbot } from "./Chatbot";
 import { Model3D } from "./Model3D";
@@ -42,41 +33,92 @@ export function StatueViewer({
     window.open(url, "_blank");
   };
 
+  const resolveImagePath = (path: string) => {
+    if (path.startsWith("http")) return path;
+    if (path.startsWith("/")) return path;
+    return `/${path}`;
+  };
+
   const renderNarrativeSection = (
     title: string,
-    data: Statue["mythologie"],
-    icon: ReactNode
+    data: Statue["mythologie"] | Statue["kunstepoche"],
+    useRichImages = false
   ) => {
     if (!data) return null;
 
-    return (
-      <div className="mb-6">
-        <div className="flex items-center gap-2 mb-3">
-          <div className="p-2 rounded-full bg-neutral-100 dark:bg-neutral-700">
-            {icon}
-          </div>
-          <h3 className="text-neutral-900 dark:text-white">{title}</h3>
-        </div>
-        <p className="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed">
-          {data.description}
-        </p>
-        {data.images?.length ? (
+    const renderImages = () => {
+      if (!data.images?.length) return null;
+
+      if (useRichImages) {
+        const richImages = ((data as Statue["mythologie"])?.images ??
+          []) as NonNullable<NonNullable<Statue["mythologie"]>["images"]>;
+
+        return (
           <div className="grid grid-cols-2 gap-3 mt-4">
-            {data.images.map((src, index) => (
+            {richImages.map((image, index) => (
               <div
                 key={`${title}-image-${index}`}
-                className="aspect-video rounded-lg overflow-hidden"
+                className="rounded-lg overflow-hidden bg-neutral-100 dark:bg-neutral-900"
               >
                 <img
-                  src={src}
-                  alt={`${title} Referenz ${index + 1}`}
-                  className="w-full h-full object-cover"
+                  src={resolveImagePath(image.path)}
+                  alt={
+                    image.title
+                      ? `${title} – ${image.title}`
+                      : `${title} Referenz ${index + 1}`
+                  }
+                  className="w-full h-auto max-h-64 object-contain"
                   loading="lazy"
                 />
+                {(image.title || image.description) && (
+                  <div className="mt-2">
+                    {image.title && (
+                      <p className="text-sm text-neutral-800 dark:text-neutral-200">
+                        {image.title}
+                      </p>
+                    )}
+                    {image.description && (
+                      <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                        {image.description}
+                      </p>
+                    )}
+                  </div>
+                )}
               </div>
             ))}
           </div>
-        ) : null}
+        );
+      }
+
+      const plainImages = data.images as string[];
+      return (
+        <div className="grid grid-cols-2 gap-3 mt-4">
+          {plainImages.map((src, index) => (
+            <div
+              key={`${title}-image-${index}`}
+              className="aspect-video rounded-lg overflow-hidden"
+            >
+              <img
+                src={resolveImagePath(src)}
+                alt={`${title} Referenz ${index + 1}`}
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          ))}
+        </div>
+      );
+    };
+
+    return (
+      <div className="mb-6">
+        <h3 className="text-neutral-900 dark:text-white tracking-wide uppercase text-xs mb-3">
+          {title}
+        </h3>
+        <p className="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed">
+          {data.description}
+        </p>
+        {renderImages()}
       </div>
     );
   };
@@ -93,10 +135,10 @@ export function StatueViewer({
         </div>
         <button
           onClick={onBookmark}
-          className={`p-2 rounded-full transition-colors ${
+          className={`p-2 rounded-full border transition-colors ${
             isBookmarked
-              ? "bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400"
-              : "bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-600"
+              ? "bg-neutral-900 text-white border-neutral-900 dark:bg-white dark:text-neutral-900"
+              : "bg-transparent text-neutral-600 dark:text-neutral-300 border-neutral-400 dark:border-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-700"
           }`}
         >
           <Bookmark
@@ -117,7 +159,11 @@ export function StatueViewer({
               setDrawerOpen(false);
               setChatOpen(true);
             }}
-            className="w-14 h-14 bg-purple-600 dark:bg-purple-700 text-white rounded-full shadow-lg hover:bg-purple-700 dark:hover:bg-purple-600 transition-all hover:scale-105 flex items-center justify-center"
+            className={`w-14 h-14 rounded-full shadow-lg transition-all hover:scale-105 flex items-center justify-center ${
+              darkMode
+                ? "bg-white/10 text-white hover:bg-white/20"
+                : "bg-white text-neutral-900 border border-neutral-200 hover:bg-neutral-100"
+            }`}
           >
             <MessageCircle className="w-6 h-6" />
           </button>
@@ -126,7 +172,11 @@ export function StatueViewer({
               setChatOpen(false);
               setDrawerOpen(true);
             }}
-            className="w-14 h-14 bg-blue-600 dark:bg-blue-700 text-white rounded-full shadow-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-all hover:scale-105 flex items-center justify-center"
+            className={`w-14 h-14 rounded-full shadow-lg transition-all hover:scale-105 flex items-center justify-center ${
+              darkMode
+                ? "bg-neutral-700 text-white hover:bg-neutral-600"
+                : "bg-neutral-900 text-white hover:bg-neutral-800"
+            }`}
           >
             <Info className="w-6 h-6" />
           </button>
@@ -190,62 +240,54 @@ export function StatueViewer({
             </div>
 
             {/* Found Location */}
-            <div className="mb-6 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
-              <div className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
-                <div className="flex-1">
-                  <p className="text-sm text-blue-900 dark:text-blue-300 mb-1">
-                    Fundort
-                  </p>
-                  <p className="text-blue-800 dark:text-blue-200 mb-2">
-                    {statue.foundLocation}
-                  </p>
-                  <button
-                    onClick={openGoogleMaps}
-                    className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline"
-                  >
-                    Auf Google Maps ansehen &rarr;
-                  </button>
-                  {statue.foundLocationImages?.length ? (
-                    <div className="grid grid-cols-2 gap-3 mt-4">
-                      {statue.foundLocationImages.map((src, index) => (
-                        <div
-                          key={`found-${index}`}
-                          className="aspect-video rounded-lg overflow-hidden"
-                        >
-                          <img
-                            src={src}
-                            alt={`Fundort ${index + 1}`}
-                            className="w-full h-full object-cover"
-                            loading="lazy"
-                          />
-                        </div>
-                      ))}
+            <div className="mb-6 border border-neutral-200 dark:border-neutral-700 p-4 bg-neutral-50 dark:bg-neutral-900">
+              <p className="text-xs tracking-wide uppercase text-neutral-500 dark:text-neutral-400 mb-2">
+                Fundort
+              </p>
+              <p className="text-neutral-900 dark:text-white mb-3">
+                {statue.foundLocation}
+              </p>
+              <button
+                onClick={openGoogleMaps}
+                className="text-sm text-neutral-800 dark:text-neutral-200 underline decoration-neutral-500 hover:opacity-70"
+              >
+                Auf Google Maps ansehen &rarr;
+              </button>
+              {statue.foundLocationImages?.length ? (
+                <div className="grid grid-cols-2 gap-3 mt-4">
+                  {statue.foundLocationImages.map((src, index) => (
+                    <div
+                      key={`found-${index}`}
+                      className="aspect-video rounded-lg overflow-hidden"
+                    >
+                      <img
+                        src={src}
+                        alt={`Fundort ${index + 1}`}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                      />
                     </div>
-                  ) : null}
+                  ))}
                 </div>
-              </div>
+              ) : null}
             </div>
 
             {/* Damages Section */}
             {statue.damages && statue.damages.length > 0 && (
               <div className="mb-6">
-                <div className="flex items-center gap-2 mb-3">
-                  <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-500" />
-                  <h3 className="text-neutral-900 dark:text-white">
-                    Schadensverlauf
-                  </h3>
-                </div>
+                <h3 className="text-neutral-900 dark:text-white tracking-wide uppercase text-xs mb-3">
+                  Schadensverlauf
+                </h3>
                 <div className="space-y-4">
                   {statue.damages.map((damage, index) => (
                     <div
                       key={index}
-                      className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-xl p-4"
+                      className="border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 p-4"
                     >
-                      <p className="text-amber-900 dark:text-amber-300 mb-2">
+                      <p className="text-neutral-900 dark:text-white mb-2">
                         {damage.part}
                       </p>
-                      <p className="text-sm text-amber-800 dark:text-amber-200 mb-3">
+                      <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-3">
                         {damage.description}
                       </p>
                       <div className="aspect-video rounded-lg overflow-hidden">
@@ -261,17 +303,9 @@ export function StatueViewer({
               </div>
             )}
 
-            {renderNarrativeSection(
-              "Mythologie",
-              statue.mythologie,
-              <Sparkles className="w-5 h-5 text-purple-600 dark:text-purple-300" />
-            )}
+            {renderNarrativeSection("Mythologie", statue.mythologie, true)}
 
-            {renderNarrativeSection(
-              "Kunstepoche",
-              statue.kunstepoche,
-              <Palette className="w-5 h-5 text-blue-600 dark:text-blue-300" />
-            )}
+            {renderNarrativeSection("Kunstepoche", statue.kunstepoche)}
 
             <div className="mb-6">
               <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-2">

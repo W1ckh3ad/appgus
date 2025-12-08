@@ -1,5 +1,5 @@
 import { Bookmark, Clock, Home, Moon, Scan, Sun } from "lucide-react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Bookmarks } from "./components/Bookmarks";
 import { History } from "./components/History";
 import { Scanner } from "./components/Scanner";
@@ -26,6 +26,14 @@ export type StatueNarrative = {
   description: string;
   images?: string[];
 };
+export type StatueNarrativeComplex = {
+  description: string;
+  images?: {
+    title: string;
+    description?: string;
+    path: string;
+  }[];
+};
 
 export type Statue = {
   id: string;
@@ -45,7 +53,7 @@ export type Statue = {
     imageUrl: string;
   }>;
   model?: StatueModelConfig;
-  mythologie?: StatueNarrative;
+  mythologie?: StatueNarrativeComplex;
   kunstepoche?: StatueNarrative;
 };
 
@@ -94,8 +102,18 @@ const statuesData: Record<string, Statue> = {
       description:
         "David steht als biblischer Held für Mut gegen übermächtige Gegner. In Florenz wurde er zum Symbol republikanischer Freiheit – die Bürger sahen im jungen Hirtenjungen den Geist ihrer Stadt.",
       images: [
-        "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=800",
-        "https://images.unsplash.com/photo-1494797710133-75ad8b1dd613?w=800",
+        {
+          title: "Symbol Florenz",
+          description:
+            "Blick auf Florenz – Sinnbild für den republikanischen Mut.",
+          path: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=800",
+        },
+        {
+          title: "Hirtenmotiv",
+          description:
+            "Darstellung jugendlicher Stärke, inspiriert vom biblischen David.",
+          path: "https://images.unsplash.com/photo-1494797710133-75ad8b1dd613?w=800",
+        },
       ],
     },
     kunstepoche: {
@@ -140,8 +158,18 @@ const statuesData: Record<string, Statue> = {
       description:
         "Die Erzählung der Aphrodite knüpft an Geburt aus dem Meeresschaum an. Die fehlenden Arme regen seit Jahrhunderten Fantasie an: Hielt sie den Apfel des Paris oder justierte sie ihr Gewand?",
       images: [
-        "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800",
-        "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800",
+        {
+          title: "Meeresschaum",
+          description:
+            "Sanfte Welle als Verweis auf Aphrodites mythische Geburt.",
+          path: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800",
+        },
+        {
+          title: "Apfel des Paris",
+          description:
+            "Stillleben, das den berühmten Schönheitswettbewerb evoziert.",
+          path: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800",
+        },
       ],
     },
     kunstepoche: {
@@ -178,8 +206,17 @@ const statuesData: Record<string, Statue> = {
       description:
         "Rodin plante den Denker ursprünglich als Dante, der das Eingangstor zur Hölle überblickt. Das Motiv bündelt die existenzielle Frage, wie Körperlichkeit und Geist miteinander ringen.",
       images: [
-        "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800",
-        "https://images.unsplash.com/photo-1500534623283-312aade485b7?w=800",
+        {
+          title: "Gedankentiefe",
+          description: "Abstraktes Lichtspiel für die innere Reise Dantes.",
+          path: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800",
+        },
+        {
+          title: "Tor zur Hölle",
+          description:
+            "Dunkle Texturen erinnern an Rodins ursprüngliches Portal.",
+          path: "https://images.unsplash.com/photo-1500534623283-312aade485b7?w=800",
+        },
       ],
     },
     kunstepoche: {
@@ -232,8 +269,16 @@ const statuesData: Record<string, Statue> = {
       description:
         "Nike landet auf dem Bug eines Siegerschiffes und trägt die Botschaft göttlicher Gunst. Auch ohne Kopf schreitet sie vorwärts – ein Sinnbild für Triumphe gegen jede Widrigkeit.",
       images: [
-        "https://images.unsplash.com/photo-1477414348463-c0eb7f1359b6?w=800",
-        "https://images.unsplash.com/photo-1482062364825-616fd23b8fc1?w=800",
+        {
+          title: "Maritimer Triumph",
+          description: "Küstenlandschaft als Echo des Siegerschiffes.",
+          path: "https://images.unsplash.com/photo-1477414348463-c0eb7f1359b6?w=800",
+        },
+        {
+          title: "Göttlicher Sturm",
+          description: "Windgepeitschte Wolken spiegeln Nikes Dynamik.",
+          path: "https://images.unsplash.com/photo-1482062364825-616fd23b8fc1?w=800",
+        },
       ],
     },
     kunstepoche: {
@@ -269,8 +314,18 @@ const statuesData: Record<string, Statue> = {
       description:
         "Der Athlet verkörpert den Mythos des kalokagathia – die Einheit von körperlicher und geistiger Tüchtigkeit. Im Moment vor dem Wurf sammelt sich Energie wie in einer Spiralfeder.",
       images: [
-        "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800",
-        "https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=800",
+        {
+          title: "Spannung vor dem Wurf",
+          description:
+            "Architektonische Kurven greifen die Spirale des Diskus auf.",
+          path: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800",
+        },
+        {
+          title: "Kalokagathia",
+          description:
+            "Figürliche Silhouette für Harmonie von Körper und Geist.",
+          path: "https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=800",
+        },
       ],
     },
     kunstepoche: {
@@ -302,8 +357,17 @@ const statuesData: Record<string, Statue> = {
       description:
         "Der trojanische Priester Laokoon warnte vor dem hölzernen Pferd und wurde zur Strafe von Poseidon gesandt – das Drama zeigt, wie göttliche Entscheidungen Menschen in den Abgrund reißen.",
       images: [
-        "https://images.unsplash.com/photo-1470246973918-29a93221c455?w=800",
-        "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800",
+        {
+          title: "Trojanisches Omen",
+          description: "Neblige Szene, die das Unheil über Troja ankündigt.",
+          path: "https://images.unsplash.com/photo-1470246973918-29a93221c455?w=800",
+        },
+        {
+          title: "Göttlicher Zorn",
+          description:
+            "Dramatische Lichtstimmung erinnert an Poseidons Strafe.",
+          path: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800",
+        },
       ],
     },
     kunstepoche: {
@@ -324,22 +388,12 @@ const statuesData: Record<string, Statue> = {
     location:
       "Dresden, Staatliche Kunstsammlungen, Skulpturensammlung (Albertinum) Inv. Hm 155",
     year: "Römische Kopie nach einem griechischen Original aus dem 2. Jh. v. Chr.",
-    imageUrl: "/images/statues/satyr_hermaphrodit_main.jpg",
+    imageUrl: "/images/satyr_hermaphroditos/ausstellung.jpg",
     material: "Marmor",
     foundLocation: "Italien, Tivoli, Sammlung Albani",
     foundCoordinates: { lat: 41.91598, lng: 12.5002 },
-    foundLocationImages: [
-      "/images/locations/tivoli_1.jpg",
-      "/images/locations/tivoli_2.jpg",
-    ],
-    damages: [
-      {
-        part: "Arme und Beine",
-        description:
-          "Die Arme beider Figuren sowie Teile der Beine fehlen – typische Bruchstellen bei antiken Skulpturen.",
-        imageUrl: "/images/statues/satyr_hermaphrodit_damage_1.jpg",
-      },
-    ],
+    foundLocationImages: ["/images/satyr_hermaphroditos/fundort_1.jpeg"],
+
     model: createModelConfig("/models/satyr-hermaphrodit.glb", {
       scale: 1.5,
       position: [0, -1, 0],
@@ -357,8 +411,14 @@ const statuesData: Record<string, Statue> = {
       description:
         "Satyrn sind Begleiter des Dionysos und verkörpern unkontrollierte Triebe, Rausch und Grenzüberschreitung. Hermaphroditos – Sohn von Hermes und Aphrodite – vereinte sich mit der Nymphe Salmakis zu einem zweigeschlechtlichen Wesen und steht für die Auflösung klarer Geschlechtergrenzen.",
       images: [
-        "/images/mythology/satyrn.jpg",
-        "/images/mythology/hermaphroditos.jpg",
+        {
+          title: "Satyr",
+          path: "images/satyr_hermaphroditos/satyr_mythologie.jpeg",
+        },
+        {
+          title: "Hermaphrodit",
+          path: "images/satyr_hermaphroditos/hermaphroditos_mythologie.jpeg",
+        },
       ],
     },
     kunstepoche: {
@@ -538,7 +598,7 @@ export default function App() {
             onClick={() => setCurrentView("home")}
             className={`flex flex-col items-center justify-center flex-1 h-full transition-colors ${
               currentView === "home"
-                ? "text-blue-600 dark:text-blue-400"
+                ? "text-neutral-900 dark:text-white"
                 : "text-neutral-500 dark:text-neutral-400"
             }`}
           >
@@ -550,7 +610,7 @@ export default function App() {
             onClick={() => setCurrentView("scanner")}
             className={`flex flex-col items-center justify-center flex-1 h-full transition-colors ${
               currentView === "scanner"
-                ? "text-blue-600 dark:text-blue-400"
+                ? "text-neutral-900 dark:text-white"
                 : "text-neutral-500 dark:text-neutral-400"
             }`}
           >
@@ -562,7 +622,7 @@ export default function App() {
             onClick={() => setCurrentView("bookmarks")}
             className={`flex flex-col items-center justify-center flex-1 h-full transition-colors ${
               currentView === "bookmarks"
-                ? "text-blue-600 dark:text-blue-400"
+                ? "text-neutral-900 dark:text-white"
                 : "text-neutral-500 dark:text-neutral-400"
             }`}
           >
@@ -574,7 +634,7 @@ export default function App() {
             onClick={() => setCurrentView("history")}
             className={`flex flex-col items-center justify-center flex-1 h-full transition-colors ${
               currentView === "history"
-                ? "text-blue-600 dark:text-blue-400"
+                ? "text-neutral-900 dark:text-white"
                 : "text-neutral-500 dark:text-neutral-400"
             }`}
           >
