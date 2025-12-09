@@ -586,16 +586,16 @@ export default function App() {
 
   return (
     <div className="h-screen flex flex-col bg-neutral-50 dark:bg-neutral-900">
-      {/* Header with Dark Mode Toggle */}
+      {/* Header mit zweiter Ebene und Logo-Überlappung */}
       <div className="bg-white dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700 px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <img
             src="/logo.png"
             alt="Appgus Logo"
-            className="w-8 h-8 rounded-full border border-neutral-200 dark:border-neutral-700 object-cover"
+            className="w-20 h-20 rounded-full border border-neutral-200 dark:border-neutral-700 object-cover"
           />
           <h1 className="text-lg text-neutral-900 dark:text-white">
-            Ausstellungs-Scanner
+            Ausstellungs-Scanner – Abgusssammlung Berlin
           </h1>
         </div>
         <button
