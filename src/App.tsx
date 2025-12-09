@@ -26,6 +26,9 @@ export type StatueNarrative = {
   description: string;
   images?: string[];
 };
+export type EpochNarrative = {
+  description: string;
+};
 export type StatueNarrativeComplex = {
   description: string;
   images?: {
@@ -89,7 +92,7 @@ export type Statue = {
   }>;
   model?: StatueModelConfig;
   mythologie?: StatueNarrativeComplex;
-  kunstepoche?: StatueNarrative;
+  kunstepoche?: EpochNarrative;
 };
 
 const createModelConfig = (
@@ -152,10 +155,6 @@ const statuesData: Record<string, Statue> = {
     kunstepoche: {
       description:
         'Die hochklassische Renaissance verbindet perfekte Anatomie mit innerer Spannung. Michelangelos bewusst unvollkommene Proportionen kompensieren die Blickperspektive des Betrachters.',
-      images: [
-        'https://images.unsplash.com/photo-1506485338023-6ce5f36692c2?w=800',
-        'https://images.unsplash.com/photo-1468109320504-028c953b2a8f?w=800',
-      ],
     },
   },
   venus: {
@@ -204,10 +203,6 @@ const statuesData: Record<string, Statue> = {
     kunstepoche: {
       description:
         'Die hellenistische Epoche betont Bewegung und sinnliche Formen. Sanfte S-Kurven und das nasse Gewand verleihen der Figur jene elegante Schwerelosigkeit, die Sammler*innen fasziniert.',
-      images: [
-        'https://images.unsplash.com/photo-1521551211900-0a7f66f0de93?w=800',
-        'https://images.unsplash.com/photo-1496317899792-9d7dbcd928a1?w=800',
-      ],
     },
   },
   thinker: {
@@ -249,10 +244,6 @@ const statuesData: Record<string, Statue> = {
     kunstepoche: {
       description:
         'Die Moderne löst sich von idealisierten Helden. Plastische Oberflächen lassen Werkzeugspuren sichtbar werden – Gedanken sind hier Bewegung, kein poliertes Dogma.',
-      images: [
-        'https://images.unsplash.com/photo-1472289065668-ce650ac443d2?w=800',
-        'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800',
-      ],
     },
   },
   'winged-victory': {
@@ -308,10 +299,6 @@ const statuesData: Record<string, Statue> = {
     kunstepoche: {
       description:
         'Hellenistische Bildhauerei setzt auf dramatische Diagonalen und wehende Draperien. Die Statue wirkt wie ein eingefrorener Sturm und zeigt die technische Meisterschaft rhodischer Werkstätten.',
-      images: [
-        'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=800',
-        'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800',
-      ],
     },
   },
   discobolus: {
@@ -352,10 +339,6 @@ const statuesData: Record<string, Statue> = {
     kunstepoche: {
       description:
         'Klassisch-griechische Kunst sucht ideale Proportionen. Der Diskobolos nutzt eine harmonische, fast mathematische Kurve, um Bewegung und Gleichgewicht in Marmor zu bannen.',
-      images: [
-        'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800',
-        'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=800',
-      ],
     },
   },
   laocoon: {
@@ -392,10 +375,6 @@ const statuesData: Record<string, Statue> = {
     kunstepoche: {
       description:
         'Spät-hellenistische Skulpturen übersteigern Pathos und körperliche Verwindungen. Die Laokoon-Gruppe inspirierte Renaissancekünstler und lehrte, wie Emotion plastisch übersetzt wird.',
-      images: [
-        'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=800',
-        'https://images.unsplash.com/photo-1472289065668-ce650ac443d2?w=800',
-      ],
     },
   },
   'satyr-hermaphrodit': {
@@ -443,7 +422,6 @@ const statuesData: Record<string, Statue> = {
     kunstepoche: {
       description:
         'Der Hellenismus liebt emotionale, theatrale Szenen sowie überraschende Motive, die Realismus, Detailfreude und erotische Themen verbinden. Künstler suchten nach psychologischer Tiefe und spielten mit ambivalenten Figuren wie Satyrn und Hermaphroditen.',
-      images: ['/images/epochs/hellenismus.jpg'],
     },
   },
   athena_parthenos: {
@@ -454,7 +432,7 @@ const statuesData: Record<string, Statue> = {
     period: 'Klassik',
     location: 'Kopenhagen, Ny Carlsberg Glyptotek',
     year: 'Römische Kopie aus der ersten Hälfte des 1. Jhs. n. Chr. nach griechischem Original aus dem 5. Jahrzehnt des 5. Jhs. v. Chr.',
-    imageUrl: '/images/statues/athena_parthenos_main.jpg',
+    imageUrl: '/images/athena_parthenos/ausstellung.jpg',
     material: 'Pentelischer Marmor',
     foundLocation: 'Vermutlich Italien, Umbrien',
     foundCoordinates: { lat: 42.850723, lng: 11.3502611 },
@@ -464,7 +442,7 @@ const statuesData: Record<string, Statue> = {
         part: 'Helm',
         description:
           'Der Helm der Athena Parthenos war ein attischer Helm, hoch und weit nach hinten gezogen, mit einem ausgeprägten Helmrand und einer hohen Helmzier. Zentrale Zierfigur war eine Sphinx, flankiert von je einem Pegasus. Diese symbolisierten Schutz, Weisheit und die Verbindung Athenas zu mythischen Helden.',
-        imageUrl: '/images/athena_parthenos/damage_helm.jpeg',
+        imageUrl: '/images/athena_parthenos/damage_helmet.jpeg',
       },
       {
         part: 'Körper',
@@ -491,19 +469,14 @@ const statuesData: Record<string, Statue> = {
         'Athena, bewaffnet dem Kopf des Zeus entsprungen, verkörpert Weisheit, Strategie und Schutz. Ihre Nike in der Hand feiert den Triumph Athens; Ölbaumgabe, Schild und Schlange erinnern an Ordnung, Fruchtbarkeit und göttliche Herkunft.',
       images: [
         {
-          title: 'Athena',
-          path: '/images/mythology/athena.jpg',
-        },
-        {
           title: 'Motivdetails',
-          path: '/images/statues/athena_parthenos_detail_motif.jpg',
+          path: '/images/athena_parthenos/motiv_details.jpeg',
         },
       ],
     },
     kunstepoche: {
       description:
         'Die Klassik strebt nach Harmonie, idealen Proportionen und ruhiger Bewegtheit. Die Athena Parthenos verbindet monumentale Präsenz mit fein austarierten Gesichtszügen und erzählt so den Anspruch Athens auf kulturelle und politische Führerschaft.',
-      images: ['/images/epochs/klassik.jpg'],
     },
   },
 };

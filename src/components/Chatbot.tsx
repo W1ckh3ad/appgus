@@ -214,45 +214,63 @@ export function Chatbot({ statue, onClose }: ChatbotProps) {
   return (
     <div className="absolute inset-0 bg-white dark:bg-neutral-900 z-50 flex flex-col">
       {/* Header */}
-      <div className="p-4 border-b border-neutral-200 dark:border-neutral-700 bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-700 dark:to-blue-700 text-white flex items-center justify-between">
+      <div className="p-4 border-b border-neutral-200 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-            <Sparkles className="w-5 h-5" />
+          <div className="w-10 h-10 bg-white/40 dark:bg-neutral-700/60 rounded-full flex items-center justify-center">
+            <Sparkles className="w-5 h-5 text-neutral-900 dark:text-white" />
           </div>
           <div>
-            <h2 className="text-white">Chat mit {statue.name}</h2>
-            <p className="text-sm text-white/90">Frag mich alles!</p>
+            <h2 className="text-neutral-900 dark:text-white">Chat mit {statue.name}</h2>
+            <p className="text-sm text-neutral-700 dark:text-neutral-200">
+              Frag mich alles!
+            </p>
           </div>
         </div>
         <button
           onClick={onClose}
-          className="p-2 rounded-full hover:bg-white/20 transition-colors"
+          className="p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
         >
-          <X className="w-5 h-5" />
+          <X className="w-5 h-5 text-neutral-800 dark:text-white" />
         </button>
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-neutral-50 dark:bg-neutral-900">
-        {messages.map((message, index) => (
-          <div
-            key={index}
-            className={`flex ${
-              message.role === 'user' ? 'justify-end' : 'justify-start'
-            }`}
-          >
-            <div
-              className={`max-w-[80%] rounded-2xl px-4 py-3 ${
-                message.role === 'user'
-                  ? 'bg-blue-600 dark:bg-blue-700 text-white rounded-br-sm'
-                  : 'bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white rounded-bl-sm shadow'
-              }`}
-            >
-              <p className="text-sm leading-relaxed">{message.content}</p>
-            </div>
-          </div>
-        ))}
-
+      <div className="relative flex-1 overflow-y-auto bg-neutral-50 dark:bg-neutral-900">
+        <div
+          className="pointer-events-none absolute z-0"
+          data-test="here"
+          style={{
+            backgroundImage: 'url(/logo.png)',
+            backgroundSize: 'contain',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            height: '100%',
+            width: '100%',
+            filter: 'opacity(0.1)',
+            inset: 0,
+          }}
+        />
+        <div className="space-y-4 relative z-10 p-4">
+          {messages.map((message, index) => {
+            const isUser = message.role === 'user';
+            return (
+              <div
+                key={index}
+                className={`flex ${isUser ? 'justify-end' : 'justify-start'} relative`}
+              >
+                <div
+                  className={`max-w-[80%] rounded-2xl px-4 py-3 ${
+                    isUser
+                      ? 'bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-br-sm border border-neutral-800 dark:border-neutral-300'
+                      : 'bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white rounded-bl-sm shadow border border-neutral-200 dark:border-neutral-700'
+                  }`}
+                >
+                  <p className="text-sm leading-relaxed">{message.content}</p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
         {isTyping && (
           <div className="flex justify-start">
             <div className="bg-white dark:bg-neutral-800 rounded-2xl rounded-bl-sm px-4 py-3 shadow">
@@ -305,12 +323,12 @@ export function Chatbot({ statue, onClose }: ChatbotProps) {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
             placeholder="Stell eine Frage..."
-            className="flex-1 px-4 py-3 border border-neutral-300 dark:border-neutral-600 rounded-full focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 transition-colors bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white"
+            className="flex-1 px-4 py-3 border border-neutral-300 dark:border-neutral-600 rounded-full focus:outline-none focus:border-neutral-500 dark:focus:border-neutral-400 transition-colors bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white"
           />
           <button
             onClick={handleSend}
             disabled={!input.trim() || isTyping}
-            className="w-12 h-12 bg-blue-600 dark:bg-blue-700 text-white rounded-full flex items-center justify-center hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors disabled:bg-neutral-300 dark:disabled:bg-neutral-700 disabled:cursor-not-allowed"
+            className="w-12 h-12 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-full flex items-center justify-center hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-colors disabled:bg-neutral-300 dark:disabled:bg-neutral-700 disabled:text-white disabled:cursor-not-allowed"
           >
             <Send className="w-5 h-5" />
           </button>

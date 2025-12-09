@@ -1,5 +1,5 @@
 import { Bookmark, Info, MessageCircle, X } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Statue, epochs } from '../App';
 import { Chatbot } from './Chatbot';
 import { Model3D } from './Model3D';
@@ -21,6 +21,9 @@ export function StatueViewer({
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
   const epochInfo = epochs[statue.period];
+  const epochSection = statue.kunstepoche
+    ? { description: statue.kunstepoche.description }
+    : undefined;
 
   const openGoogleMaps = () => {
     const { lat, lng } = statue.foundCoordinates;
@@ -50,19 +53,20 @@ export function StatueViewer({
     const headingLabel = options?.subtitle ? `${title} – ${options.subtitle}` : title;
 
     const renderImages = () => {
-      if (!data.images?.length) return null;
+      const images = (data as { images?: Array<unknown> }).images ?? [];
+      if (!images.length) return null;
 
       if (useRichImages) {
-        const richImages = ((data as Statue['mythologie'])?.images ?? []) as NonNullable<
+        const richImages = images as NonNullable<
           NonNullable<Statue['mythologie']>['images']
         >;
 
         return (
-          <div className="grid grid-cols-2 gap-3 mt-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
             {richImages.map((image, index) => (
               <div
                 key={`${title}-image-${index}`}
-                className="rounded-lg overflow-hidden bg-neutral-100 dark:bg-neutral-900"
+                className="rounded-lg overflow-hidden bg-neutral-100 dark:bg-neutral-900 flex flex-col items-center justify-start"
               >
                 <img
                   src={resolveImagePath(image.path)}
@@ -71,7 +75,7 @@ export function StatueViewer({
                       ? `${title} – ${image.title}`
                       : `${title} Referenz ${index + 1}`
                   }
-                  className="w-full h-auto max-h-64 object-contain"
+                  className="w-full h-auto max-h-64 max-w-[280px] object-contain"
                   loading="lazy"
                 />
                 {(image.title || image.description) && (
@@ -94,18 +98,18 @@ export function StatueViewer({
         );
       }
 
-      const plainImages = data.images as string[];
+      const plainImages = images as string[];
       return (
-        <div className="grid grid-cols-2 gap-3 mt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
           {plainImages.map((src, index) => (
             <div
               key={`${title}-image-${index}`}
-              className="aspect-video rounded-lg overflow-hidden"
+              className="rounded-lg overflow-hidden bg-neutral-100 dark:bg-neutral-900 flex items-center justify-center"
             >
               <img
                 src={resolveImagePath(src)}
                 alt={`${title} Referenz ${index + 1}`}
-                className="w-full h-full object-cover"
+                className="w-full h-auto max-h-80 max-w-[240px] object-contain"
                 loading="lazy"
               />
             </div>
@@ -124,7 +128,7 @@ export function StatueViewer({
               style={{ backgroundColor: options.accentColor }}
             />
           )}
-          <h3 className="text-neutral-900 dark:text-white tracking-wide uppercase text-xs">
+          <h3 className="text-neutral-900 dark:text-white text-lg font-semibold">
             {headingLabel}
           </h3>
         </div>
@@ -217,18 +221,20 @@ export function StatueViewer({
           <div className="h-full overflow-y-auto p-6 pt-12">
             <h2 className="mb-2 text-neutral-900 dark:text-white">{statue.name}</h2>
 
-            <div className="grid grid-cols-2 gap-4 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
               <div>
-                <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">
+                <p className="text-sm text-neutral-900 dark:text-neutral-300 mb-1 pb-2 border-b border-neutral-200 dark:border-neutral-700">
                   Material
                 </p>
-                <p className="text-neutral-900 dark:text-white">{statue.material}</p>
+                <p className="text-neutral-700 dark:text-neutral-300">
+                  {statue.material}
+                </p>
               </div>
               <div>
-                <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">
+                <p className="text-sm text-neutral-900 dark:text-neutral-300 mb-1 pb-2 border-b border-neutral-200 dark:border-neutral-700">
                   Epoche
                 </p>
-                <div className="flex items-center gap-2 text-neutral-900 dark:text-white">
+                <div className="flex items-center gap-2 text-neutral-700 dark:text-neutral-300">
                   {epochInfo && (
                     <span
                       aria-hidden
@@ -240,16 +246,16 @@ export function StatueViewer({
                 </div>
               </div>
               <div>
-                <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">
+                <p className="text-sm text-neutral-900 dark:text-neutral-300 mb-1 pb-2 border-b border-neutral-200 dark:border-neutral-700">
                   Entstehungsjahr
                 </p>
-                <p className="text-neutral-900 dark:text-white">{statue.year}</p>
+                <p className="text-neutral-700 dark:text-neutral-300">{statue.year}</p>
               </div>
               <div>
-                <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">
+                <p className="text-sm text-neutral-900 dark:text-neutral-300 mb-1 pb-2 border-b border-neutral-200 dark:border-neutral-700">
                   Heutiger Standort
                 </p>
-                <p className="text-neutral-900 dark:text-white text-sm">
+                <p className="text-neutral-700 dark:text-neutral-300 text-sm">
                   {statue.location}
                 </p>
               </div>
@@ -257,10 +263,10 @@ export function StatueViewer({
 
             {/* Found Location */}
             <div className="mb-6 border border-neutral-200 dark:border-neutral-700 p-4 bg-neutral-50 dark:bg-neutral-900">
-              <p className="text-xs tracking-wide uppercase text-neutral-500 dark:text-neutral-400 mb-2">
+              <p className="text-xs tracking-wide uppercase text-neutral-900 dark:text-neutral-300 mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">
                 Fundort
               </p>
-              <p className="text-neutral-900 dark:text-white mb-3">
+              <p className="text-neutral-700 dark:text-neutral-300 mb-3">
                 {statue.foundLocation}
               </p>
               <button
@@ -270,16 +276,16 @@ export function StatueViewer({
                 Auf Google Maps ansehen &rarr;
               </button>
               {statue.foundLocationImages?.length ? (
-                <div className="grid grid-cols-2 gap-3 mt-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
                   {statue.foundLocationImages.map((src, index) => (
                     <div
                       key={`found-${index}`}
-                      className="aspect-video rounded-lg overflow-hidden"
+                      className="rounded-lg overflow-hidden bg-neutral-100 dark:bg-neutral-900 flex items-center justify-center"
                     >
                       <img
                         src={src}
                         alt={`Fundort ${index + 1}`}
-                        className="w-full h-full object-cover"
+                        className="w-full h-auto max-h-56 max-w-[220px] object-contain"
                         loading="lazy"
                       />
                     </div>
@@ -291,7 +297,7 @@ export function StatueViewer({
             {/* Damages Section */}
             {statue.damages && statue.damages.length > 0 && (
               <div className="mb-6">
-                <h3 className="text-neutral-900 dark:text-white tracking-wide uppercase text-xs mb-3">
+                <h3 className="text-neutral-900 dark:text-white text-lg font-semibold mb-3 pb-2 border-b border-neutral-200 dark:border-neutral-700">
                   Schadensverlauf
                 </h3>
                 <div className="space-y-4">
@@ -303,14 +309,14 @@ export function StatueViewer({
                       <p className="text-neutral-900 dark:text-white mb-2">
                         {damage.part}
                       </p>
-                      <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-3">
+                      <p className="text-sm text-neutral-700 dark:text-neutral-300 mb-3">
                         {damage.description}
                       </p>
-                      <div className="aspect-video rounded-lg overflow-hidden">
+                      <div className="rounded-lg overflow-hidden bg-neutral-100 dark:bg-neutral-900 flex items-center justify-center">
                         <img
                           src={damage.imageUrl}
                           alt={`${damage.part} Referenz`}
-                          className="w-full h-full object-cover"
+                          className="w-full h-auto max-h-64 max-w-[260px] object-contain"
                         />
                       </div>
                     </div>
@@ -323,14 +329,14 @@ export function StatueViewer({
               useRichImages: true,
             })}
 
-            {renderNarrativeSection('Kunstepoche', statue.kunstepoche, {
+            {renderNarrativeSection('Kunstepoche', epochSection, {
               accentColor: epochInfo?.color,
               subtitle: epochInfo?.name,
               preface: epochInfo?.description,
             })}
 
             <div className="mb-6">
-              <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-2">
+              <p className="text-sm text-neutral-900 dark:text-neutral-300 mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">
                 Über die Statue
               </p>
               <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed">
@@ -338,11 +344,11 @@ export function StatueViewer({
               </p>
             </div>
 
-            <div className="aspect-video rounded-xl overflow-hidden mb-6">
+            <div className="rounded-xl overflow-hidden mb-6 bg-neutral-100 dark:bg-neutral-900 flex items-center justify-center">
               <img
                 src={statue.imageUrl}
                 alt={statue.name}
-                className="w-full h-full object-cover"
+                className="w-full h-auto max-h-[420px] object-contain"
               />
             </div>
 
