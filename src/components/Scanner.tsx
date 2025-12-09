@@ -31,6 +31,7 @@ export function Scanner({ onScan }: ScannerProps) {
     { label: 'Diskobolos', value: 'discobolus' },
     { label: 'Laokoon', value: 'laocoon' },
     { label: 'Satyr & Hermaphrodit', value: 'satyr-hermaphrodit' },
+    { label: 'Athena Parthenos', value: 'athena_parthenos' },
   ];
 
   return (
