@@ -1,5 +1,13 @@
 import { Bookmark, Clock, Home, Moon, Scan, Sun } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import {
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 import { Bookmarks } from './components/Bookmarks';
 import { History } from './components/History';
 import { Scanner } from './components/Scanner';
@@ -481,8 +489,6 @@ const statuesData: Record<string, Statue> = {
   },
 };
 
-type View = 'home' | 'scanner' | 'bookmarks' | 'history';
-
 const getStoredValue = <T,>(key: string, defaultValue: T): T => {
   if (typeof window === 'undefined') return defaultValue;
   try {
@@ -494,8 +500,12 @@ const getStoredValue = <T,>(key: string, defaultValue: T): T => {
 };
 
 export default function App() {
-  const [currentView, setCurrentView] = useState('home' as View);
-  const [selectedStatue, setSelectedStatue] = useState(null as Statue | null);
+  return <AppWithRouter />;
+}
+
+function AppWithRouter() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [darkMode, setDarkMode] = useState(() =>
     getStoredValue<boolean>('darkMode', false)
   );
@@ -526,17 +536,18 @@ export default function App() {
     localStorage.setItem('history', JSON.stringify(historyItems));
   }, [historyItems]);
 
+  const addToHistory = (statue: Statue) => {
+    setHistoryItems((prev) => {
+      const filtered = prev.filter((item) => item.statue.id !== statue.id);
+      return [{ statue, timestamp: Date.now() }, ...filtered];
+    });
+  };
+
   const handleScan = (qrData: string) => {
     const statue = statuesData[qrData.toLowerCase()];
     if (statue) {
-      setSelectedStatue(statue);
-      // Add to history
-      setHistoryItems((prev) => {
-        // Remove duplicates and add new item at the beginning
-        const filtered = prev.filter((item) => item.statue.id !== statue.id);
-        return [{ statue, timestamp: Date.now() }, ...filtered];
-      });
-      setCurrentView('home');
+      addToHistory(statue);
+      navigate(`/statue/${statue.id}`);
     }
   };
 
@@ -551,15 +562,17 @@ export default function App() {
   };
 
   const handleSelectFromHistory = (statue: Statue) => {
-    setSelectedStatue(statue);
-    setCurrentView('home');
+    navigate(`/statue/${statue.id}`);
   };
 
-  const bookmarkedStatues = bookmarkedIds.map((id) => statuesData[id]).filter(Boolean);
+  const bookmarkedStatues = useMemo(
+    () => bookmarkedIds.map((id) => statuesData[id]).filter(Boolean),
+    [bookmarkedIds]
+  );
 
   return (
     <div className="h-screen flex flex-col bg-neutral-50 dark:bg-neutral-900">
-      {/* Header mit zweiter Ebene und Logo-Überlappung */}
+      {/* Header */}
       <div className="bg-white dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700 px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <img
@@ -586,54 +599,54 @@ export default function App() {
 
       {/* Main Content */}
       <div className="flex-1 overflow-hidden">
-        {currentView === 'home' && (
-          <div className="h-full flex flex-col">
-            {selectedStatue ? (
-              <StatueViewer
-                statue={selectedStatue}
-                isBookmarked={bookmarkedIds.includes(selectedStatue.id)}
-                onBookmark={() => handleBookmark(selectedStatue.id)}
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <HomeRoute
                 darkMode={darkMode}
+                bookmarkedIds={bookmarkedIds}
+                onBookmark={handleBookmark}
+                addToHistory={addToHistory}
               />
-            ) : (
-              <div className="h-full flex flex-col items-center justify-center p-6 text-center">
-                <Scan className="w-24 h-24 text-neutral-300 dark:text-neutral-600 mb-4" />
-                <h2 className="text-neutral-600 dark:text-neutral-400 mb-2">
-                  Keine Statue ausgewählt
-                </h2>
-                <p className="text-neutral-500 dark:text-neutral-500 text-sm">
-                  Scanne einen QR-Code, um das 3D-Modell und Informationen zur originalen
-                  Statue zu sehen
-                </p>
-              </div>
-            )}
-          </div>
-        )}
-
-        {currentView === 'scanner' && <Scanner onScan={handleScan} />}
-
-        {currentView === 'bookmarks' && (
-          <Bookmarks
-            statues={bookmarkedStatues}
-            onSelect={(statue) => {
-              setSelectedStatue(statue);
-              setCurrentView('home');
-            }}
+            }
           />
-        )}
-
-        {currentView === 'history' && (
-          <History items={historyItems} onSelect={handleSelectFromHistory} />
-        )}
+          <Route
+            path="/statue/:statueId"
+            element={
+              <HomeRoute
+                darkMode={darkMode}
+                bookmarkedIds={bookmarkedIds}
+                onBookmark={handleBookmark}
+                addToHistory={addToHistory}
+              />
+            }
+          />
+          <Route path="/scanner" element={<Scanner onScan={handleScan} />} />
+          <Route
+            path="/bookmarks"
+            element={
+              <Bookmarks
+                statues={bookmarkedStatues}
+                onSelect={(statue) => navigate(`/statue/${statue.id}`)}
+              />
+            }
+          />
+          <Route
+            path="/history"
+            element={<History items={historyItems} onSelect={handleSelectFromHistory} />}
+          />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
       </div>
 
       {/* Bottom Navigation */}
       <nav className="border-t border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800">
         <div className="flex justify-around items-center h-16">
           <button
-            onClick={() => setCurrentView('home')}
+            onClick={() => navigate('/')}
             className={`flex flex-col items-center justify-center flex-1 h-full transition-colors ${
-              currentView === 'home'
+              location.pathname === '/' || location.pathname.startsWith('/statue')
                 ? 'text-neutral-900 dark:text-white'
                 : 'text-neutral-500 dark:text-neutral-400'
             }`}
@@ -643,9 +656,9 @@ export default function App() {
           </button>
 
           <button
-            onClick={() => setCurrentView('scanner')}
+            onClick={() => navigate('/scanner')}
             className={`flex flex-col items-center justify-center flex-1 h-full transition-colors ${
-              currentView === 'scanner'
+              location.pathname === '/scanner'
                 ? 'text-neutral-900 dark:text-white'
                 : 'text-neutral-500 dark:text-neutral-400'
             }`}
@@ -655,9 +668,9 @@ export default function App() {
           </button>
 
           <button
-            onClick={() => setCurrentView('bookmarks')}
+            onClick={() => navigate('/bookmarks')}
             className={`flex flex-col items-center justify-center flex-1 h-full transition-colors ${
-              currentView === 'bookmarks'
+              location.pathname === '/bookmarks'
                 ? 'text-neutral-900 dark:text-white'
                 : 'text-neutral-500 dark:text-neutral-400'
             }`}
@@ -667,9 +680,9 @@ export default function App() {
           </button>
 
           <button
-            onClick={() => setCurrentView('history')}
+            onClick={() => navigate('/history')}
             className={`flex flex-col items-center justify-center flex-1 h-full transition-colors ${
-              currentView === 'history'
+              location.pathname === '/history'
                 ? 'text-neutral-900 dark:text-white'
                 : 'text-neutral-500 dark:text-neutral-400'
             }`}
@@ -679,6 +692,60 @@ export default function App() {
           </button>
         </div>
       </nav>
+    </div>
+  );
+}
+
+function HomeRoute({
+  darkMode,
+  bookmarkedIds,
+  onBookmark,
+  addToHistory,
+}: {
+  darkMode: boolean;
+  bookmarkedIds: string[];
+  onBookmark: (id: string) => void;
+  addToHistory: (statue: Statue) => void;
+}) {
+  const { statueId } = useParams<{ statueId: string }>();
+  const navigate = useNavigate();
+  const statue = statueId ? statuesData[statueId.toLowerCase()] : null;
+
+  useEffect(() => {
+    if (statue) addToHistory(statue);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [statue]);
+
+  if (!statue) {
+    return (
+      <div className="h-full flex flex-col items-center justify-center p-6 text-center">
+        <Scan className="w-24 h-24 text-neutral-300 dark:text-neutral-600 mb-4" />
+        <h2 className="text-neutral-600 dark:text-neutral-400 mb-2">
+          Keine Statue ausgewählt
+        </h2>
+        <p className="text-neutral-500 dark:text-neutral-500 text-sm mb-4">
+          Scanne einen QR-Code, um das 3D-Modell und Informationen zur originalen Statue
+          zu sehen
+        </p>
+        <button
+          onClick={() => navigate('/scanner')}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-colors"
+        >
+          <Scan className="w-4 h-4" />
+          Scannen
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="h-full flex flex-col">
+      <StatueViewer
+        statue={statue}
+        isBookmarked={bookmarkedIds.includes(statue.id)}
+        onBookmark={() => onBookmark(statue.id)}
+        darkMode={darkMode}
+      />
     </div>
   );
 }
