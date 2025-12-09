@@ -1,6 +1,6 @@
 import { Bookmark, Info, MessageCircle, X } from 'lucide-react';
 import { useState } from 'react';
-import { Statue } from '../App';
+import { Statue, epochs } from '../App';
 import { Chatbot } from './Chatbot';
 import { Model3D } from './Model3D';
 import { Recommendations } from './Recommendations';
@@ -20,6 +20,7 @@ export function StatueViewer({
 }: StatueViewerProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
+  const epochInfo = epochs[statue.period];
 
   const openGoogleMaps = () => {
     const { lat, lng } = statue.foundCoordinates;
@@ -36,9 +37,17 @@ export function StatueViewer({
   const renderNarrativeSection = (
     title: string,
     data: Statue['mythologie'] | Statue['kunstepoche'],
-    useRichImages = false
+    options?: {
+      useRichImages?: boolean;
+      accentColor?: string;
+      subtitle?: string;
+      preface?: string;
+    }
   ) => {
     if (!data) return null;
+
+    const useRichImages = options?.useRichImages ?? false;
+    const headingLabel = options?.subtitle ? `${title} – ${options.subtitle}` : title;
 
     const renderImages = () => {
       if (!data.images?.length) return null;
@@ -107,9 +116,23 @@ export function StatueViewer({
 
     return (
       <div className="mb-6">
-        <h3 className="text-neutral-900 dark:text-white tracking-wide uppercase text-xs mb-3">
-          {title}
-        </h3>
+        <div className="flex items-center gap-2 mb-2">
+          {options?.accentColor && (
+            <span
+              aria-hidden
+              className="w-4 h-4 rounded-sm shadow-inner border border-neutral-200 dark:border-neutral-700"
+              style={{ backgroundColor: options.accentColor }}
+            />
+          )}
+          <h3 className="text-neutral-900 dark:text-white tracking-wide uppercase text-xs">
+            {headingLabel}
+          </h3>
+        </div>
+        {options?.preface && (
+          <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-2 leading-relaxed">
+            {options.preface}
+          </p>
+        )}
         <p className="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed">
           {data.description}
         </p>
@@ -205,7 +228,16 @@ export function StatueViewer({
                 <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">
                   Epoche
                 </p>
-                <p className="text-neutral-900 dark:text-white">{statue.period}</p>
+                <div className="flex items-center gap-2 text-neutral-900 dark:text-white">
+                  {epochInfo && (
+                    <span
+                      aria-hidden
+                      className="w-3.5 h-3.5 rounded-sm border border-neutral-300 dark:border-neutral-600"
+                      style={{ backgroundColor: epochInfo.color }}
+                    />
+                  )}
+                  <span>{epochInfo?.name ?? statue.period}</span>
+                </div>
               </div>
               <div>
                 <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">
@@ -287,9 +319,15 @@ export function StatueViewer({
               </div>
             )}
 
-            {renderNarrativeSection('Mythologie', statue.mythologie, true)}
+            {renderNarrativeSection('Mythologie', statue.mythologie, {
+              useRichImages: true,
+            })}
 
-            {renderNarrativeSection('Kunstepoche', statue.kunstepoche)}
+            {renderNarrativeSection('Kunstepoche', statue.kunstepoche, {
+              accentColor: epochInfo?.color,
+              subtitle: epochInfo?.name,
+              preface: epochInfo?.description,
+            })}
 
             <div className="mb-6">
               <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-2">

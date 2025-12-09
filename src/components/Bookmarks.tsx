@@ -1,5 +1,5 @@
 import { BookmarkX } from 'lucide-react';
-import { Statue } from '../App';
+import { Statue, epochs } from '../App';
 
 type BookmarksProps = {
   statues: Statue[];
@@ -53,7 +53,9 @@ export function Bookmarks({ statues, onSelect }: BookmarksProps) {
                       {statue.artist}
                     </p>
                     <p className="text-sm text-neutral-500 dark:text-neutral-500">
-                      {statue.period} • {statue.year}
+                      {(epochs[statue.period]?.name ?? statue.period) +
+                        ' • ' +
+                        statue.year}
                     </p>
                   </div>
                 </div>

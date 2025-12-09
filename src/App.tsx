@@ -35,11 +35,46 @@ export type StatueNarrativeComplex = {
   }[];
 };
 
+export type EpochKey = 'Hellenismus' | 'Klassik' | 'Renaissance' | 'Moderne';
+
+export type Epoch = {
+  name: string;
+  color: string;
+  description: string;
+};
+
+export const epochs: Record<EpochKey, Epoch> = {
+  Hellenismus: {
+    name: 'Hellenismus',
+    color: '#e4c76a',
+    description:
+      'Bevorzugt dramatische Bewegungen, starke Emotionen und fein ausgearbeitete Details, die den Moment wie eingefroren wirken lassen.',
+  },
+  Klassik: {
+    name: 'Klassik',
+    color: '#d88c3a',
+    description:
+      'Sucht nach ausgewogenen Proportionen, klaren Linien und ruhiger Harmonie – Schönheit entsteht durch Maß und Ordnung.',
+  },
+  Renaissance: {
+    name: 'Renaissance',
+    color: '#7e8ed8',
+    description:
+      'Entdeckt antike Ideale neu, verbindet Anatomie, Perspektive und individuelle Ausdruckskraft zu einer humanistischen Bildsprache.',
+  },
+  Moderne: {
+    name: 'Moderne',
+    color: '#4f9da6',
+    description:
+      'Bricht mit traditionellen Idealen, zeigt Materialspuren bewusst und setzt auf experimentelle Formen, um Denken und Prozess sichtbar zu machen.',
+  },
+};
+
 export type Statue = {
   id: string;
   name: string;
   description: string;
-  period: string;
+  period: EpochKey;
   location: string;
   year: string;
   imageUrl: string;
@@ -128,7 +163,7 @@ const statuesData: Record<string, Statue> = {
     name: 'Venus de Milo',
     description:
       'Die Venus von Milo ist eine hellenistische Marmorskulptur, die Aphrodite, die griechische Göttin der Liebe und Schönheit, darstellt. Entstanden zwischen 150 und 125 v. Chr., ist sie für ihre fehlenden Arme berühmt und gilt als Ideal weiblicher Anmut.',
-    period: 'Hellenistische Epoche',
+    period: 'Hellenismus',
     location: 'Louvre, Paris',
     year: '150-125 v. Chr.',
     imageUrl: 'https://images.unsplash.com/photo-1566305977571-5666677c6e98?w=800',
@@ -225,7 +260,7 @@ const statuesData: Record<string, Statue> = {
     name: 'Geflügelter Sieg von Samothrake',
     description:
       'Die Geflügelte Siegesgöttin von Samothrake, auch Nike von Samothrake genannt, ist eine hellenistische Marmorskulptur der Siegesgöttin Nike. Sie entstand im 2. Jahrhundert v. Chr., steht auf einem Schiffsbogen und erinnert an einen maritimen Triumph.',
-    period: 'Hellenistische Epoche',
+    period: 'Hellenismus',
     location: 'Louvre, Paris',
     year: '200-190 v. Chr.',
     imageUrl: 'https://images.unsplash.com/photo-1565024145823-e88d3ae41642?w=800',
@@ -284,7 +319,7 @@ const statuesData: Record<string, Statue> = {
     name: 'Diskobolos',
     description:
       'Der Diskobolos, der berühmte Diskuswerfer, verkörpert den Höhepunkt klassisch-griechischer Athletik. Er hält den Moment gespannter Energie kurz vor dem Wurf fest und zeigt perfekte Anatomie sowie dynamische Bewegung.',
-    period: 'Klassisches Griechenland',
+    period: 'Klassik',
     location: 'Nationalmuseum Rom',
     year: '460-450 v. Chr.',
     imageUrl: 'https://images.unsplash.com/photo-1575912180747-2a9b04de8870?w=800',
@@ -328,7 +363,7 @@ const statuesData: Record<string, Statue> = {
     name: 'Laokoon und seine Söhne',
     description:
       'Diese dramatische hellenistische Skulptur zeigt den trojanischen Priester Laokoon und seine Söhne, die von Meeresschlangen angegriffen werden, die die Götter als Strafe sandten. Sie ist berühmt für die eindringliche Darstellung menschlichen Leidens und göttlichen Zorns.',
-    period: 'Hellenistische Epoche',
+    period: 'Hellenismus',
     location: 'Vatikanische Museen, Vatikanstadt',
     year: '200 v. Chr. - 70 n. Chr.',
     imageUrl: 'https://images.unsplash.com/photo-1580674285054-bed31e145f59?w=800',
@@ -411,6 +446,66 @@ const statuesData: Record<string, Statue> = {
       images: ['/images/epochs/hellenismus.jpg'],
     },
   },
+  athena_parthenos: {
+    id: 'athena_parthenos',
+    name: 'Athena Parthenos',
+    description:
+      'Der 34 cm große, hier im Abguss gezeigte Kopf ist eine verkleinerte Kopie des ca. 12 m hohen Goldelfenbein-Kultbilds des Phidias aus dem Parthenon in Athen. Das Gesicht des Kopfes in Kopenhagen wirkt deutlich ovaler, die Wangenknochen sind schmaler und das Kinn weniger rund als es für das Original aus dem Parthenon überliefert ist. Ähnliche Züge finden sich beispielsweise bei der Statuette aus Madrid. Der attische Helm ist nur noch schlecht erhalten, je ein Pegasus an jeder Seite und eine Sphinx in der Mitte des Helms sind in Ansätzen erkennbar. Sie sind auch für das Original in Athen belegt.',
+    period: 'Klassik',
+    location: 'Kopenhagen, Ny Carlsberg Glyptotek',
+    year: 'Römische Kopie aus der ersten Hälfte des 1. Jhs. n. Chr. nach griechischem Original aus dem 5. Jahrzehnt des 5. Jhs. v. Chr.',
+    imageUrl: '/images/statues/athena_parthenos_main.jpg',
+    material: 'Pentelischer Marmor',
+    foundLocation: 'Vermutlich Italien, Umbrien',
+    foundCoordinates: { lat: 42.850723, lng: 11.3502611 },
+    foundLocationImages: ['/images/athena_parthenos/fundort_1.jpeg'],
+    damages: [
+      {
+        part: 'Helm',
+        description:
+          'Der Helm der Athena Parthenos war ein attischer Helm, hoch und weit nach hinten gezogen, mit einem ausgeprägten Helmrand und einer hohen Helmzier. Zentrale Zierfigur war eine Sphinx, flankiert von je einem Pegasus. Diese symbolisierten Schutz, Weisheit und die Verbindung Athenas zu mythischen Helden.',
+        imageUrl: '/images/athena_parthenos/damage_helm.jpeg',
+      },
+      {
+        part: 'Körper',
+        description:
+          'Die ursprüngliche Statue war ca. 12m hoch. Die rechte Hand hielt eine Nike-Figur, die linke Hand ruhte auf einem großen Rundschild, neben dem sich eine Schlange (oft als Erichthonios interpretiert) befand.',
+        imageUrl: '/images/athena_parthenos/damage_body.jpeg',
+      },
+    ],
+    model: createModelConfig('/models/athena_parthenos.glb', {
+      scale: 1,
+      position: [0, -1.2, 0],
+      rotation: [0, 0, 0],
+      camera: {
+        position: [0, 0, 4],
+        fov: 50,
+      },
+      controls: {
+        minDistance: 2,
+        maxDistance: 8,
+      },
+    }),
+    mythologie: {
+      description:
+        'Athena, bewaffnet dem Kopf des Zeus entsprungen, verkörpert Weisheit, Strategie und Schutz. Ihre Nike in der Hand feiert den Triumph Athens; Ölbaumgabe, Schild und Schlange erinnern an Ordnung, Fruchtbarkeit und göttliche Herkunft.',
+      images: [
+        {
+          title: 'Athena',
+          path: '/images/mythology/athena.jpg',
+        },
+        {
+          title: 'Motivdetails',
+          path: '/images/statues/athena_parthenos_detail_motif.jpg',
+        },
+      ],
+    },
+    kunstepoche: {
+      description:
+        'Die Klassik strebt nach Harmonie, idealen Proportionen und ruhiger Bewegtheit. Die Athena Parthenos verbindet monumentale Präsenz mit fein austarierten Gesichtszügen und erzählt so den Anspruch Athens auf kulturelle und politische Führerschaft.',
+      images: ['/images/epochs/klassik.jpg'],
+    },
+  },
 };
 
 type View = 'home' | 'scanner' | 'bookmarks' | 'history';
@@ -426,17 +521,17 @@ const getStoredValue = <T,>(key: string, defaultValue: T): T => {
 };
 
 export default function App() {
-  const [currentView, setCurrentView] = useState<View>('home');
-  const [selectedStatue, setSelectedStatue] = useState<Statue | null>(null);
-  const [darkMode, setDarkMode] = useState<boolean>(() =>
-    getStoredValue('darkMode', false)
+  const [currentView, setCurrentView] = useState('home' as View);
+  const [selectedStatue, setSelectedStatue] = useState(null as Statue | null);
+  const [darkMode, setDarkMode] = useState(() =>
+    getStoredValue<boolean>('darkMode', false)
   );
-  const [bookmarkedIds, setBookmarkedIds] = useState<string[]>(() =>
+  const [bookmarkedIds, setBookmarkedIds] = useState(() =>
     getStoredValue<string[]>('bookmarks', [])
   );
-  const [historyItems, setHistoryItems] = useState<
-    Array<{ statue: Statue; timestamp: number }>
-  >(() => getStoredValue('history', []));
+  const [historyItems, setHistoryItems] = useState(() =>
+    getStoredValue<Array<{ statue: Statue; timestamp: number }>>('history', [])
+  );
 
   // Save dark mode preference to localStorage
   useEffect(() => {

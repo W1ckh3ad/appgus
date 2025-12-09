@@ -1,6 +1,6 @@
 import { Send, Sparkles, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { Statue } from '../App';
+import { Statue, epochs } from '../App';
 
 type ChatbotProps = {
   statue: Statue;
@@ -22,6 +22,7 @@ export function Chatbot({ statue, onClose }: ChatbotProps) {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const epochName = epochs[statue.period]?.name ?? statue.period;
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -114,7 +115,7 @@ export function Chatbot({ statue, onClose }: ChatbotProps) {
 
     // Context-aware responses based on the question
     if (includesWhen && includesCreated) {
-      return `Ich entstand in der Epoche ${statue.period}, genauer gesagt im Jahr ${statue.year}. Es war eine bemerkenswerte Zeit für Kunst und Bildhauerei!`;
+      return `Ich entstand in der Epoche ${epochName}, genauer gesagt im Jahr ${statue.year}. Es war eine bemerkenswerte Zeit für Kunst und Bildhauerei!`;
     }
 
     if (
@@ -123,7 +124,7 @@ export function Chatbot({ statue, onClose }: ChatbotProps) {
         lowerQuestion.includes('artist') ||
         lowerQuestion.includes('künstler'))
     ) {
-      return `Geschaffen wurde ich von ${statue.artist}, einer herausragenden Persönlichkeit der Epoche ${statue.period}. Ihr Können und ihre Vision haben mich zum Leben erweckt.`;
+      return `Geschaffen wurde ich von ${statue.artist}, einer herausragenden Persönlichkeit der Epoche ${epochName}. Ihr Können und ihre Vision haben mich zum Leben erweckt.`;
     }
 
     if (includesWhere && includesFound) {
@@ -140,7 +141,7 @@ export function Chatbot({ statue, onClose }: ChatbotProps) {
     }
 
     if (includesMaterial) {
-      return `Ich bin aus Marmor gearbeitet, einem in der Epoche ${statue.period} besonders geschätzten Material, weil es Schönheit und gute Bearbeitbarkeit verbindet. Der Stein wurde sorgfältig ausgewählt und mit großer Präzision geformt.`;
+      return `Ich bin aus Marmor gearbeitet, einem in der Epoche ${epochName} besonders geschätzten Material, weil es Schönheit und gute Bearbeitbarkeit verbindet. Der Stein wurde sorgfältig ausgewählt und mit großer Präzision geformt.`;
     }
 
     if (includesMeaning) {
@@ -151,15 +152,15 @@ export function Chatbot({ statue, onClose }: ChatbotProps) {
       if (statue.id === 'david') {
         return `Ich bin beeindruckende 17 Fuß (5,17 Meter) groß! Ich wurde aus einem einzigen Marmorblock gehauen, was meine Dimensionen noch außergewöhnlicher macht.`;
       }
-      return `Ich habe Lebensgröße und wurde nach den Gestaltungsprinzipien der Epoche ${statue.period} sorgfältig proportioniert.`;
+      return `Ich habe Lebensgröße und wurde nach den Gestaltungsprinzipien der Epoche ${epochName} sorgfältig proportioniert.`;
     }
 
     if (includesPeriod) {
-      return `Ich entstamme der Epoche ${statue.period} und wurde ${statue.year} geschaffen. Diese Zeit brachte bedeutende Entwicklungen in der Kunst- und Bildhauergeschichte mit sich.`;
+      return `Ich entstamme der Epoche ${epochName} und wurde ${statue.year} geschaffen. Diese Zeit brachte bedeutende Entwicklungen in der Kunst- und Bildhauergeschichte mit sich.`;
     }
 
     if (includesTechnique) {
-      return `Ich entstand mit traditionellen Bildhauertechniken der Epoche ${statue.period}. Mein Schöpfer ${statue.artist} nutzte Meißel, Spitzen und viel Planung, um den Rohmarmor in meine heutige Form zu verwandeln.`;
+      return `Ich entstand mit traditionellen Bildhauertechniken der Epoche ${epochName}. Mein Schöpfer ${statue.artist} nutzte Meißel, Spitzen und viel Planung, um den Rohmarmor in meine heutige Form zu verwandeln.`;
     }
 
     if (includesThank) {

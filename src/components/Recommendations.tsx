@@ -1,4 +1,4 @@
-import { Statue } from '../App';
+import { Statue, epochs } from '../App';
 
 type RecommendationsProps = {
   currentStatue: Statue;
@@ -23,7 +23,7 @@ const allStatuesData: Record<string, Statue> = {
     name: 'Venus de Milo',
     description:
       'Die Venus von Milo ist eine hellenistische Darstellung der Göttin Aphrodite.',
-    period: 'Hellenistische Epoche',
+    period: 'Hellenismus',
     location: 'Louvre, Paris',
     artist: 'Alexandros von Antiochia',
     year: '150-125 v. Chr.',
@@ -54,7 +54,7 @@ const allStatuesData: Record<string, Statue> = {
     id: 'winged-victory',
     name: 'Geflügelter Sieg von Samothrake',
     description: 'Die Nike von Samothrake feiert einen hellenistischen Seesieg.',
-    period: 'Hellenistische Epoche',
+    period: 'Hellenismus',
     location: 'Louvre, Paris',
     artist: 'Unbekannt',
     year: '200-190 v. Chr.',
@@ -73,7 +73,7 @@ const allStatuesData: Record<string, Statue> = {
     id: 'discobolus',
     name: 'Diskobolos',
     description: 'Der Diskuswerfer zeigt den Höhepunkt klassischer Athletik.',
-    period: 'Klassisches Griechenland',
+    period: 'Klassik',
     location: 'Nationalmuseum Rom',
     artist: 'Myron',
     year: '460-450 v. Chr.',
@@ -85,7 +85,7 @@ const allStatuesData: Record<string, Statue> = {
     id: 'laocoon',
     name: 'Laokoon und seine Söhne',
     description: 'Die Gruppe zeigt Laokoon im Kampf gegen Meeresschlangen.',
-    period: 'Hellenistische Epoche',
+    period: 'Hellenismus',
     location: 'Vatikanische Museen, Vatikanstadt',
     artist: 'Agesander, Athenodoros und Polydoros',
     year: '200 v. Chr. - 70 n. Chr.',
@@ -96,6 +96,9 @@ const allStatuesData: Record<string, Statue> = {
 };
 
 export function Recommendations({ currentStatue }: RecommendationsProps) {
+  const currentEpoch = epochs[currentStatue.period];
+  const currentEpochLabel = currentEpoch?.name ?? currentStatue.period;
+
   // Calculate recommendations based on period and location
   const getRecommendations = (): Statue[] => {
     const allStatues = Object.values(allStatuesData);
@@ -189,7 +192,7 @@ export function Recommendations({ currentStatue }: RecommendationsProps) {
         Das könnte dir auch gefallen
       </h3>
       <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
-        Basierend auf der Epoche {currentStatue.period} und Fundorten in der Nähe von{' '}
+        Basierend auf der Epoche {currentEpochLabel} und Fundorten in der Nähe von{' '}
         {currentStatue.foundLocation}
       </p>
       <div className="space-y-3">
@@ -212,7 +215,9 @@ export function Recommendations({ currentStatue }: RecommendationsProps) {
                   {statue.artist}
                 </p>
                 <p className="text-xs text-neutral-500 dark:text-neutral-500 mt-1">
-                  {statue.period} • {statue.foundLocation}
+                  {(epochs[statue.period]?.name ?? statue.period) +
+                    ' • ' +
+                    statue.foundLocation}
                 </p>
               </div>
             </div>

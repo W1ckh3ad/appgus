@@ -1,5 +1,5 @@
 import { History as HistoryIcon } from 'lucide-react';
-import { Statue } from '../App';
+import { Statue, epochs } from '../App';
 
 type HistoryProps = {
   items: Array<{ statue: Statue; timestamp: number }>;
@@ -74,7 +74,9 @@ export function History({ items, onSelect }: HistoryProps) {
                       {item.statue.artist}
                     </p>
                     <p className="text-sm text-neutral-500 dark:text-neutral-500">
-                      {item.statue.period} • {item.statue.year}
+                      {(epochs[item.statue.period]?.name ?? item.statue.period) +
+                        ' • ' +
+                        item.statue.year}
                     </p>
                   </div>
                 </div>
