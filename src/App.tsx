@@ -1,5 +1,5 @@
 import { Bookmark, Clock, Home, Moon, Scan, Sun } from 'lucide-react';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Navigate,
   Route,

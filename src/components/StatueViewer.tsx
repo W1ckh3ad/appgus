@@ -1,5 +1,5 @@
 import { Bookmark, Info, MessageCircle, X } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Statue, epochs } from '../App';
 import { Chatbot } from './Chatbot';
 import { Model3D } from './Model3D';
@@ -221,6 +221,41 @@ export function StatueViewer({
           <div className="h-full overflow-y-auto p-6 pt-12">
             <h2 className="mb-2 text-neutral-900 dark:text-white">{statue.name}</h2>
 
+            <div className="mb-6 border border-neutral-200 dark:border-neutral-700 p-4 bg-neutral-50 dark:bg-neutral-900 rounded-lg">
+              <h3 className="text-neutral-900 dark:text-white text-lg font-semibold mb-3">
+                Quick Facts
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+                <div>
+                  <p className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+                    Name
+                  </p>
+                  <p className="text-neutral-900 dark:text-white">{statue.name}</p>
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+                    Epoche
+                  </p>
+                  <div className="flex items-center gap-2 text-neutral-900 dark:text-white">
+                    {epochInfo && (
+                      <span
+                        aria-hidden
+                        className="w-3.5 h-3.5 rounded-sm border border-neutral-300 dark:border-neutral-600"
+                        style={{ backgroundColor: epochInfo.color }}
+                      />
+                    )}
+                    <span>{epochInfo?.name ?? statue.period}</span>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+                    Jahr
+                  </p>
+                  <p className="text-neutral-900 dark:text-white">{statue.year}</p>
+                </div>
+              </div>
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
               <div>
                 <p className="text-sm text-neutral-900 dark:text-neutral-300 mb-1 pb-2 border-b border-neutral-200 dark:border-neutral-700">
@@ -298,7 +333,7 @@ export function StatueViewer({
             {statue.damages && statue.damages.length > 0 && (
               <div className="mb-6">
                 <h3 className="text-neutral-900 dark:text-white text-lg font-semibold mb-3 pb-2 border-b border-neutral-200 dark:border-neutral-700">
-                  Schadensverlauf
+                  Rekonstruktion
                 </h3>
                 <div className="space-y-4">
                   {statue.damages.map((damage, index) => (
