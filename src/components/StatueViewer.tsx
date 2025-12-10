@@ -270,46 +270,6 @@ export function StatueViewer({
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-              <div>
-                <p className="text-sm text-neutral-900 dark:text-neutral-300 mb-1 pb-2 border-b border-neutral-200 dark:border-neutral-700">
-                  Material
-                </p>
-                <p className="text-neutral-700 dark:text-neutral-300">
-                  {statue.material}
-                </p>
-              </div>
-              <div>
-                <p className="text-sm text-neutral-900 dark:text-neutral-300 mb-1 pb-2 border-b border-neutral-200 dark:border-neutral-700">
-                  Epoche
-                </p>
-                <div className="flex items-center gap-2 text-neutral-700 dark:text-neutral-300">
-                  {epochInfo && (
-                    <span
-                      aria-hidden
-                      className="w-3.5 h-3.5 rounded-sm border border-neutral-300 dark:border-neutral-600"
-                      style={{ backgroundColor: epochInfo.color }}
-                    />
-                  )}
-                  <span>{epochInfo?.name ?? statue.period}</span>
-                </div>
-              </div>
-              <div>
-                <p className="text-sm text-neutral-900 dark:text-neutral-300 mb-1 pb-2 border-b border-neutral-200 dark:border-neutral-700">
-                  Entstehungsjahr
-                </p>
-                <p className="text-neutral-700 dark:text-neutral-300">{statue.year}</p>
-              </div>
-              <div>
-                <p className="text-sm text-neutral-900 dark:text-neutral-300 mb-1 pb-2 border-b border-neutral-200 dark:border-neutral-700">
-                  Heutiger Standort
-                </p>
-                <p className="text-neutral-700 dark:text-neutral-300 text-sm">
-                  {statue.location}
-                </p>
-              </div>
-            </div>
-
             {/* Found Location */}
             <div className="mb-6 border border-neutral-200 dark:border-neutral-700 p-4 bg-neutral-50 dark:bg-neutral-900">
               <p className="text-xs tracking-wide uppercase text-neutral-900 dark:text-neutral-300 mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">
