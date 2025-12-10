@@ -221,16 +221,22 @@ export function StatueViewer({
           <div className="h-full overflow-y-auto p-6 pt-12">
             <h2 className="mb-2 text-neutral-900 dark:text-white">{statue.name}</h2>
 
+            <h3 className="text-neutral-900 dark:text-white text-lg font-semibold mb-2 pb-2 inline-block border-b-2 border-neutral-900 dark:border-neutral-300">
+              Quick Facts
+            </h3>
             <div className="mb-6 border border-neutral-200 dark:border-neutral-700 p-4 bg-neutral-50 dark:bg-neutral-900 rounded-lg">
-              <h3 className="text-neutral-900 dark:text-white text-lg font-semibold mb-3">
-                Quick Facts
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
                 <div>
                   <p className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
                     Name
                   </p>
                   <p className="text-neutral-900 dark:text-white">{statue.name}</p>
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+                    Material
+                  </p>
+                  <p className="text-neutral-900 dark:text-white">{statue.material}</p>
                 </div>
                 <div>
                   <p className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
@@ -249,9 +255,17 @@ export function StatueViewer({
                 </div>
                 <div>
                   <p className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
-                    Jahr
+                    Entstehungsjahr
                   </p>
-                  <p className="text-neutral-900 dark:text-white">{statue.year}</p>
+                  <p className="text-neutral-900 dark:text-white leading-snug">
+                    {statue.year}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+                    Heutiger Standort
+                  </p>
+                  <p className="text-neutral-900 dark:text-white">{statue.location}</p>
                 </div>
               </div>
             </div>
