@@ -644,25 +644,16 @@ function AppWithRouter() {
       {/* Bottom Navigation */}
       <nav className="border-t border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800">
         <div className="flex justify-around items-center h-16">
-          {/*
-            Inlining background color ensures it also works when arbitrary Tailwind
-            classes are purged. Color is kept light to stay legible in Dark Mode.
-          */}
           <button
             onClick={() => navigate('/')}
             className={clsx(
-              'flex flex-col items-center justify-center flex-1 h-full rounded-md mx-1 transition-colors',
+              'nav-btn',
               location.pathname === '/' || location.pathname.startsWith('/statue')
-                ? 'bg-[#cdc9c3] text-neutral-900 border border-neutral-300 shadow-sm'
-                : 'bg-transparent text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800/60'
+                ? 'nav-btn-active'
+                : undefined
             )}
             aria-current={
               location.pathname === '/' || location.pathname.startsWith('/statue')
-            }
-            style={
-              location.pathname === '/' || location.pathname.startsWith('/statue')
-                ? { backgroundColor: '#cdc9c3', color: '#111' }
-                : undefined
             }
           >
             <Home className="w-6 h-6" />
@@ -672,17 +663,10 @@ function AppWithRouter() {
           <button
             onClick={() => navigate('/scanner')}
             className={clsx(
-              'flex flex-col items-center justify-center flex-1 h-full rounded-md mx-1 transition-colors',
-              location.pathname === '/scanner'
-                ? 'bg-[#cdc9c3] text-neutral-900 border border-neutral-300 shadow-sm'
-                : 'bg-transparent text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800/60'
+              'nav-btn',
+              location.pathname === '/scanner' ? 'nav-btn-active' : undefined
             )}
             aria-current={location.pathname === '/scanner'}
-            style={
-              location.pathname === '/scanner'
-                ? { backgroundColor: '#cdc9c3', color: '#111' }
-                : undefined
-            }
           >
             <Scan className="w-6 h-6" />
             <span className="text-xs mt-1">Scannen</span>
@@ -691,17 +675,10 @@ function AppWithRouter() {
           <button
             onClick={() => navigate('/bookmarks')}
             className={clsx(
-              'flex flex-col items-center justify-center flex-1 h-full rounded-md mx-1 transition-colors',
-              location.pathname === '/bookmarks'
-                ? 'bg-[#cdc9c3] text-neutral-900 border border-neutral-300 shadow-sm'
-                : 'bg-transparent text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800/60'
+              'nav-btn',
+              location.pathname === '/bookmarks' ? 'nav-btn-active' : undefined
             )}
             aria-current={location.pathname === '/bookmarks'}
-            style={
-              location.pathname === '/bookmarks'
-                ? { backgroundColor: '#cdc9c3', color: '#111' }
-                : undefined
-            }
           >
             <Bookmark className="w-6 h-6" />
             <span className="text-xs mt-1">Gespeichert</span>
@@ -710,17 +687,10 @@ function AppWithRouter() {
           <button
             onClick={() => navigate('/history')}
             className={clsx(
-              'flex flex-col items-center justify-center flex-1 h-full rounded-md mx-1 transition-colors',
-              location.pathname === '/history'
-                ? 'bg-[#cdc9c3] text-neutral-900 border border-neutral-300 shadow-sm'
-                : 'bg-transparent text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800/60'
+              'nav-btn',
+              location.pathname === '/history' ? 'nav-btn-active' : undefined
             )}
             aria-current={location.pathname === '/history'}
-            style={
-              location.pathname === '/history'
-                ? { backgroundColor: '#cdc9c3', color: '#111' }
-                : undefined
-            }
           >
             <Clock className="w-6 h-6" />
             <span className="text-xs mt-1">Verlauf</span>
