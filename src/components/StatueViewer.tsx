@@ -1,5 +1,5 @@
 import { Bookmark, Info, MessageCircle, X } from 'lucide-react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Statue, epochs } from '../App';
 import { Chatbot } from './Chatbot';
 import { Model3D } from './Model3D';
@@ -24,6 +24,58 @@ export function StatueViewer({
   const epochSection = statue.kunstepoche
     ? { description: statue.kunstepoche.description }
     : undefined;
+
+  const quickFactsRef = useRef<HTMLDivElement | null>(null);
+  const reconstructionRef = useRef<HTMLDivElement | null>(null);
+  const mythologyRef = useRef<HTMLDivElement | null>(null);
+  const artEpochRef = useRef<HTMLDivElement | null>(null);
+  const aboutRef = useRef<HTMLDivElement | null>(null);
+
+  const tocItems = [
+    { key: 'quickfacts', label: 'Quick Facts', visible: true },
+    {
+      key: 'rekonstruktion',
+      label: 'Rekonstruktion',
+      visible: Boolean(statue.damages && statue.damages.length > 0),
+    },
+    {
+      key: 'mythologie',
+      label: 'Mythologie',
+      visible: Boolean(statue.mythologie),
+    },
+    {
+      key: 'kunstepoche',
+      label: 'Kunstepoche',
+      visible: Boolean(epochSection),
+    },
+    { key: 'ueber', label: 'Über die Statue', visible: true },
+  ];
+
+  const scrollToSection = (sectionRef: React.RefObject<HTMLDivElement | null>) => {
+    sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const handleTocClick = (key: string) => {
+    switch (key) {
+      case 'quickfacts':
+        scrollToSection(quickFactsRef);
+        break;
+      case 'rekonstruktion':
+        scrollToSection(reconstructionRef);
+        break;
+      case 'mythologie':
+        scrollToSection(mythologyRef);
+        break;
+      case 'kunstepoche':
+        scrollToSection(artEpochRef);
+        break;
+      case 'ueber':
+        scrollToSection(aboutRef);
+        break;
+      default:
+        break;
+    }
+  };
 
   const openGoogleMaps = () => {
     const { lat, lng } = statue.foundCoordinates;
@@ -221,9 +273,30 @@ export function StatueViewer({
           <div className="h-full overflow-y-auto p-6 pt-12">
             <h2 className="mb-2 text-neutral-900 dark:text-white">{statue.name}</h2>
 
-            <h3 className="text-neutral-900 dark:text-white text-lg font-semibold mb-2 pb-2 inline-block border-b-2 border-neutral-900 dark:border-neutral-300">
-              Quick Facts
-            </h3>
+            <div className="mb-4">
+              <p className="text-xs uppercase tracking-wide text-neutral-900 dark:text-white mb-2">
+                Inhalte
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {tocItems
+                  .filter((item) => item.visible)
+                  .map((item) => (
+                    <button
+                      key={item.key}
+                      onClick={() => handleTocClick(item.key)}
+                      className="text-xs px-2 py-1 rounded-md border border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+              </div>
+            </div>
+
+            <div ref={quickFactsRef}>
+              <h3 className="text-neutral-900 dark:text-white text-lg font-semibold mb-2 pb-2 inline-block border-b-2 border-neutral-900 dark:border-neutral-300">
+                Quick Facts
+              </h3>
+            </div>
             <div className="mb-6 border border-neutral-200 dark:border-neutral-700 p-4 bg-neutral-50 dark:bg-neutral-900 rounded-lg">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
                 <div>
@@ -305,7 +378,7 @@ export function StatueViewer({
 
             {/* Damages Section */}
             {statue.damages && statue.damages.length > 0 && (
-              <div className="mb-6">
+              <div className="mb-6" ref={reconstructionRef}>
                 <h3 className="text-neutral-900 dark:text-white text-lg font-semibold mb-3 pb-2 border-b border-neutral-200 dark:border-neutral-700">
                   Rekonstruktion
                 </h3>
@@ -334,20 +407,28 @@ export function StatueViewer({
               </div>
             )}
 
-            {renderNarrativeSection('Mythologie', statue.mythologie, {
-              useRichImages: true,
-            })}
+            {statue.mythologie ? (
+              <div ref={mythologyRef}>
+                {renderNarrativeSection('Mythologie', statue.mythologie, {
+                  useRichImages: true,
+                })}
+              </div>
+            ) : null}
 
-            {renderNarrativeSection('Kunstepoche', epochSection, {
-              accentColor: epochInfo?.color,
-              subtitle: epochInfo?.name,
-              preface: epochInfo?.description,
-            })}
+            {epochSection ? (
+              <div ref={artEpochRef}>
+                {renderNarrativeSection('Kunstepoche', epochSection, {
+                  accentColor: epochInfo?.color,
+                  subtitle: epochInfo?.name,
+                  preface: epochInfo?.description,
+                })}
+              </div>
+            ) : null}
 
-            <div className="mb-6">
-              <p className="text-sm text-neutral-900 dark:text-neutral-300 mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">
+            <div className="mb-6" ref={aboutRef}>
+              <h3 className="text-neutral-900 dark:text-white text-lg font-semibold mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">
                 Über die Statue
-              </p>
+              </h3>
               <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed">
                 {statue.description}
               </p>
