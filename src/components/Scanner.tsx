@@ -27,7 +27,6 @@ export function Scanner({ onScan }: ScannerProps) {
     { label: 'Faustkämpfer von Quirinal', value: 'faustkaempfer-quirinal' },
     { label: 'Ringergruppe', value: 'ringergruppe' },
     { label: 'Hera-Tempel in Paestum', value: 'hera-tempel-paestum' },
-    { label: 'Geflügelter Sieg', value: 'winged-victory' },
     { label: 'Torso von Belvedere', value: 'torso-belvedere' },
     { label: 'Satyr & Hermaphrodit', value: 'satyr-hermaphrodit' },
     { label: 'Athena Parthenos', value: 'athena_parthenos' },

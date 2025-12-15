@@ -3,100 +3,20 @@ import { Statue, epochs } from '../App';
 
 type RecommendationsProps = {
   currentStatue: Statue;
+  allStatues: Record<string, Statue>;
 };
 
-// Import statues data - in a real app this would come from a prop or context
-const allStatuesData: Record<string, Statue> = {
-  'faustkaempfer-quirinal': {
-    id: 'faustkaempfer-quirinal',
-    name: 'Faustkämpfer von Quirinal',
-    description:
-      'Bronzener sitzender Athlet mit sichtbaren Schlagspuren – ein seltenes Meisterwerk des hellenistischen Realismus.',
-    period: 'Hellenismus',
-    location: 'Museo Nazionale Romano, Rom',
-    artist: 'Unbekannt',
-    year: '4.–3. Jh. v. Chr.',
-    imageUrl: 'https://images.unsplash.com/photo-1564951434112-64d74cc2a2d7?w=800',
-    material: 'Bronze',
-    foundLocation: 'Rom, Italien',
-    foundCoordinates: { lat: 41.9028, lng: 12.4964 },
-  },
-  ringergruppe: {
-    id: 'ringergruppe',
-    name: 'Ringergruppe',
-    description:
-      'Zwei Athleten im Bodenkampf – eingefroren im Moment maximaler Spannung und Technik.',
-    period: 'Hellenismus',
-    location: 'Uffizien, Florenz',
-    artist: 'Unbekannt',
-    year: '3. Jh. v. Chr.',
-    imageUrl: 'https://images.unsplash.com/photo-1566305977571-5666677c6e98?w=800',
-    material: 'Marmor',
-    foundLocation: 'Rom, Italien',
-    foundCoordinates: { lat: 41.9028, lng: 12.4964 },
-    damages: [],
-  },
-  'hera-tempel-paestum': {
-    id: 'hera-tempel-paestum',
-    name: 'Hera-Tempel in Paestum',
-    description:
-      'Frühklassischer dorischer Tempel mit massiven Travertinsäulen – archaische Monumentalität Süditaliens.',
-    period: 'Klassik',
-    location: 'Paestum, Italien',
-    artist: 'Unbekannt',
-    year: 'um 560 v. Chr.',
-    imageUrl: 'https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?w=800',
-    material: 'Travertin',
-    foundLocation: 'Paestum, Italien',
-    foundCoordinates: { lat: 40.4237, lng: 15.0069 },
-  },
-  'winged-victory': {
-    id: 'winged-victory',
-    name: 'Geflügelter Sieg von Samothrake',
-    description: 'Die Nike von Samothrake feiert einen hellenistischen Seesieg.',
-    period: 'Hellenismus',
-    location: 'Louvre, Paris',
-    artist: 'Unbekannt',
-    year: '200-190 v. Chr.',
-    imageUrl: 'https://images.unsplash.com/photo-1565024145823-e88d3ae41642?w=800',
-    material: 'Parischer Marmor',
-    foundLocation: 'Samothrake, Griechenland',
-    foundCoordinates: { lat: 40.4897, lng: 25.513 },
-    damages: [
-      {
-        part: 'Kopf',
-        description: 'Der Kopf der Statue fehlt bis heute.',
-        imageUrl: 'https://images.unsplash.com/photo-1578632292335-df3abbb0d586?w=800',
-      },
-    ],
-  },
-  'torso-belvedere': {
-    id: 'torso-belvedere',
-    name: 'Torso von Belvedere',
-    description:
-      'Monumentaler Torso, vermutlich Herakles, der trotz fehlender Gliedmaßen enorme Spannung und Anatomie vermittelt.',
-    period: 'Klassik',
-    location: 'Nationalmuseum Rom',
-    artist: 'Myron',
-    year: '460-450 v. Chr.',
-    imageUrl: 'https://images.unsplash.com/photo-1575912180747-2a9b04de8870?w=800',
-    material: 'Marmor',
-    foundLocation: 'Hadrians Villa, Tivoli, Italien',
-    foundCoordinates: { lat: 41.9409, lng: 12.7739 },
-  },
-};
-
-export function Recommendations({ currentStatue }: RecommendationsProps) {
+export function Recommendations({ currentStatue, allStatues }: RecommendationsProps) {
   const navigate = useNavigate();
   const currentEpoch = epochs[currentStatue.period];
   const currentEpochLabel = currentEpoch?.name ?? currentStatue.period;
 
   // Calculate recommendations based on period and location
   const getRecommendations = (): Statue[] => {
-    const allStatues = Object.values(allStatuesData);
+    const allStatuesList = Object.values(allStatues);
     const recommendations: Array<{ statue: Statue; score: number }> = [];
 
-    allStatues.forEach((statue) => {
+    allStatuesList.forEach((statue) => {
       if (statue.id === currentStatue.id) return;
 
       let score = 0;

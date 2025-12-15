@@ -10,6 +10,7 @@ type StatueViewerProps = {
   isBookmarked: boolean;
   onBookmark: () => void;
   darkMode: boolean;
+  allStatues: Record<string, Statue>;
 };
 
 export function StatueViewer({
@@ -17,6 +18,7 @@ export function StatueViewer({
   isBookmarked,
   onBookmark,
   darkMode,
+  allStatues,
 }: StatueViewerProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
@@ -443,7 +445,7 @@ export function StatueViewer({
             </div>
 
             {/* Recommendations */}
-            <Recommendations currentStatue={statue} />
+            <Recommendations currentStatue={statue} allStatues={allStatues} />
           </div>
         </div>
       )}

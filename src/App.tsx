@@ -134,11 +134,11 @@ const statuesData: Record<string, Statue> = {
     period: 'Hellenismus',
     location: 'Rom, Museo Nazionale Romano (Palazzo Massimo)',
     year: '4.–3. Jh. v. Chr.',
-    imageUrl: '/images/faustkämpfer_vom_quirinal/ausstellung.jpg',
+    imageUrl: '/images/faustkaempfer_von_quirinal/ausstellung.jpg',
     material: 'Bronze',
     foundLocation: 'Rom, Italien',
     foundCoordinates: { lat: 41.9028, lng: 12.4964 },
-    foundLocationImages: ['/images/faustkämpfer_vom_quirinal/fundort_1.png'],
+    foundLocationImages: ['/images/faustkaempfer_von_quirinal/fundort_1.png'],
     model: createModelConfig('/models/david.glb', {
       position: [0, -1.6, 0],
       scale: 1.1,
@@ -213,61 +213,6 @@ const statuesData: Record<string, Statue> = {
     kunstepoche: {
       description:
         'Archaische dorische Architektur: massive Säulen, eng stehende Stützen und eine klare Gliederung prägen die frühe Klassik Süditaliens.',
-    },
-  },
-  'winged-victory': {
-    id: 'winged-victory',
-    name: 'Geflügelter Sieg von Samothrake',
-    description:
-      'Die Geflügelte Siegesgöttin von Samothrake, auch Nike von Samothrake genannt, ist eine hellenistische Marmorskulptur der Siegesgöttin Nike. Sie entstand im 2. Jahrhundert v. Chr., steht auf einem Schiffsbogen und erinnert an einen maritimen Triumph.',
-    period: 'Hellenismus',
-    location: 'Louvre, Paris',
-    year: '200-190 v. Chr.',
-    imageUrl: 'https://images.unsplash.com/photo-1565024145823-e88d3ae41642?w=800',
-    material: 'Parischer Marmor',
-    foundLocation: 'Samothrake, Griechenland',
-    foundCoordinates: { lat: 40.4897, lng: 25.513 },
-    foundLocationImages: [
-      'https://images.unsplash.com/photo-1526481280695-3c469c04b657?w=800',
-    ],
-    damages: [
-      {
-        part: 'Kopf',
-        description:
-          'Der Kopf der Nike wurde nie gefunden. Forschende gehen davon aus, dass er leicht nach rechts gedreht war und über das Meer blickte.',
-        imageUrl: 'https://images.unsplash.com/photo-1578632292335-df3abbb0d586?w=800',
-      },
-      {
-        part: 'Arme',
-        description:
-          'Beide Arme fehlen. Der rechte Arm war wahrscheinlich in einer Geste des Sieges oder des Grußes erhoben.',
-        imageUrl: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=800',
-      },
-    ],
-    model: createModelConfig('/models/winged-victory.glb', {
-      position: [0, -1.3, 0],
-      scale: 1.15,
-      camera: { position: [0, 1.2, 5], fov: 38 },
-    }),
-    mythologie: {
-      description:
-        'Nike landet auf dem Bug eines Siegerschiffes und trägt die Botschaft göttlicher Gunst. Auch ohne Kopf schreitet sie vorwärts – ein Sinnbild für Triumphe gegen jede Widrigkeit.',
-      images: [
-        {
-          title: 'Maritimer Triumph',
-          description: 'Küstenlandschaft als Echo des Siegerschiffes.',
-          path: 'https://images.unsplash.com/photo-1477414348463-c0eb7f1359b6?w=800',
-        },
-        {
-          title: 'Göttlicher Sturm',
-          description: 'Windgepeitschte Wolken spiegeln Nikes Dynamik.',
-          path: 'https://images.unsplash.com/photo-1482062364825-616fd23b8fc1?w=800',
-        },
-      ],
-    },
-    kunstepoche: {
-      description:
-        'Hellenistische Bildhauerei setzt auf dramatische Diagonalen und wehende Draperien. Die Statue wirkt wie ein eingefrorener Sturm und zeigt die technische Meisterschaft rhodischer Werkstätten.',
     },
   },
   'torso-belvedere': {
@@ -668,6 +613,7 @@ function HomeRoute({
   return (
     <div className="h-full flex flex-col">
       <StatueViewer
+        allStatues={statuesData}
         key={statue.id}
         statue={statue}
         isBookmarked={bookmarkedIds.includes(statue.id)}
