@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { Statue, epochs } from '../App';
 
 type RecommendationsProps = {
@@ -6,49 +7,48 @@ type RecommendationsProps = {
 
 // Import statues data - in a real app this would come from a prop or context
 const allStatuesData: Record<string, Statue> = {
-  david: {
-    id: 'david',
-    name: 'David',
-    description: 'Michelangelos David gilt als Ikone der Renaissance-Bildhauerei.',
-    period: 'Renaissance',
-    location: "Galleria dell'Accademia, Florenz",
-    artist: 'Michelangelo',
-    year: '1501-1504',
-    imageUrl: 'https://images.unsplash.com/photo-1564951434112-64d74cc2a2d7?w=800',
-    foundLocation: 'Florenz, Italien',
-    foundCoordinates: { lat: 43.7696, lng: 11.2558 },
-  },
-  venus: {
-    id: 'venus',
-    name: 'Venus de Milo',
+  'faustkaempfer-quirinal': {
+    id: 'faustkaempfer-quirinal',
+    name: 'Faustkämpfer von Quirinal',
     description:
-      'Die Venus von Milo ist eine hellenistische Darstellung der Göttin Aphrodite.',
+      'Bronzener sitzender Athlet mit sichtbaren Schlagspuren – ein seltenes Meisterwerk des hellenistischen Realismus.',
     period: 'Hellenismus',
-    location: 'Louvre, Paris',
-    artist: 'Alexandros von Antiochia',
-    year: '150-125 v. Chr.',
-    imageUrl: 'https://images.unsplash.com/photo-1566305977571-5666677c6e98?w=800',
-    foundLocation: 'Insel Milos, Griechenland',
-    foundCoordinates: { lat: 36.7213, lng: 24.4259 },
-    damages: [
-      {
-        part: 'Beide Arme',
-        description: 'Die Arme fehlten bereits bei der Entdeckung 1820.',
-        imageUrl: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=800',
-      },
-    ],
+    location: 'Museo Nazionale Romano, Rom',
+    artist: 'Unbekannt',
+    year: '4.–3. Jh. v. Chr.',
+    imageUrl: 'https://images.unsplash.com/photo-1564951434112-64d74cc2a2d7?w=800',
+    material: 'Bronze',
+    foundLocation: 'Rom, Italien',
+    foundCoordinates: { lat: 41.9028, lng: 12.4964 },
   },
-  thinker: {
-    id: 'thinker',
-    name: 'Der Denker',
-    description: 'Der Denker von Auguste Rodin verkörpert konzentrierte Selbstreflexion.',
-    period: 'Moderne',
-    location: 'Musée Rodin, Paris',
-    artist: 'Auguste Rodin',
-    year: '1880-1882',
+  ringergruppe: {
+    id: 'ringergruppe',
+    name: 'Ringergruppe',
+    description:
+      'Zwei Athleten im Bodenkampf – eingefroren im Moment maximaler Spannung und Technik.',
+    period: 'Hellenismus',
+    location: 'Uffizien, Florenz',
+    artist: 'Unbekannt',
+    year: '3. Jh. v. Chr.',
+    imageUrl: 'https://images.unsplash.com/photo-1566305977571-5666677c6e98?w=800',
+    material: 'Marmor',
+    foundLocation: 'Rom, Italien',
+    foundCoordinates: { lat: 41.9028, lng: 12.4964 },
+    damages: [],
+  },
+  'hera-tempel-paestum': {
+    id: 'hera-tempel-paestum',
+    name: 'Hera-Tempel in Paestum',
+    description:
+      'Frühklassischer dorischer Tempel mit massiven Travertinsäulen – archaische Monumentalität Süditaliens.',
+    period: 'Klassik',
+    location: 'Paestum, Italien',
+    artist: 'Unbekannt',
+    year: 'um 560 v. Chr.',
     imageUrl: 'https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?w=800',
-    foundLocation: 'Paris, Frankreich (Entstehung)',
-    foundCoordinates: { lat: 48.8566, lng: 2.3522 },
+    material: 'Travertin',
+    foundLocation: 'Paestum, Italien',
+    foundCoordinates: { lat: 40.4237, lng: 15.0069 },
   },
   'winged-victory': {
     id: 'winged-victory',
@@ -59,6 +59,7 @@ const allStatuesData: Record<string, Statue> = {
     artist: 'Unbekannt',
     year: '200-190 v. Chr.',
     imageUrl: 'https://images.unsplash.com/photo-1565024145823-e88d3ae41642?w=800',
+    material: 'Parischer Marmor',
     foundLocation: 'Samothrake, Griechenland',
     foundCoordinates: { lat: 40.4897, lng: 25.513 },
     damages: [
@@ -69,33 +70,24 @@ const allStatuesData: Record<string, Statue> = {
       },
     ],
   },
-  discobolus: {
-    id: 'discobolus',
-    name: 'Diskobolos',
-    description: 'Der Diskuswerfer zeigt den Höhepunkt klassischer Athletik.',
+  'torso-belvedere': {
+    id: 'torso-belvedere',
+    name: 'Torso von Belvedere',
+    description:
+      'Monumentaler Torso, vermutlich Herakles, der trotz fehlender Gliedmaßen enorme Spannung und Anatomie vermittelt.',
     period: 'Klassik',
     location: 'Nationalmuseum Rom',
     artist: 'Myron',
     year: '460-450 v. Chr.',
     imageUrl: 'https://images.unsplash.com/photo-1575912180747-2a9b04de8870?w=800',
+    material: 'Marmor',
     foundLocation: 'Hadrians Villa, Tivoli, Italien',
     foundCoordinates: { lat: 41.9409, lng: 12.7739 },
-  },
-  laocoon: {
-    id: 'laocoon',
-    name: 'Laokoon und seine Söhne',
-    description: 'Die Gruppe zeigt Laokoon im Kampf gegen Meeresschlangen.',
-    period: 'Hellenismus',
-    location: 'Vatikanische Museen, Vatikanstadt',
-    artist: 'Agesander, Athenodoros und Polydoros',
-    year: '200 v. Chr. - 70 n. Chr.',
-    imageUrl: 'https://images.unsplash.com/photo-1580674285054-bed31e145f59?w=800',
-    foundLocation: 'Rom, Italien',
-    foundCoordinates: { lat: 41.9028, lng: 12.4964 },
   },
 };
 
 export function Recommendations({ currentStatue }: RecommendationsProps) {
+  const navigate = useNavigate();
   const currentEpoch = epochs[currentStatue.period];
   const currentEpochLabel = currentEpoch?.name ?? currentStatue.period;
 
@@ -197,9 +189,10 @@ export function Recommendations({ currentStatue }: RecommendationsProps) {
       </p>
       <div className="space-y-3">
         {recommendations.map((statue) => (
-          <div
+          <button
             key={statue.id}
-            className="bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl p-3 hover:border-neutral-900 dark:hover:border-white/40 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all cursor-pointer"
+            onClick={() => navigate(`/statue/${statue.id}`)}
+            className="w-full text-left bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl p-3 hover:border-neutral-900 dark:hover:border-white/40 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all cursor-pointer"
           >
             <div className="flex gap-3">
               <div className="w-16 h-16 rounded-lg overflow-hidden bg-neutral-200 dark:bg-neutral-800 flex-shrink-0">
@@ -212,7 +205,7 @@ export function Recommendations({ currentStatue }: RecommendationsProps) {
               <div className="flex-1 min-w-0">
                 <p className="text-neutral-900 dark:text-white mb-1">{statue.name}</p>
                 <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                  {statue.artist}
+                  {statue.artist ?? 'Unbekannt'}
                 </p>
                 <p className="text-xs text-neutral-500 dark:text-neutral-500 mt-1">
                   {(epochs[statue.period]?.name ?? statue.period) +
@@ -221,7 +214,7 @@ export function Recommendations({ currentStatue }: RecommendationsProps) {
                 </p>
               </div>
             </div>
-          </div>
+          </button>
         ))}
       </div>
     </div>

@@ -90,6 +90,7 @@ export type Statue = {
   location: string;
   year: string;
   imageUrl: string;
+  artist?: string;
   material: string;
   foundLocation: string;
   foundCoordinates: { lat: number; lng: number };
@@ -125,134 +126,93 @@ const createModelConfig = (
 };
 
 const statuesData: Record<string, Statue> = {
-  david: {
-    id: 'david',
-    name: 'David',
+  'faustkaempfer-quirinal': {
+    id: 'faustkaempfer-quirinal',
+    name: 'Faustkämpfer von Quirinal',
     description:
-      "Michelangelos David ist ein Meisterwerk der Renaissance und entstand zwischen 1501 und 1504. Die 5,17 Meter hohe Marmorskulptur zeigt den biblischen Helden David als stehenden Akt. Ursprünglich für den Dom von Florenz gedacht, steht sie heute in der Galleria dell'Accademia.",
-    period: 'Renaissance',
-    location: "Galleria dell'Accademia, Florenz",
-    year: '1501-1504',
+      'Der Faustkämpfer vom Quirinal ist eine seltene bronzene Großplastik eines sitzenden Athleten. Die detailreichen Schlagspuren und Narben betonen die Härte des antiken Ringkampfs.',
+    period: 'Hellenismus',
+    location: 'Rom, Museo Nazionale Romano (Palazzo Massimo)',
+    year: '4.–3. Jh. v. Chr.',
     imageUrl: 'https://images.unsplash.com/photo-1564951434112-64d74cc2a2d7?w=800',
-    material: 'Carrara-Marmor',
-    foundLocation: 'Florenz, Italien',
-    foundCoordinates: { lat: 43.7696, lng: 11.2558 },
-    foundLocationImages: [
-      'https://images.unsplash.com/photo-1470123383396-1d514bff6432?w=800',
-    ],
+    material: 'Bronze',
+    foundLocation: 'Rom, Italien',
+    foundCoordinates: { lat: 41.9028, lng: 12.4964 },
+    foundLocationImages: ['/images/faustkämpfer_vom_quirinal/fundort_1.png'],
     model: createModelConfig('/models/david.glb', {
       position: [0, -1.6, 0],
       scale: 1.1,
     }),
     mythologie: {
       description:
-        'David steht als biblischer Held für Mut gegen übermächtige Gegner. In Florenz wurde er zum Symbol republikanischer Freiheit – die Bürger sahen im jungen Hirtenjungen den Geist ihrer Stadt.',
+        'Als Siegerstatue zeigt der Faustkämpfer die Idealisierung des Sportlers – nicht göttlich, sondern menschlich und gezeichnet vom Wettkampf.',
       images: [
         {
-          title: 'Symbol Florenz',
-          description: 'Blick auf Florenz – Sinnbild für den republikanischen Mut.',
+          title: 'Stadionstimmung',
+          description: 'Lichtstimmung wie in einer antiken Arena.',
           path: 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=800',
         },
         {
-          title: 'Hirtenmotiv',
-          description:
-            'Darstellung jugendlicher Stärke, inspiriert vom biblischen David.',
+          title: 'Spuren des Kampfes',
+          description: 'Makrostruktur erinnert an Bronzeoberflächen mit Narben.',
           path: 'https://images.unsplash.com/photo-1494797710133-75ad8b1dd613?w=800',
         },
       ],
     },
     kunstepoche: {
       description:
-        'Die hochklassische Renaissance verbindet perfekte Anatomie mit innerer Spannung. Michelangelos bewusst unvollkommene Proportionen kompensieren die Blickperspektive des Betrachters.',
+        'Hellenistische Plastik liebt Realismus und Emotion: angespannte Muskulatur, verletzte Hände und ein Moment des Durchatmens nach dem Kampf.',
     },
   },
-  venus: {
-    id: 'venus',
-    name: 'Venus de Milo',
+  ringergruppe: {
+    id: 'ringergruppe',
+    name: 'Ringergruppe',
     description:
-      'Die Venus von Milo ist eine hellenistische Marmorskulptur, die Aphrodite, die griechische Göttin der Liebe und Schönheit, darstellt. Entstanden zwischen 150 und 125 v. Chr., ist sie für ihre fehlenden Arme berühmt und gilt als Ideal weiblicher Anmut.',
+      'Die Ringergruppe zeigt zwei Athleten im Bodenkampf, eingefroren im Moment maximaler Spannung. Die verschränkten Körper machen die Dynamik und Technik des antiken Ringens sichtbar.',
     period: 'Hellenismus',
-    location: 'Louvre, Paris',
-    year: '150-125 v. Chr.',
+    location: 'Florenz, Uffizien',
+    year: 'um 3. Jh. v. Chr.',
     imageUrl: 'https://images.unsplash.com/photo-1566305977571-5666677c6e98?w=800',
-    material: 'Parischer Marmor',
-    foundLocation: 'Insel Milos, Griechenland',
-    foundCoordinates: { lat: 36.7213, lng: 24.4259 },
-    foundLocationImages: [
-      'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=800',
-    ],
-    damages: [
-      {
-        part: 'Beide Arme',
-        description:
-          'Die Arme der Statue fehlten bereits bei ihrer Entdeckung im Jahr 1820. Der rechte Arm war vermutlich erhoben und hielt vielleicht einen Apfel, während die Position des linken Arms bis heute diskutiert wird.',
-        imageUrl: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=800',
-      },
-    ],
+    material: 'Marmor',
+    foundLocation: 'Wahrscheinlich Rom',
+    foundCoordinates: { lat: 41.9028, lng: 12.4964 },
+    foundLocationImages: ['/images/ringergruppe/fundort_1.png'],
+    damages: [],
     model: createModelConfig('/models/venus.glb', {
       position: [0, -1.4, 0],
       scale: 1.05,
+      camera: { position: [0, 1.4, 9], fov: 40 },
+      controls: { minDistance: 2, maxDistance: 10 },
     }),
-    mythologie: {
-      description:
-        'Die Erzählung der Aphrodite knüpft an Geburt aus dem Meeresschaum an. Die fehlenden Arme regen seit Jahrhunderten Fantasie an: Hielt sie den Apfel des Paris oder justierte sie ihr Gewand?',
-      images: [
-        {
-          title: 'Meeresschaum',
-          description: 'Sanfte Welle als Verweis auf Aphrodites mythische Geburt.',
-          path: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800',
-        },
-        {
-          title: 'Apfel des Paris',
-          description: 'Stillleben, das den berühmten Schönheitswettbewerb evoziert.',
-          path: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800',
-        },
-      ],
-    },
+    mythologie: undefined,
     kunstepoche: {
       description:
-        'Die hellenistische Epoche betont Bewegung und sinnliche Formen. Sanfte S-Kurven und das nasse Gewand verleihen der Figur jene elegante Schwerelosigkeit, die Sammler*innen fasziniert.',
+        'Hellenistische Athletenbilder setzen auf körperliche Spannung und realistische Körperlichkeit – jede Muskelpartie wird zur Erzählung des Wettkampfs.',
     },
   },
-  thinker: {
-    id: 'thinker',
-    name: 'Der Denker',
+  'hera-tempel-paestum': {
+    id: 'hera-tempel-paestum',
+    name: 'Hera-Tempel in Paestum',
     description:
-      'Der ursprünglich als "Der Dichter" betitelte Denker wurde von Auguste Rodin geschaffen und zeigt eine nackte männliche Figur auf einem Felsen, den Kopf nachdenklich auf die Hand gestützt. Die Skulptur gehört zu den bekanntesten der Welt.',
-    period: 'Moderne',
-    location: 'Musée Rodin, Paris',
-    year: '1880-1882',
+      'Der Hera-Tempel in Paestum (auch Basilika genannt) ist einer der ältesten dorischen Tempel Süditaliens. Mächtige Travertinsäulen und eine strenge Säulenhalle vermitteln archaische Monumentalität.',
+    period: 'Klassik',
+    location: 'Paestum, Italien',
+    year: 'um 560 v. Chr.',
     imageUrl: 'https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?w=800',
-    material: 'Bronze (Guss 1904)',
-    foundLocation: 'Paris, Frankreich (Entstehung)',
-    foundCoordinates: { lat: 48.8566, lng: 2.3522 },
-    foundLocationImages: [
-      'https://images.unsplash.com/photo-1469478715127-2f0fc0d1b0d1?w=800',
-    ],
+    material: 'Travertin',
+    foundLocation: 'Paestum, Italien',
+    foundCoordinates: { lat: 40.4237, lng: 15.0069 },
+    foundLocationImages: ['/images/hera_tempel_in_paestum/fundort_1.png'],
     model: createModelConfig('/models/thinker.glb', {
       position: [0, -1.1, 0],
       scale: 1,
-      controls: { minDistance: 1.2, maxDistance: 5 },
+      camera: { position: [0, 1.0, 2.7], fov: 40 },
+      controls: { minDistance: 0.8, maxDistance: 4 },
     }),
-    mythologie: {
-      description:
-        'Rodin plante den Denker ursprünglich als Dante, der das Eingangstor zur Hölle überblickt. Das Motiv bündelt die existenzielle Frage, wie Körperlichkeit und Geist miteinander ringen.',
-      images: [
-        {
-          title: 'Gedankentiefe',
-          description: 'Abstraktes Lichtspiel für die innere Reise Dantes.',
-          path: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800',
-        },
-        {
-          title: 'Tor zur Hölle',
-          description: 'Dunkle Texturen erinnern an Rodins ursprüngliches Portal.',
-          path: 'https://images.unsplash.com/photo-1500534623283-312aade485b7?w=800',
-        },
-      ],
-    },
+    mythologie: undefined,
     kunstepoche: {
       description:
-        'Die Moderne löst sich von idealisierten Helden. Plastische Oberflächen lassen Werkzeugspuren sichtbar werden – Gedanken sind hier Bewegung, kein poliertes Dogma.',
+        'Archaische dorische Architektur: massive Säulen, eng stehende Stützen und eine klare Gliederung prägen die frühe Klassik Süditaliens.',
     },
   },
   'winged-victory': {
@@ -310,21 +270,19 @@ const statuesData: Record<string, Statue> = {
         'Hellenistische Bildhauerei setzt auf dramatische Diagonalen und wehende Draperien. Die Statue wirkt wie ein eingefrorener Sturm und zeigt die technische Meisterschaft rhodischer Werkstätten.',
     },
   },
-  discobolus: {
-    id: 'discobolus',
-    name: 'Diskobolos',
+  'torso-belvedere': {
+    id: 'torso-belvedere',
+    name: 'Torso von Belvedere',
     description:
-      'Der Diskobolos, der berühmte Diskuswerfer, verkörpert den Höhepunkt klassisch-griechischer Athletik. Er hält den Moment gespannter Energie kurz vor dem Wurf fest und zeigt perfekte Anatomie sowie dynamische Bewegung.',
+      'Der Torso von Belvedere, vermutlich Herakles, zeigt die kraftvolle Drehung eines sitzenden Athleten. Trotz fehlender Gliedmaßen vermittelt der Torso monumentale Spannung und Anatomie.',
     period: 'Klassik',
     location: 'Nationalmuseum Rom',
     year: '460-450 v. Chr.',
     imageUrl: 'https://images.unsplash.com/photo-1575912180747-2a9b04de8870?w=800',
-    material: 'Römische Marmor-Replik',
+    material: 'Marmor',
     foundLocation: 'Hadrians Villa, Tivoli, Italien',
     foundCoordinates: { lat: 41.9409, lng: 12.7739 },
-    foundLocationImages: [
-      'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800',
-    ],
+    foundLocationImages: ['/images/torso_vom_belvedere/fundort_1.png'],
     model: createModelConfig('/models/discobolus.glb', {
       position: [0, -1.2, 0],
       controls: { minDistance: 1.4, maxDistance: 5.5 },
@@ -348,42 +306,6 @@ const statuesData: Record<string, Statue> = {
     kunstepoche: {
       description:
         'Klassisch-griechische Kunst sucht ideale Proportionen. Der Diskobolos nutzt eine harmonische, fast mathematische Kurve, um Bewegung und Gleichgewicht in Marmor zu bannen.',
-    },
-  },
-  laocoon: {
-    id: 'laocoon',
-    name: 'Laokoon und seine Söhne',
-    description:
-      'Diese dramatische hellenistische Skulptur zeigt den trojanischen Priester Laokoon und seine Söhne, die von Meeresschlangen angegriffen werden, die die Götter als Strafe sandten. Sie ist berühmt für die eindringliche Darstellung menschlichen Leidens und göttlichen Zorns.',
-    period: 'Hellenismus',
-    location: 'Vatikanische Museen, Vatikanstadt',
-    year: '200 v. Chr. - 70 n. Chr.',
-    imageUrl: 'https://images.unsplash.com/photo-1580674285054-bed31e145f59?w=800',
-    material: 'Marmor aus Rhodos',
-    foundLocation: 'Rom, Italien',
-    foundCoordinates: { lat: 41.9028, lng: 12.4964 },
-    foundLocationImages: [
-      'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=800',
-    ],
-    mythologie: {
-      description:
-        'Der trojanische Priester Laokoon warnte vor dem hölzernen Pferd und wurde zur Strafe von Poseidon gesandt – das Drama zeigt, wie göttliche Entscheidungen Menschen in den Abgrund reißen.',
-      images: [
-        {
-          title: 'Trojanisches Omen',
-          description: 'Neblige Szene, die das Unheil über Troja ankündigt.',
-          path: 'https://images.unsplash.com/photo-1470246973918-29a93221c455?w=800',
-        },
-        {
-          title: 'Göttlicher Zorn',
-          description: 'Dramatische Lichtstimmung erinnert an Poseidons Strafe.',
-          path: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800',
-        },
-      ],
-    },
-    kunstepoche: {
-      description:
-        'Spät-hellenistische Skulpturen übersteigern Pathos und körperliche Verwindungen. Die Laokoon-Gruppe inspirierte Renaissancekünstler und lehrte, wie Emotion plastisch übersetzt wird.',
     },
   },
   'satyr-hermaphrodit': {
@@ -445,7 +367,7 @@ const statuesData: Record<string, Statue> = {
     material: 'Pentelischer Marmor',
     foundLocation: 'Vermutlich Italien, Umbrien',
     foundCoordinates: { lat: 42.850723, lng: 11.3502611 },
-    foundLocationImages: ['/images/athena_parthenos/fundort_1.jpeg'],
+    foundLocationImages: ['/images/athena_parthenos/fundort_1.png'],
     damages: [
       {
         part: 'Helm',
@@ -746,6 +668,7 @@ function HomeRoute({
   return (
     <div className="h-full flex flex-col">
       <StatueViewer
+        key={statue.id}
         statue={statue}
         isBookmarked={bookmarkedIds.includes(statue.id)}
         onBookmark={() => onBookmark(statue.id)}

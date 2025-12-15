@@ -16,13 +16,14 @@ export function Chatbot({ statue, onClose }: ChatbotProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      content: `Hallo! Ich bin ${statue.name}, geschaffen von ${statue.artist}. Frag mich gern nach meiner Geschichte, Entstehung oder kulturellen Bedeutung!`,
+      content: `Hallo! Ich bin ${statue.name}, geschaffen von ${statue.artist ?? 'Unbekannt'}. Frag mich gern nach meiner Geschichte, Entstehung oder kulturellen Bedeutung!`,
     },
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const epochName = epochs[statue.period]?.name ?? statue.period;
+  const artistName = statue.artist ?? 'Unbekannt';
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -124,7 +125,7 @@ export function Chatbot({ statue, onClose }: ChatbotProps) {
         lowerQuestion.includes('artist') ||
         lowerQuestion.includes('künstler'))
     ) {
-      return `Geschaffen wurde ich von ${statue.artist}, einer herausragenden Persönlichkeit der Epoche ${epochName}. Ihr Können und ihre Vision haben mich zum Leben erweckt.`;
+      return `Geschaffen wurde ich von ${artistName}, einer herausragenden Persönlichkeit der Epoche ${epochName}. Ihr Können und ihre Vision haben mich zum Leben erweckt.`;
     }
 
     if (includesWhere && includesFound) {
@@ -149,8 +150,8 @@ export function Chatbot({ statue, onClose }: ChatbotProps) {
     }
 
     if (includesSize) {
-      if (statue.id === 'david') {
-        return `Ich bin beeindruckende 17 Fuß (5,17 Meter) groß! Ich wurde aus einem einzigen Marmorblock gehauen, was meine Dimensionen noch außergewöhnlicher macht.`;
+      if (statue.id === 'faustkaempfer-quirinal') {
+        return `Ich wirke kompakt, sitze aber lebensgroß auf meinem Stein – die Bronze zeigt jede Muskelspannung und die Spuren vieler Kämpfe.`;
       }
       return `Ich habe Lebensgröße und wurde nach den Gestaltungsprinzipien der Epoche ${epochName} sorgfältig proportioniert.`;
     }
@@ -160,7 +161,7 @@ export function Chatbot({ statue, onClose }: ChatbotProps) {
     }
 
     if (includesTechnique) {
-      return `Ich entstand mit traditionellen Bildhauertechniken der Epoche ${epochName}. Mein Schöpfer ${statue.artist} nutzte Meißel, Spitzen und viel Planung, um den Rohmarmor in meine heutige Form zu verwandeln.`;
+      return `Ich entstand mit traditionellen Bildhauertechniken der Epoche ${epochName}. Mein Schöpfer ${artistName} nutzte Meißel, Spitzen und viel Planung, um den Rohmarmor in meine heutige Form zu verwandeln.`;
     }
 
     if (includesThank) {

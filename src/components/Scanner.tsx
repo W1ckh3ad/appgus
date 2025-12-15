@@ -24,12 +24,11 @@ export function Scanner({ onScan }: ScannerProps) {
   };
 
   const quickScanOptions = [
-    { label: 'David', value: 'david' },
-    { label: 'Venus de Milo', value: 'venus' },
-    { label: 'Der Denker', value: 'thinker' },
+    { label: 'Faustkämpfer von Quirinal', value: 'faustkaempfer-quirinal' },
+    { label: 'Ringergruppe', value: 'ringergruppe' },
+    { label: 'Hera-Tempel in Paestum', value: 'hera-tempel-paestum' },
     { label: 'Geflügelter Sieg', value: 'winged-victory' },
-    { label: 'Diskobolos', value: 'discobolus' },
-    { label: 'Laokoon', value: 'laocoon' },
+    { label: 'Torso von Belvedere', value: 'torso-belvedere' },
     { label: 'Satyr & Hermaphrodit', value: 'satyr-hermaphrodit' },
     { label: 'Athena Parthenos', value: 'athena_parthenos' },
   ];
@@ -78,7 +77,7 @@ export function Scanner({ onScan }: ScannerProps) {
             <input
               ref={inputRef}
               type="text"
-              placeholder="z. B. david"
+              placeholder="z. B. faustkaempfer-quirinal / ringergruppe / hera-tempel-paestum"
               className="flex-1 px-3 py-2 border border-neutral-300 dark:border-neutral-600 text-sm bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white"
               onKeyDown={(e) => e.key === 'Enter' && handleManualInput()}
             />
