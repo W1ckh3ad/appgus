@@ -1,5 +1,5 @@
-import { Bookmark, Info, MessageCircle, X } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { Bookmark, Info, Map, MessageCircle, X } from 'lucide-react';
+import { useMemo, useRef, useState } from 'react';
 import { Statue, epochs } from '../App';
 import { Chatbot } from './Chatbot';
 import { Model3D } from './Model3D';
@@ -22,6 +22,8 @@ export function StatueViewer({
 }: StatueViewerProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
+  const [planOpen, setPlanOpen] = useState(false);
+  const [selectedZone, setSelectedZone] = useState<string | null>(null);
   const epochInfo = epochs[statue.period];
   const epochSection = statue.kunstepoche
     ? { description: statue.kunstepoche.description }
@@ -32,6 +34,69 @@ export function StatueViewer({
   const mythologyRef = useRef<HTMLDivElement | null>(null);
   const artEpochRef = useRef<HTMLDivElement | null>(null);
   const aboutRef = useRef<HTMLDivElement | null>(null);
+
+  const planZones = useMemo(
+    () => [
+      // Eingangsbereich bleibt leer (links)
+      {
+        id: 'archaisch',
+        label: 'Archaische\nZeit',
+        years: 'ca. 700–480 v. Chr.',
+        color: '#c95555', // rot
+        epochsMatch: ['Archaisch'],
+        style: { left: '30%', top: '20%', width: '18%', height: '70%' },
+        dot: { left: '50%', top: '75%' },
+      },
+      {
+        id: 'klassik',
+        label: 'Klassik',
+        years: 'ca. 480–323 v. Chr.',
+        color: '#e9a44f', // orange
+        epochsMatch: ['Klassik'],
+        style: { left: '46%', top: '20%', width: '12%', height: '70%' },
+        dot: { left: '50%', top: '70%' },
+      },
+      {
+        id: 'hellenismus',
+        label: 'Hellenismus',
+        years: 'ca. 323–31 v. Chr.',
+        color: '#e6d469', // gelb
+        epochsMatch: ['Hellenismus'],
+        style: { left: '62%', top: '20%', width: '10%', height: '70%' },
+        dot: { left: '50%', top: '70%' },
+      },
+      {
+        id: 'republik',
+        label: 'Römische\nRepublik',
+        years: 'ca. 509–27 v. Chr.',
+        color: '#5f8a5f', // grün (kleines Feld unten)
+        epochsMatch: ['Renaissance'],
+        style: { left: '67%', top: '76%', width: '8%', height: '18%' },
+        dot: { left: '50%', top: '70%' },
+      },
+      {
+        id: 'kaiserzeit',
+        label: 'Römische\nKaiserzeit',
+        years: '27 v. Chr.–ca. 476 n. Chr.',
+        color: '#7ab1d9', // blau
+        epochsMatch: ['Moderne'],
+        style: { left: '73%', top: '24%', width: '12%', height: '70%' },
+        dot: { left: '50%', top: '70%' },
+      },
+      {
+        id: 'spaetantike',
+        label: 'Spät-\nantike',
+        years: 'ca. 300–600 n. Chr.',
+        color: '#9d6cb7', // lila (schmaler Streifen)
+        epochsMatch: [],
+        style: { left: '82%', top: '34%', width: '7%', height: '62%' },
+        dot: { left: '50%', top: '70%' },
+      },
+    ],
+    []
+  );
+
+  const activeZone = planZones.find((z) => z.epochsMatch.includes(statue.period));
 
   const tocItems = [
     { key: 'quickfacts', label: 'Quick Facts', visible: true },
@@ -226,12 +291,28 @@ export function StatueViewer({
         <Model3D statue={statue} darkMode={darkMode} />
 
         {/* Action Buttons */}
-        <div className="absolute bottom-6 right-6 flex flex-col gap-3">
+        <div className="absolute bottom-6 right-6 flex flex-col gap-3 z-20">
+          <button
+            onClick={() => {
+              setChatOpen(false);
+              setDrawerOpen(false);
+              setPlanOpen(true);
+            }}
+            type="button"
+            className={`w-14 h-14 rounded-full shadow-lg transition-all hover:scale-105 flex items-center justify-center ${
+              darkMode
+                ? 'bg-white/10 text-white hover:bg-white/20'
+                : 'bg-white text-neutral-900 border border-neutral-200 hover:bg-neutral-100'
+            }`}
+          >
+            <Map className="w-6 h-6" />
+          </button>
           <button
             onClick={() => {
               setDrawerOpen(false);
               setChatOpen(true);
             }}
+            type="button"
             className={`w-14 h-14 rounded-full shadow-lg transition-all hover:scale-105 flex items-center justify-center ${
               darkMode
                 ? 'bg-white/10 text-white hover:bg-white/20'
@@ -245,6 +326,7 @@ export function StatueViewer({
               setChatOpen(false);
               setDrawerOpen(true);
             }}
+            type="button"
             className={`w-14 h-14 rounded-full shadow-lg transition-all hover:scale-105 flex items-center justify-center ${
               darkMode
                 ? 'bg-neutral-700 text-white hover:bg-neutral-600'
@@ -259,14 +341,17 @@ export function StatueViewer({
       {/* Information Drawer */}
       {!chatOpen && (
         <div
-          className={`absolute inset-0 bg-white dark:bg-neutral-800 transition-transform duration-300 ease-out ${
-            drawerOpen ? 'translate-y-0' : 'translate-y-full'
+          className={`absolute inset-0 bg-white dark:bg-neutral-800 transition-transform duration-300 ease-out z-30 ${
+            drawerOpen
+              ? 'translate-y-0 pointer-events-auto'
+              : 'translate-y-full pointer-events-none'
           }`}
         >
           {/* Close Button */}
           <button
+            type="button"
             onClick={() => setDrawerOpen(false)}
-            className="absolute top-4 right-4 p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors z-10"
+            className="absolute top-4 right-4 p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors z-50"
           >
             <X className="w-5 h-5 text-neutral-600 dark:text-neutral-300" />
           </button>
@@ -452,6 +537,117 @@ export function StatueViewer({
 
       {/* Chatbot */}
       {chatOpen && <Chatbot statue={statue} onClose={() => setChatOpen(false)} />}
+
+      {/* Lageplan Modal (inline, wie Chat) */}
+      {planOpen && (
+        <div className="absolute inset-0 z-[60] flex items-center justify-center">
+          <div
+            className="absolute inset-0 bg-black/60"
+            onClick={() => setPlanOpen(false)}
+            aria-hidden
+          />
+          <div className="relative bg-white dark:bg-neutral-900 rounded-2xl shadow-2xl w-[95vw] max-w-6xl max-h-[90vh] overflow-hidden border border-neutral-200 dark:border-neutral-700">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-neutral-200 dark:border-neutral-700">
+              <div>
+                <p className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+                  Lageplan
+                </p>
+                <p className="text-sm text-neutral-900 dark:text-white">
+                  Epoche: {epochs[statue.period]?.name ?? statue.period}
+                </p>
+              </div>
+              <button
+                onClick={() => setPlanOpen(false)}
+                className="p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+                aria-label="Schließen"
+                type="button"
+              >
+                <X className="w-5 h-5 text-neutral-700 dark:text-neutral-200" />
+              </button>
+            </div>
+
+            <div
+              className="relative bg-neutral-50 dark:bg-neutral-950"
+              style={{ fontSize: '12px' }}
+            >
+              <img
+                src="/images/lageplan.png"
+                alt="Lageplan der Epochen"
+                className="w-full h-full object-contain max-h-[70vh] pointer-sevents-none select-none"
+              />
+
+              {planZones.map((zone) => {
+                const isActive = activeZone?.id === zone.id;
+                return (
+                  <button
+                    key={zone.id}
+                    onClick={() => {
+                      setSelectedZone(zone.id);
+                      // Nur bei aktiver Zone: Modal schließen, Drawer öffnen, zur Epoche scrollen
+                      if (isActive && epochSection) {
+                        setPlanOpen(false);
+                        setDrawerOpen(true);
+                        setTimeout(() => scrollToSection(artEpochRef), 100);
+                      }
+                    }}
+                    type="button"
+                    className="absolute rounded-md focus:outline-none bg-transparent hover:bg-white/20 dark:hover:bg-white/10"
+                    style={zone.style}
+                    aria-label={`Epoche ${zone.label.replace('\n', ' ')}`}
+                  >
+                    <span
+                      className={`font-semibold px-1 py-0.5 inline-flex text-center whitespace-pre-line rounded-md ${
+                        isActive
+                          ? 'text-black bg-white/95 shadow-sm'
+                          : 'text-neutral-800 dark:text-neutral-200 bg-white/70 backdrop-blur'
+                      }`}
+                      style={{ maxWidth: '60px' }}
+                    >
+                      {zone.label}
+                    </span>
+                    {isActive && (
+                      <span
+                        className="absolute pointer-events-none text-black text-lg font-bold leading-none"
+                        style={{
+                          left: zone.dot.left,
+                          top: zone.dot.top,
+                          transform: 'translate(-50%, -50%)',
+                        }}
+                      >
+                        ✕
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+            <div className="px-4 py-3 text-xs text-neutral-600 dark:text-neutral-400 border-t border-neutral-200 dark:border-neutral-700 space-y-2">
+              <div className="flex items-center gap-2">
+                <span className="text-black dark:text-white text-base font-bold leading-none">
+                  ✕
+                </span>
+                <span>= Aktueller Standort der Statue</span>
+              </div>
+              <p>
+                Tipp: Klicke auf ein Farbfeld für Infos zur Epoche. Die Epoche deiner
+                Statue ist hervorgehoben – klicke darauf, um zur Beschreibung zu gelangen.
+              </p>
+              {selectedZone && (
+                <div className="text-neutral-900 dark:text-white text-sm border border-neutral-200 dark:border-neutral-700 rounded-md px-2 py-1 bg-neutral-50 dark:bg-neutral-800">
+                  <p className="font-semibold">
+                    {planZones
+                      .find((z) => z.id === selectedZone)
+                      ?.label.replace('\n', ' ')}
+                  </p>
+                  <p className="text-xs text-neutral-600 dark:text-neutral-300">
+                    {planZones.find((z) => z.id === selectedZone)?.years}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
