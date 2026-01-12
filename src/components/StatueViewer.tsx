@@ -44,7 +44,7 @@ export function StatueViewer({
         years: 'ca. 700–480 v. Chr.',
         color: '#c95555', // rot
         epochsMatch: ['Archaisch'],
-        style: { left: '30%', top: '20%', width: '18%', height: '70%' },
+        style: { left: '11%', top: '22%', width: '18%', height: '80%' },
         dot: { left: '50%', top: '75%' },
       },
       {
@@ -53,7 +53,7 @@ export function StatueViewer({
         years: 'ca. 480–323 v. Chr.',
         color: '#e9a44f', // orange
         epochsMatch: ['Klassik'],
-        style: { left: '46%', top: '20%', width: '12%', height: '70%' },
+        style: { left: '32%', top: '20%', width: '12%', height: '70%' },
         dot: { left: '50%', top: '70%' },
       },
       {
@@ -62,7 +62,7 @@ export function StatueViewer({
         years: 'ca. 323–31 v. Chr.',
         color: '#e6d469', // gelb
         epochsMatch: ['Hellenismus'],
-        style: { left: '62%', top: '20%', width: '10%', height: '70%' },
+        style: { left: '49%', top: '12%', width: '10%', height: '70%' },
         dot: { left: '50%', top: '70%' },
       },
       {
@@ -71,7 +71,7 @@ export function StatueViewer({
         years: 'ca. 509–27 v. Chr.',
         color: '#5f8a5f', // grün (kleines Feld unten)
         epochsMatch: ['Renaissance'],
-        style: { left: '67%', top: '76%', width: '8%', height: '18%' },
+        style: { left: '58%', top: '82%', width: '10%', height: '12%' },
         dot: { left: '50%', top: '70%' },
       },
       {
@@ -80,7 +80,7 @@ export function StatueViewer({
         years: '27 v. Chr.–ca. 476 n. Chr.',
         color: '#7ab1d9', // blau
         epochsMatch: ['Moderne'],
-        style: { left: '73%', top: '24%', width: '12%', height: '70%' },
+        style: { left: '66%', top: '35%', width: '12%', height: '70%' },
         dot: { left: '50%', top: '70%' },
       },
       {
@@ -89,7 +89,7 @@ export function StatueViewer({
         years: 'ca. 300–600 n. Chr.',
         color: '#9d6cb7', // lila (schmaler Streifen)
         epochsMatch: [],
-        style: { left: '82%', top: '34%', width: '7%', height: '62%' },
+        style: { left: '80%', top: '47%', width: '7%', height: '62%' },
         dot: { left: '50%', top: '70%' },
       },
     ],
@@ -571,7 +571,7 @@ export function StatueViewer({
               style={{ fontSize: '12px' }}
             >
               <img
-                src="/images/lageplan.png"
+                src="/images/lageplan.jpeg"
                 alt="Lageplan der Epochen"
                 className="w-full h-full object-contain max-h-[70vh] pointer-sevents-none select-none"
               />
