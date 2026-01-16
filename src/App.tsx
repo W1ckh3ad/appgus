@@ -130,7 +130,7 @@ const statuesData: Record<string, Statue> = {
     id: 'faustkaempfer-quirinal',
     name: 'Faustkämpfer von Quirinal',
     description:
-      'Der Faustkämpfer vom Quirinal ist eine seltene bronzene Großplastik eines sitzenden Athleten. Die detailreichen Schlagspuren und Narben betonen die Härte des antiken Ringkampfs.',
+      'Der Faustkämpfer vom Quirinal ist eine seltene bronzene Großplastik eines sitzenden, erschöpften Boxer nach dem Kampf. Die detailreichen Schlagspuren und Narben betonen die Härte des antiken Ringkampfs. Die Hände sind in antiken "Himantes" gewickelt - typische Boxhandschuhe der Antike. Die Statue gilt als eines der seltensten, erhaltenen und bedeutenden Originalbronzewerke der Antike, da viele Bronzestatuen eingeschmolzen wurden.',
     period: 'Hellenismus',
     location: 'Rom, Museo Nazionale Romano (Palazzo Massimo)',
     year: '4.–3. Jh. v. Chr.',
@@ -141,27 +141,23 @@ const statuesData: Record<string, Statue> = {
     foundLocationImages: ['/images/faustkaempfer_von_quirinal/fundort_1.png'],
     model: createModelConfig('/models/david.glb', {
       position: [0, -1.6, 0],
-      scale: 1.1,
+      scale: 2,
     }),
     mythologie: {
       description:
-        'Als Siegerstatue zeigt der Faustkämpfer die Idealisierung des Sportlers – nicht göttlich, sondern menschlich und gezeichnet vom Wettkampf.',
+        'Der Faustkämpfer war im antiken Griechenland hoch angesehen. Athletik galt als Ausdruck von Tüchtigkeit und Exzellenz (lat. areté). Siege brachten Ruhm, Ehre und sozialen Aufstieg, nicht nur für den Athleten sondern auch für seine polis (lat. Stadt). Gleichzeitig war der Faustkampf extrem brutal - der Körper war Opfer für Ruhm und Anerkennung.',
       images: [
         {
-          title: 'Stadionstimmung',
-          description: 'Lichtstimmung wie in einer antiken Arena.',
-          path: 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=800',
+          title: 'Stadionstimmung wie in einer antiken Arena',
+        
+          path: '/images/faustkaempfer_von_quirinal/mythologie_1.jpg',
         },
-        {
-          title: 'Spuren des Kampfes',
-          description: 'Makrostruktur erinnert an Bronzeoberflächen mit Narben.',
-          path: 'https://images.unsplash.com/photo-1494797710133-75ad8b1dd613?w=800',
-        },
+        
       ],
     },
     kunstepoche: {
       description:
-        'Hellenistische Plastik liebt Realismus und Emotion: angespannte Muskulatur, verletzte Hände und ein Moment des Durchatmens nach dem Kampf.',
+        'Hellenistische Plastik liebt Realismus und Emotion: angespannte Muskulatur, verletzte Hände und ein Moment des Durchatmens nach dem Kampf. Die Statue verkörpert ein zentrales ANliegen der hellenistischen Kunst: nicht das ideale, zeitlose Schönheitsideal, sondern den individuelken, leidenden, erschöpften Menschen. Der Körper ist gezeichnet von Berletzungen wie Narben, geschwollenen Ohren und Blutresten aus Kupfer. Die Haltung zeigt Müdigkeit und innere Spannung, nicht Triumph.',
     },
   },
   ringergruppe: {
@@ -179,8 +175,8 @@ const statuesData: Record<string, Statue> = {
     foundLocationImages: ['/images/ringergruppe/fundort_1.png'],
     damages: [],
     model: createModelConfig('/models/venus.glb', {
-      position: [0, -1.4, 0],
-      scale: 1.05,
+      position: [0, -1.2, 0],
+      scale: 0.7,
       camera: { position: [0, 1.4, 9], fov: 40 },
       controls: { minDistance: 2, maxDistance: 10 },
     }),
@@ -204,8 +200,8 @@ const statuesData: Record<string, Statue> = {
     foundCoordinates: { lat: 40.4237, lng: 15.0069 },
     foundLocationImages: ['/images/hera_tempel_in_paestum/fundort_1.png'],
     model: createModelConfig('/models/thinker.glb', {
-      position: [0, -1.1, 0],
-      scale: 1,
+      position: [0, -1.4, 0],
+      scale: 2.4,
       camera: { position: [0, 1.0, 2.7], fov: 40 },
       controls: { minDistance: 0.8, maxDistance: 4 },
     }),
@@ -229,7 +225,8 @@ const statuesData: Record<string, Statue> = {
     foundCoordinates: { lat: 41.9409, lng: 12.7739 },
     foundLocationImages: ['/images/torso_vom_belvedere/fundort_1.png'],
     model: createModelConfig('/models/discobolus.glb', {
-      position: [0, -1.2, 0],
+      position: [0, -2.8, 0],
+      scale: 2.2,
       controls: { minDistance: 1.4, maxDistance: 5.5 },
     }),
     mythologie: {
@@ -269,9 +266,9 @@ const statuesData: Record<string, Statue> = {
     foundLocationImages: ['/images/satyr_hermaphroditos/fundort_1.jpeg'],
 
     model: createModelConfig('/models/satyr-hermaphrodit.glb', {
-      scale: 1.5,
-      position: [0, -1, 0],
-      rotation: [0, 0.5, 0],
+      scale: 2.5,
+      position: [0, -1.4, 0],
+      rotation: [0, 1.8, 0],
       camera: {
         position: [0, 1, 5],
         fov: 45,
@@ -328,9 +325,9 @@ const statuesData: Record<string, Statue> = {
       },
     ],
     model: createModelConfig('/models/athena_parthenos.glb', {
-      scale: 1,
-      position: [0, -1.2, 0],
-      rotation: [0, 0, 0],
+      scale: 3.2,
+      position: [0, -2.2, 0],
+      rotation: [0, -1.7, 0],
       camera: {
         position: [0, 0, 4],
         fov: 50,
