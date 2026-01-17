@@ -145,14 +145,12 @@ const statuesData: Record<string, Statue> = {
     }),
     mythologie: {
       description:
-        'Der Faustkämpfer war im antiken Griechenland hoch angesehen. Athletik galt als Ausdruck von Tüchtigkeit und Exzellenz (lat. areté). Siege brachten Ruhm, Ehre und sozialen Aufstieg, nicht nur für den Athleten sondern auch für seine polis (lat. Stadt). Gleichzeitig war der Faustkampf extrem brutal - der Körper war Opfer für Ruhm und Anerkennung.',
+        'Der Faustkämpfer war im antiken Griechenland hoch angesehen. Athletik galt als Ausdruck von Tüchtigkeit und Exzellenz (griech. areté). Siege brachten Ruhm, Ehre und sozialen Aufstieg, nicht nur für den Athleten sondern auch für seine polis (griech. Stadt). Gleichzeitig war der Faustkampf extrem brutal - der Körper war Opfer für Ruhm und Anerkennung.',
       images: [
         {
           title: 'Stadionstimmung wie in einer antiken Arena',
-        
           path: '/images/faustkaempfer_von_quirinal/mythologie_1.jpg',
         },
-        
       ],
     },
     kunstepoche: {
@@ -164,7 +162,7 @@ const statuesData: Record<string, Statue> = {
     id: 'ringergruppe',
     name: 'Ringergruppe',
     description:
-      'Die Ringergruppe zeigt zwei Athleten im Bodenkampf, eingefroren im Moment maximaler Spannung. Die verschränkten Körper machen die Dynamik und Technik des antiken Ringens sichtbar.',
+      'Die Ringergruppe zeigt zwei Athleten im Bodenkampf, eingefroren im Moment maximaler Spannung. Die verschränkten Körper machen die Dynamik und Technik des antiken Ringens sichtbar. Die Szene wurde als Rundplastik konzipiert. So kann die Komposition aus jeder Perspektive gelesen werden und zeigt so wechselnde Momente des Kampfes.',
     period: 'Hellenismus',
     location: 'Florenz, Uffizien',
     year: 'um 3. Jh. v. Chr.',
@@ -180,17 +178,26 @@ const statuesData: Record<string, Statue> = {
       camera: { position: [0, 1.4, 9], fov: 40 },
       controls: { minDistance: 2, maxDistance: 10 },
     }),
-    mythologie: undefined,
+    mythologie: {
+      description:
+        'Der Kampf ist weniger sportlich als erotisch-symbolisch. Er zeigt den Konflikt zwischen dem Naturtrieb - Pan - und jugendlicher Zurückhaltung oder Widerstand. Der Pan ist ein Hirtengott - ein Mischwesen aus Menschen und Ziege. Er verkörpert Natur, Sexualität, Triebhaftigkeit und Wildheit. In Mythen verfolgen Pan häufig Nymphen oder Jünglinge erotisch. Der Jüngling, oft als Daphnis gedeutet, ist ein schöner Hirtenjunge aus der griechischen Mythologie. Er ist ein Symbol für Jugend, Schönheit und Unschuld. In vielen Erzählungen wird er von Göttern oder Naturwesen begehrt. ',
+      images: [
+        {
+          title: 'Statue des Gottes Pan, der seinem Eromenos (griech. Geliebter), dem Hirten Daphnis, das Flötenspielen beibringt. ',
+          path: '/images/ringergruppe/mythologie_1.webp',
+        },
+      ],
+    },
     kunstepoche: {
       description:
-        'Hellenistische Athletenbilder setzen auf körperliche Spannung und realistische Körperlichkeit – jede Muskelpartie wird zur Erzählung des Wettkampfs.',
+        'Hellenistische Athletenbilder setzen auf körperliche Spannung und realistische Körperlichkeit – jede Muskelpartie wird zur Erzählung des Wettkampfs. Es ist ein typisches Beispiel für die hellenistische Plastik. Die Figuren sind in einem verschränkten, spiralartigen Kamf dargestellt. Es gibt keine ruhige, ausgewogene Haltung, sondern Spannung und körperlichen Einsatz. Muskeln, Körperhaltungen und Proportionen sind realistisch und teilweise bewusst "unschön". Statt Göttern in idealer Form, zeigt man Mischwesen, Erotik, Gewalt und körperliche Auseinandersetzung.',
     },
   },
   'hera-tempel-paestum': {
     id: 'hera-tempel-paestum',
     name: 'Hera-Tempel in Paestum',
     description:
-      'Der Hera-Tempel in Paestum (auch Basilika genannt) ist einer der ältesten dorischen Tempel Süditaliens. Mächtige Travertinsäulen und eine strenge Säulenhalle vermitteln archaische Monumentalität.',
+      'Der Hera-Tempel in Paestum (auch Basilika genannt) ist einer der ältesten dorischen Tempel Süditaliens. Mächtige Travertinsäulen und eine strenge Säulenhalle vermitteln archaische Monumentalität. Lange Zeit wurde der Tempel als "Basilika" bezeichnet, da frühe Forscher seinen sakralen Charakter nicht erkannten. Auffällig sind die neun Frontsäulen an der schlaen Seite anstelle der üblichen sechs Säulen. Innen besitzt der Tempel eine zweischiffige Cella mit doppelten Säulenreihen, was architektonisch ungewöhnlich ist.',
     period: 'Klassik',
     location: 'Paestum, Italien',
     year: 'um 560 v. Chr.',
@@ -205,17 +212,26 @@ const statuesData: Record<string, Statue> = {
       camera: { position: [0, 1.0, 2.7], fov: 40 },
       controls: { minDistance: 0.8, maxDistance: 4 },
     }),
-    mythologie: undefined,
+    mythologie: {
+      description:
+        'Hera ist die Gemahlin des Zeus und eine der wichtigsten olympischen Göttinnen. Sie ist die Göttin der Ehe und legitimier Ordnung, die Göttin der Familie und Fruchtbarkeit sowie des Schutzes von Frauen. Paestum war ene griechische Kolonie und und Hera war Schutzgöttin der Polis (griech. Stadt). Der Tempel stand wahrscheinlich in Verbindung mit Hochzeiten, Fruchtbarkeitsritualen und Bitten um Schutz und Stabilität der Gemeinschaft. Die stabile, massive Bauweise des Tempels spiegelt Heras Rolle als Hüterin der Ordnung und des Gesetztes wider. ',
+      images: [
+        {
+          title: 'Griechische Hochzeit im Hera-Tempel. ',
+          path: '/images/hera_tempel_in_paestum/mythologie_1.avif',
+        },
+      ],
+    },
     kunstepoche: {
       description:
-        'Archaische dorische Architektur: massive Säulen, eng stehende Stützen und eine klare Gliederung prägen die frühe Klassik Süditaliens.',
+        'Der sogenannte Hera-Tempel I in Paestum enstand im Übergang von der Archaik zur frühen Klassik. Er ist ein zentrales Beispiel für klassische, griechische Architektur in Süditalien. Archaische dorische Architektur ist geprägt von massiven Säulen, eng stehenden Stützen und eine klare Gliederung. Es gibt keine dramatischen Bewegungen wie im Hellenismus, sondern Stabilität, Klarheit und Dauerhaftigkeit. Die Architektur gfolgt festen Regeln. Dadurch soll das klassische Ideal des Kosmos, der Ordnung und Rationalität zum Ausdruck kommen.',
     },
   },
   'torso-belvedere': {
     id: 'torso-belvedere',
     name: 'Torso von Belvedere',
     description:
-      'Der Torso von Belvedere, vermutlich Herakles, zeigt die kraftvolle Drehung eines sitzenden Athleten. Trotz fehlender Gliedmaßen vermittelt der Torso monumentale Spannung und Anatomie.',
+      'Der Torso von Belvedere, vermutlich Herakles, zeigt die kraftvolle Drehung eines sitzenden Athleten. Trotz fehlender Gliedmaßen vermittelt der Torso monumentale Spannung und Anatomie. Der Torso wurde bewusst nicht ergänzt. Denn schon in der Renaissance lehnten Michelangelo und andere Künstler jede Rekonstruktion ab, weil sie den Ausdruck und die Komposition als vollkommen empfanden.',
     period: 'Klassik',
     location: 'Nationalmuseum Rom',
     year: '460-450 v. Chr.',
@@ -231,23 +247,19 @@ const statuesData: Record<string, Statue> = {
     }),
     mythologie: {
       description:
-        'Der Athlet verkörpert den Mythos des kalokagathia – die Einheit von körperlicher und geistiger Tüchtigkeit. Im Moment vor dem Wurf sammelt sich Energie wie in einer Spiralfeder.',
+        'Die verbreitetste Interpretation sieht im Torso Herakles (Herkules). Er symbolisiert übermenschliche Kraft, Leiden und Mühsal sowie die heroische Selbstüberwindung. Die extrem kräftige und gespannte Muskulatur und die sitzende, ruhende HAltung, welche für Erschöpfung nach vollbrachter Tat steht, weisen auf Herakles hin. Wahrscheinlich hielt die Figur eine Keule oder trug das Löwenfell, ein Attribut des Herakles.',
       images: [
         {
-          title: 'Spannung vor dem Wurf',
-          description: 'Architektonische Kurven greifen die Spirale des Diskus auf.',
-          path: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800',
+          title: 'Rekonstruktion mit einer Keule und einem Löwenfell',
+  
+          path: '/images/torso_vom_belvedere/mythologie_1.png',
         },
-        {
-          title: 'Kalokagathia',
-          description: 'Figürliche Silhouette für Harmonie von Körper und Geist.',
-          path: 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=800',
-        },
+       
       ],
     },
     kunstepoche: {
       description:
-        'Klassisch-griechische Kunst sucht ideale Proportionen. Der Diskobolos nutzt eine harmonische, fast mathematische Kurve, um Bewegung und Gleichgewicht in Marmor zu bannen.',
+        'Der Torso von Belvedere ist eine römische MArmorkopie, die auf ein griechisches Original der späten Klassik zurückgeht. Das Oroginal wird meist Apollonios von Athen zugeschrieben.Klassisch-griechische Kunst sucht ideale Proportionen. Der Diskobolos nutzt eine harmonische, fast mathematische Kurve, um Bewegung und Gleichgewicht in Marmor zu bannen. Der Körper ist leicht gedreht. So entsteht Sapannung zwischen Ruhe und Bewegung. Es gibt keine extremen Emotionen wie im Hellenismus, sondern kontrollierte Energie. Der Körper selbst wird zum Hauptthema, nicht Handlungen oder die Umgebung. Dies ist der Übergang von der strengen Klassik zu einer subjektiveren, körperbetonten Darstellung.',
     },
   },
   'satyr-hermaphrodit': {
