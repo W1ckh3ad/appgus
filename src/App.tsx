@@ -244,15 +244,24 @@ const statuesData: Record<string, Statue> = {
       position: [0, -2.8, 0],
       scale: 2.2,
       controls: { minDistance: 1.4, maxDistance: 5.5 },
-    }),
+    }),damages: [
+      {
+        part: 'Rekonstruktion mit einer Keule und einem Löwenfell',
+         
+        imageUrl: '/images/torso_vom_belvedere/mythologie_1.png',
+      },
+     
+      
+      
+    ],
     mythologie: {
       description:
         'Die verbreitetste Interpretation sieht im Torso Herakles (Herkules). Er symbolisiert übermenschliche Kraft, Leiden und Mühsal sowie die heroische Selbstüberwindung. Die extrem kräftige und gespannte Muskulatur und die sitzende, ruhende HAltung, welche für Erschöpfung nach vollbrachter Tat steht, weisen auf Herakles hin. Wahrscheinlich hielt die Figur eine Keule oder trug das Löwenfell, ein Attribut des Herakles.',
       images: [
         {
-          title: 'Rekonstruktion mit einer Keule und einem Löwenfell',
+          title: 'Herkules',
   
-          path: '/images/torso_vom_belvedere/mythologie_1.png',
+          path: '/images/torso_vom_belvedere/mythologie_2.webp',
         },
        
       ],
