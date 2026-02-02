@@ -17,6 +17,21 @@ declare global {
   }
 }
 
+const calculateScanRegion = (video: HTMLVideoElement) => {
+  const smallestDimension = Math.min(video.videoWidth, video.videoHeight);
+  const size = Math.floor(smallestDimension * 0.8);
+  const x = Math.floor((video.videoWidth - size) / 2);
+  const y = Math.floor((video.videoHeight - size) / 2);
+  return {
+    x,
+    y,
+    width: size,
+    height: size,
+    downScaledWidth: 600,
+    downScaledHeight: 600,
+  };
+};
+
 type ScannerProps = {
   onScan: (data: string) => void;
 };
@@ -135,12 +150,20 @@ export function Scanner({ onScan }: ScannerProps) {
         setIsScanning(false);
         stopCamera();
       },
-      { returnDetailedScanResult: true }
+      {
+        returnDetailedScanResult: true,
+        preferredCamera: 'environment',
+        maxScansPerSecond: 12,
+        highlightScanRegion: true,
+        highlightCodeOutline: true,
+        calculateScanRegion,
+      }
     );
     qrScannerRef.current = scanner;
     scanner
       .start()
       .then(() => {
+        scanner.setInversionMode('both');
         appendStatus('Fallback-Scanner aktiv');
       })
       .catch(() => {
