@@ -1,15 +1,20 @@
 import { QrCode } from 'lucide-react';
+import QrScanner from 'qr-scanner';
+import qrScannerWorkerPath from 'qr-scanner/qr-scanner-worker.min.js?url';
 import { useEffect, useRef, useState } from 'react';
+
+QrScanner.WORKER_PATH = qrScannerWorkerPath;
 
 type BarcodeDetectorResult = { rawValue: string };
 
+type BarcodeDetectorConstructor = new (options: { formats: string[] }) => {
+  detect: (video: HTMLVideoElement) => Promise<BarcodeDetectorResult[]>;
+};
+
 declare global {
-  // eslint-disable-next-line no-var
-  var BarcodeDetector: {
-    new (options: { formats: string[] }): {
-      detect: (video: HTMLVideoElement) => Promise<BarcodeDetectorResult[]>;
-    };
-  };
+  interface Window {
+    BarcodeDetector?: BarcodeDetectorConstructor;
+  }
 }
 
 type ScannerProps = {
@@ -20,11 +25,19 @@ export function Scanner({ onScan }: ScannerProps) {
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const qrScannerRef = useRef<QrScanner | null>(null);
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [isScanning, setIsScanning] = useState(false);
-  const [hasBarcodeSupport] = useState( typeof window !== 'undefined' && typeof window.BarcodeDetector !== 'undefined');
+  const [hasBarcodeSupport] = useState(
+    typeof window !== 'undefined' && typeof window.BarcodeDetector !== 'undefined'
+  );
 
   const stopCamera = () => {
+    if (qrScannerRef.current) {
+      qrScannerRef.current.stop();
+      qrScannerRef.current.destroy();
+      qrScannerRef.current = null;
+    }
     const video = videoRef.current;
     if (video?.srcObject) {
       const stream = video.srcObject as MediaStream;
@@ -51,7 +64,7 @@ export function Scanner({ onScan }: ScannerProps) {
       video.srcObject = stream;
       await video.play();
       setIsCameraActive(true);
-      setIsScanning(hasBarcodeSupport);
+      setIsScanning(true);
     } catch {
       setError('Kamerazugriff verweigert oder nicht verfügbar.');
     }
@@ -63,7 +76,9 @@ export function Scanner({ onScan }: ScannerProps) {
 
   useEffect(() => {
     if (!isCameraActive || !isScanning || !hasBarcodeSupport) return;
-    const detector = new window.BarcodeDetector({ formats: ['qr_code'] });
+    const Detector = window.BarcodeDetector;
+    if (!Detector) return;
+    const detector = new Detector({ formats: ['qr_code'] });
     let cancelled = false;
     const intervalId = window.setInterval(async () => {
       if (cancelled) return;
@@ -84,6 +99,33 @@ export function Scanner({ onScan }: ScannerProps) {
     return () => {
       cancelled = true;
       window.clearInterval(intervalId);
+    };
+  }, [hasBarcodeSupport, isCameraActive, isScanning, onScan]);
+
+  useEffect(() => {
+    if (!isCameraActive || !isScanning || hasBarcodeSupport) return;
+    const video = videoRef.current;
+    if (!video) return;
+    const scanner = new QrScanner(
+      video,
+      (result) => {
+        onScan(result.data);
+        setIsScanning(false);
+        stopCamera();
+      },
+      { returnDetailedScanResult: true }
+    );
+    qrScannerRef.current = scanner;
+    scanner.start().catch(() => {
+      setError('QR-Scanner konnte nicht gestartet werden.');
+    });
+
+    return () => {
+      scanner.stop();
+      scanner.destroy();
+      if (qrScannerRef.current === scanner) {
+        qrScannerRef.current = null;
+      }
     };
   }, [hasBarcodeSupport, isCameraActive, isScanning, onScan]);
 
@@ -153,16 +195,16 @@ export function Scanner({ onScan }: ScannerProps) {
           </div>
         </div>
 
-        <div className="w-full max-w-sm flex items-center justify-between gap-3 mb-4">
+        <div className="w-full max-w-sm flex flex-col gap-2 mb-4">
           <button
             onClick={isCameraActive ? stopCamera : startCamera}
-            className="flex-1 px-4 py-2 bg-neutral-900 text-white text-sm hover:bg-neutral-800 transition-colors"
+            className="w-full px-4 py-2 bg-neutral-900 text-white text-sm hover:bg-neutral-800 transition-colors"
           >
             {isCameraActive ? 'Kamera stoppen' : 'Kamera starten'}
           </button>
           {!hasBarcodeSupport && (
-            <span className="text-xs text-neutral-500 dark:text-neutral-400">
-              QR-Erkennung nicht unterstützt
+            <span className="text-xs text-neutral-500 dark:text-neutral-400 text-center">
+              QR-Erkennung per Browser-API nicht unterstützt – Fallback aktiv
             </span>
           )}
         </div>
