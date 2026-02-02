@@ -13,6 +13,7 @@ import { Bookmarks } from './components/Bookmarks';
 import { History } from './components/History';
 import { Scanner } from './components/Scanner';
 import { StatueViewer } from './components/StatueViewer';
+import { Tutorial } from './components/Tutorial';
 
 export type Vector3Tuple = [number, number, number];
 
@@ -183,7 +184,8 @@ const statuesData: Record<string, Statue> = {
         'Der Kampf ist weniger sportlich als erotisch-symbolisch. Er zeigt den Konflikt zwischen dem Naturtrieb - Pan - und jugendlicher Zurückhaltung oder Widerstand. Der Pan ist ein Hirtengott - ein Mischwesen aus Menschen und Ziege. Er verkörpert Natur, Sexualität, Triebhaftigkeit und Wildheit. In Mythen verfolgen Pan häufig Nymphen oder Jünglinge erotisch. Der Jüngling, oft als Daphnis gedeutet, ist ein schöner Hirtenjunge aus der griechischen Mythologie. Er ist ein Symbol für Jugend, Schönheit und Unschuld. In vielen Erzählungen wird er von Göttern oder Naturwesen begehrt. ',
       images: [
         {
-          title: 'Statue des Gottes Pan, der seinem Eromenos (griech. Geliebter), dem Hirten Daphnis, das Flötenspielen beibringt. ',
+          title:
+            'Statue des Gottes Pan, der seinem Eromenos (griech. Geliebter), dem Hirten Daphnis, das Flötenspielen beibringt. ',
           path: '/images/ringergruppe/mythologie_1.webp',
         },
       ],
@@ -244,15 +246,14 @@ const statuesData: Record<string, Statue> = {
       position: [0, -2.8, 0],
       scale: 2.2,
       controls: { minDistance: 1.4, maxDistance: 5.5 },
-    }),damages: [
+    }),
+    damages: [
       {
         part: 'Rekonstruktion mit einer Keule und einem Löwenfell',
-         
+        description:
+          'In historischen Rekonstruktionsversuchen wurde der Torso oft als Herakles ergänzt.',
         imageUrl: '/images/torso_vom_belvedere/mythologie_1.png',
       },
-     
-      
-      
     ],
     mythologie: {
       description:
@@ -260,10 +261,8 @@ const statuesData: Record<string, Statue> = {
       images: [
         {
           title: 'Herkules',
-  
           path: '/images/torso_vom_belvedere/mythologie_2.webp',
         },
-       
       ],
     },
     kunstepoche: {
@@ -385,6 +384,17 @@ const getStoredValue = <T,>(key: string, defaultValue: T): T => {
   }
 };
 
+const normalizeQrValue = (value: string) => {
+  const trimmed = value.trim();
+  try {
+    const url = new URL(trimmed);
+    const parts = url.pathname.split('/').filter(Boolean);
+    return parts[parts.length - 1] ?? trimmed;
+  } catch {
+    return trimmed;
+  }
+};
+
 export default function App() {
   return <AppWithRouter />;
 }
@@ -392,6 +402,7 @@ export default function App() {
 function AppWithRouter() {
   const navigate = useNavigate();
   const location = useLocation();
+  const isTutorialPage = location.pathname === '/tutorial';
   const [darkMode, setDarkMode] = useState(() =>
     getStoredValue<boolean>('darkMode', false)
   );
@@ -430,7 +441,8 @@ function AppWithRouter() {
   };
 
   const handleScan = (qrData: string) => {
-    const statue = statuesData[qrData.toLowerCase()];
+    const normalized = normalizeQrValue(qrData);
+    const statue = statuesData[normalized.toLowerCase()];
     if (statue) {
       addToHistory(statue);
       navigate(`/statue/${statue.id}`);
@@ -459,29 +471,31 @@ function AppWithRouter() {
   return (
     <div className="h-screen flex flex-col bg-neutral-50 dark:bg-neutral-900">
       {/* Header */}
-      <div className="bg-white dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700 px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <img
-            src="/logo.png"
-            alt="Appgus Logo"
-            className="w-20 h-20 rounded-full border border-neutral-200 dark:border-neutral-700 object-cover"
-          />
-          <h1 className="text-lg text-neutral-900 dark:text-white">
-            Ausstellungs-Scanner – Abgusssammlung Berlin
-          </h1>
+      {!isTutorialPage && (
+        <div className="bg-white dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700 px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <img
+              src="/logo.png"
+              alt="Appgus Logo"
+              className="w-20 h-20 rounded-full border border-neutral-200 dark:border-neutral-700 object-cover"
+            />
+            <h1 className="text-lg text-neutral-900 dark:text-white">
+              Ausstellungs-Scanner – Abgusssammlung Berlin
+            </h1>
+          </div>
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            className="p-2 rounded-full bg-neutral-100 dark:bg-neutral-700 hover:bg-neutral-200 dark:hover:bg-neutral-600 transition-colors"
+            aria-label="Dunkelmodus umschalten"
+          >
+            {darkMode ? (
+              <Sun className="w-5 h-5 text-yellow-500" />
+            ) : (
+              <Moon className="w-5 h-5 text-neutral-700" />
+            )}
+          </button>
         </div>
-        <button
-          onClick={() => setDarkMode(!darkMode)}
-          className="p-2 rounded-full bg-neutral-100 dark:bg-neutral-700 hover:bg-neutral-200 dark:hover:bg-neutral-600 transition-colors"
-          aria-label="Dunkelmodus umschalten"
-        >
-          {darkMode ? (
-            <Sun className="w-5 h-5 text-yellow-500" />
-          ) : (
-            <Moon className="w-5 h-5 text-neutral-700" />
-          )}
-        </button>
-      </div>
+      )}
 
       {/* Main Content */}
       <div className="flex-1 overflow-hidden">
@@ -509,6 +523,7 @@ function AppWithRouter() {
             }
           />
           <Route path="/scanner" element={<Scanner onScan={handleScan} />} />
+          <Route path="/tutorial" element={<Tutorial />} />
           <Route
             path="/bookmarks"
             element={
@@ -527,61 +542,63 @@ function AppWithRouter() {
       </div>
 
       {/* Bottom Navigation */}
-      <nav className="border-t border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800">
-        <div className="flex justify-around items-center h-16">
-          <button
-            onClick={() => navigate('/')}
-            className={clsx(
-              'nav-btn',
-              location.pathname === '/' || location.pathname.startsWith('/statue')
-                ? 'nav-btn-active'
-                : undefined
-            )}
-            aria-current={
-              location.pathname === '/' || location.pathname.startsWith('/statue')
-            }
-          >
-            <Home className="w-6 h-6" />
-            <span className="text-xs mt-1">Start</span>
-          </button>
+      {!isTutorialPage && (
+        <nav className="border-t border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800">
+          <div className="flex justify-around items-center h-16">
+            <button
+              onClick={() => navigate('/')}
+              className={clsx(
+                'nav-btn',
+                location.pathname === '/' || location.pathname.startsWith('/statue')
+                  ? 'nav-btn-active'
+                  : undefined
+              )}
+              aria-current={
+                location.pathname === '/' || location.pathname.startsWith('/statue')
+              }
+            >
+              <Home className="w-6 h-6" />
+              <span className="text-xs mt-1">Start</span>
+            </button>
 
-          <button
-            onClick={() => navigate('/scanner')}
-            className={clsx(
-              'nav-btn',
-              location.pathname === '/scanner' ? 'nav-btn-active' : undefined
-            )}
-            aria-current={location.pathname === '/scanner'}
-          >
-            <Scan className="w-6 h-6" />
-            <span className="text-xs mt-1">Scannen</span>
-          </button>
+            <button
+              onClick={() => navigate('/scanner')}
+              className={clsx(
+                'nav-btn',
+                location.pathname === '/scanner' ? 'nav-btn-active' : undefined
+              )}
+              aria-current={location.pathname === '/scanner'}
+            >
+              <Scan className="w-6 h-6" />
+              <span className="text-xs mt-1">Scannen</span>
+            </button>
 
-          <button
-            onClick={() => navigate('/bookmarks')}
-            className={clsx(
-              'nav-btn',
-              location.pathname === '/bookmarks' ? 'nav-btn-active' : undefined
-            )}
-            aria-current={location.pathname === '/bookmarks'}
-          >
-            <Bookmark className="w-6 h-6" />
-            <span className="text-xs mt-1">Gespeichert</span>
-          </button>
+            <button
+              onClick={() => navigate('/bookmarks')}
+              className={clsx(
+                'nav-btn',
+                location.pathname === '/bookmarks' ? 'nav-btn-active' : undefined
+              )}
+              aria-current={location.pathname === '/bookmarks'}
+            >
+              <Bookmark className="w-6 h-6" />
+              <span className="text-xs mt-1">Gespeichert</span>
+            </button>
 
-          <button
-            onClick={() => navigate('/history')}
-            className={clsx(
-              'nav-btn',
-              location.pathname === '/history' ? 'nav-btn-active' : undefined
-            )}
-            aria-current={location.pathname === '/history'}
-          >
-            <Clock className="w-6 h-6" />
-            <span className="text-xs mt-1">Verlauf</span>
-          </button>
-        </div>
-      </nav>
+            <button
+              onClick={() => navigate('/history')}
+              className={clsx(
+                'nav-btn',
+                location.pathname === '/history' ? 'nav-btn-active' : undefined
+              )}
+              aria-current={location.pathname === '/history'}
+            >
+              <Clock className="w-6 h-6" />
+              <span className="text-xs mt-1">Verlauf</span>
+            </button>
+          </div>
+        </nav>
+      )}
     </div>
   );
 }

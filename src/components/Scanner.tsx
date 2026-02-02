@@ -1,5 +1,16 @@
 import { QrCode } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
+type BarcodeDetectorResult = { rawValue: string };
+
+declare global {
+  // eslint-disable-next-line no-var
+  var BarcodeDetector: {
+    new (options: { formats: string[] }): {
+      detect: (video: HTMLVideoElement) => Promise<BarcodeDetectorResult[]>;
+    };
+  };
+}
 
 type ScannerProps = {
   onScan: (data: string) => void;
@@ -8,6 +19,73 @@ type ScannerProps = {
 export function Scanner({ onScan }: ScannerProps) {
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isCameraActive, setIsCameraActive] = useState(false);
+  const [isScanning, setIsScanning] = useState(false);
+  const [hasBarcodeSupport] = useState( typeof window !== 'undefined' && typeof window.BarcodeDetector !== 'undefined');
+
+  const stopCamera = () => {
+    const video = videoRef.current;
+    if (video?.srcObject) {
+      const stream = video.srcObject as MediaStream;
+      stream.getTracks().forEach((track) => track.stop());
+      video.srcObject = null;
+    }
+    setIsCameraActive(false);
+    setIsScanning(false);
+  };
+
+  const startCamera = async () => {
+    setError(null);
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setError('Kamera-API wird von diesem Browser nicht unterstützt.');
+      return;
+    }
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { ideal: 'environment' } },
+        audio: false,
+      });
+      const video = videoRef.current;
+      if (!video) return;
+      video.srcObject = stream;
+      await video.play();
+      setIsCameraActive(true);
+      setIsScanning(hasBarcodeSupport);
+    } catch {
+      setError('Kamerazugriff verweigert oder nicht verfügbar.');
+    }
+  };
+
+  useEffect(() => {
+    return () => stopCamera();
+  }, []);
+
+  useEffect(() => {
+    if (!isCameraActive || !isScanning || !hasBarcodeSupport) return;
+    const detector = new window.BarcodeDetector({ formats: ['qr_code'] });
+    let cancelled = false;
+    const intervalId = window.setInterval(async () => {
+      if (cancelled) return;
+      const video = videoRef.current;
+      if (!video || video.readyState < 2) return;
+      try {
+        const results = await detector.detect(video);
+        if (results.length > 0) {
+          onScan(results[0].rawValue);
+          setIsScanning(false);
+          stopCamera();
+        }
+      } catch {
+        setIsScanning(false);
+      }
+    }, 500);
+
+    return () => {
+      cancelled = true;
+      window.clearInterval(intervalId);
+    };
+  }, [hasBarcodeSupport, isCameraActive, isScanning, onScan]);
 
   // Simulate QR code scanning with manual input for demo purposes
   const handleManualInput = () => {
@@ -46,11 +124,19 @@ export function Scanner({ onScan }: ScannerProps) {
 
       {/* Scanner Area */}
       <div className="flex-1 flex flex-col items-center justify-center p-6 pb-24">
-        {/* Simulated Camera View */}
+        {/* Camera View */}
         <div className="relative w-full max-w-sm aspect-square bg-neutral-900 dark:bg-neutral-950 rounded-2xl overflow-hidden mb-6">
-          <div className="absolute inset-0 flex items-center justify-center">
-            <QrCode className="w-32 h-32 text-neutral-700 dark:text-neutral-800" />
-          </div>
+          <video
+            ref={videoRef}
+            className="absolute inset-0 w-full h-full object-cover"
+            muted
+            playsInline
+          />
+          {!isCameraActive && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <QrCode className="w-32 h-32 text-neutral-700 dark:text-neutral-800" />
+            </div>
+          )}
 
           {/* Scanner Frame */}
           <div className="absolute inset-0 flex items-center justify-center p-12">
@@ -65,6 +151,20 @@ export function Scanner({ onScan }: ScannerProps) {
               <div className="absolute inset-x-0 top-0 h-1 bg-white/70 dark:bg-white/40 animate-scan" />
             </div>
           </div>
+        </div>
+
+        <div className="w-full max-w-sm flex items-center justify-between gap-3 mb-4">
+          <button
+            onClick={isCameraActive ? stopCamera : startCamera}
+            className="flex-1 px-4 py-2 bg-neutral-900 text-white text-sm hover:bg-neutral-800 transition-colors"
+          >
+            {isCameraActive ? 'Kamera stoppen' : 'Kamera starten'}
+          </button>
+          {!hasBarcodeSupport && (
+            <span className="text-xs text-neutral-500 dark:text-neutral-400">
+              QR-Erkennung nicht unterstützt
+            </span>
+          )}
         </div>
 
         {/* Demo Instructions */}
