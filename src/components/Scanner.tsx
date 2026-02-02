@@ -1,7 +1,7 @@
 import { QrCode } from 'lucide-react';
 import QrScanner from 'qr-scanner';
 import qrScannerWorkerPath from 'qr-scanner/qr-scanner-worker.min.js?url';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 QrScanner.WORKER_PATH = qrScannerWorkerPath;
 
@@ -31,8 +31,18 @@ export function Scanner({ onScan }: ScannerProps) {
   const [hasBarcodeSupport] = useState(
     typeof window !== 'undefined' && typeof window.BarcodeDetector !== 'undefined'
   );
+  const [showStatus, setShowStatus] = useState(false);
+  const [statusLogs, setStatusLogs] = useState<string[]>([]);
 
-  const stopCamera = () => {
+  const appendStatus = useCallback((message: string) => {
+    setStatusLogs((prev) => [
+      ...prev.slice(-19),
+      `${new Date().toLocaleTimeString()} – ${message}`,
+    ]);
+  }, []);
+
+  const stopCamera = useCallback(() => {
+    appendStatus('Kamera wird gestoppt');
     if (qrScannerRef.current) {
       qrScannerRef.current.stop();
       qrScannerRef.current.destroy();
@@ -46,12 +56,14 @@ export function Scanner({ onScan }: ScannerProps) {
     }
     setIsCameraActive(false);
     setIsScanning(false);
-  };
+  }, [appendStatus]);
 
-  const startCamera = async () => {
+  const startCamera = useCallback(async () => {
     setError(null);
+    appendStatus('Kamera wird gestartet');
     if (!navigator.mediaDevices?.getUserMedia) {
       setError('Kamera-API wird von diesem Browser nicht unterstützt.');
+      appendStatus('Kamera-API nicht verfugbar');
       return;
     }
     try {
@@ -65,14 +77,16 @@ export function Scanner({ onScan }: ScannerProps) {
       await video.play();
       setIsCameraActive(true);
       setIsScanning(true);
+      appendStatus('Kamera aktiv');
     } catch {
       setError('Kamerazugriff verweigert oder nicht verfügbar.');
+      appendStatus('Kamerazugriff fehlgeschlagen');
     }
-  };
+  }, [appendStatus]);
 
   useEffect(() => {
     return () => stopCamera();
-  }, []);
+  }, [stopCamera]);
 
   useEffect(() => {
     if (!isCameraActive || !isScanning || !hasBarcodeSupport) return;
@@ -80,19 +94,26 @@ export function Scanner({ onScan }: ScannerProps) {
     if (!Detector) return;
     const detector = new Detector({ formats: ['qr_code'] });
     let cancelled = false;
+    let loggedStart = false;
     const intervalId = window.setInterval(async () => {
       if (cancelled) return;
       const video = videoRef.current;
       if (!video || video.readyState < 2) return;
+      if (!loggedStart) {
+        appendStatus('BarcodeDetector aktiv');
+        loggedStart = true;
+      }
       try {
         const results = await detector.detect(video);
         if (results.length > 0) {
+          appendStatus('QR erkannt (Browser-API)');
           onScan(results[0].rawValue);
           setIsScanning(false);
           stopCamera();
         }
       } catch {
         setIsScanning(false);
+        appendStatus('BarcodeDetector Fehler');
       }
     }, 500);
 
@@ -100,7 +121,7 @@ export function Scanner({ onScan }: ScannerProps) {
       cancelled = true;
       window.clearInterval(intervalId);
     };
-  }, [hasBarcodeSupport, isCameraActive, isScanning, onScan]);
+  }, [appendStatus, hasBarcodeSupport, isCameraActive, isScanning, onScan, stopCamera]);
 
   useEffect(() => {
     if (!isCameraActive || !isScanning || hasBarcodeSupport) return;
@@ -109,6 +130,7 @@ export function Scanner({ onScan }: ScannerProps) {
     const scanner = new QrScanner(
       video,
       (result) => {
+        appendStatus('QR erkannt (Fallback)');
         onScan(result.data);
         setIsScanning(false);
         stopCamera();
@@ -116,9 +138,15 @@ export function Scanner({ onScan }: ScannerProps) {
       { returnDetailedScanResult: true }
     );
     qrScannerRef.current = scanner;
-    scanner.start().catch(() => {
-      setError('QR-Scanner konnte nicht gestartet werden.');
-    });
+    scanner
+      .start()
+      .then(() => {
+        appendStatus('Fallback-Scanner aktiv');
+      })
+      .catch(() => {
+        setError('QR-Scanner konnte nicht gestartet werden.');
+        appendStatus('Fallback konnte nicht starten');
+      });
 
     return () => {
       scanner.stop();
@@ -127,7 +155,7 @@ export function Scanner({ onScan }: ScannerProps) {
         qrScannerRef.current = null;
       }
     };
-  }, [hasBarcodeSupport, isCameraActive, isScanning, onScan]);
+  }, [appendStatus, hasBarcodeSupport, isCameraActive, isScanning, onScan, stopCamera]);
 
   // Simulate QR code scanning with manual input for demo purposes
   const handleManualInput = () => {
@@ -202,12 +230,32 @@ export function Scanner({ onScan }: ScannerProps) {
           >
             {isCameraActive ? 'Kamera stoppen' : 'Kamera starten'}
           </button>
+          <button
+            onClick={() => setShowStatus((prev) => !prev)}
+            className="w-full px-4 py-2 bg-neutral-100 text-neutral-900 text-sm hover:bg-neutral-200 transition-colors"
+          >
+            {showStatus ? 'Status ausblenden' : 'Status anzeigen'}
+          </button>
           {!hasBarcodeSupport && (
             <span className="text-xs text-neutral-500 dark:text-neutral-400 text-center">
               QR-Erkennung per Browser-API nicht unterstützt – Fallback aktiv
             </span>
           )}
         </div>
+        {showStatus && (
+          <div className="w-full max-w-sm bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 p-3 mb-4 text-xs text-neutral-700 dark:text-neutral-200">
+            <p className="font-medium mb-2">Status</p>
+            {statusLogs.length === 0 ? (
+              <p>Keine Ereignisse</p>
+            ) : (
+              <ul className="space-y-1">
+                {statusLogs.map((entry, index) => (
+                  <li key={`${entry}-${index}`}>{entry}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
 
         {/* Demo Instructions */}
         <div className="w-full max-w-sm border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 p-4 mb-6">
