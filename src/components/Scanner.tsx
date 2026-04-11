@@ -17,6 +17,21 @@ declare global {
   }
 }
 
+function isAppleTouchDevice(): boolean {
+  if (typeof navigator === 'undefined') return false;
+  const ua = navigator.userAgent;
+  if (/iPhone|iPad|iPod/i.test(ua)) return true;
+  return navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
+}
+
+function resolveScannerMode(): 'barcode-detector' | 'qr-scanner' {
+  if (typeof window === 'undefined') return 'qr-scanner';
+  // BarcodeDetector auf iOS/WebKit ist oft nicht vorhanden oder unzuverlässig — qr-scanner mit exklusivem Kamera-Zugriff nutzen.
+  if (isAppleTouchDevice()) return 'qr-scanner';
+  if (typeof window.BarcodeDetector !== 'undefined') return 'barcode-detector';
+  return 'qr-scanner';
+}
+
 const calculateScanRegion = (video: HTMLVideoElement) => {
   const smallestDimension = Math.min(video.videoWidth, video.videoHeight);
   const size = Math.floor(smallestDimension * 0.8);
@@ -38,16 +53,14 @@ type ScannerProps = {
 
 export function Scanner({ onScan }: ScannerProps) {
   const [error, setError] = useState<string | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const qrScannerRef = useRef<QrScanner | null>(null);
+  const [scannerMode] = useState(resolveScannerMode);
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [isScanning, setIsScanning] = useState(false);
-  const [hasBarcodeSupport] = useState(
-    typeof window !== 'undefined' && typeof window.BarcodeDetector !== 'undefined'
-  );
   const [showStatus, setShowStatus] = useState(false);
   const [statusLogs, setStatusLogs] = useState<string[]>([]);
+  const useHighlights = !isAppleTouchDevice();
 
   const appendStatus = useCallback((message: string) => {
     setStatusLogs((prev) => [
@@ -81,6 +94,15 @@ export function Scanner({ onScan }: ScannerProps) {
       appendStatus('Kamera-API nicht verfugbar');
       return;
     }
+
+    if (scannerMode === 'qr-scanner') {
+      // Wichtig für iOS/Safari: Kein getUserMedia hier — QrScanner übernimmt Kamera und Video-Stream allein.
+      setIsCameraActive(true);
+      setIsScanning(true);
+      appendStatus('Scanner wird initialisiert');
+      return;
+    }
+
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: { ideal: 'environment' } },
@@ -93,18 +115,19 @@ export function Scanner({ onScan }: ScannerProps) {
       setIsCameraActive(true);
       setIsScanning(true);
       appendStatus('Kamera aktiv');
-    } catch {
-      setError('Kamerazugriff verweigert oder nicht verfügbar.');
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      setError(`Kamerazugriff verweigert oder nicht verfügbar. (${msg})`);
       appendStatus('Kamerazugriff fehlgeschlagen');
     }
-  }, [appendStatus]);
+  }, [appendStatus, scannerMode]);
 
   useEffect(() => {
     return () => stopCamera();
   }, [stopCamera]);
 
   useEffect(() => {
-    if (!isCameraActive || !isScanning || !hasBarcodeSupport) return;
+    if (scannerMode !== 'barcode-detector' || !isCameraActive || !isScanning) return;
     const Detector = window.BarcodeDetector;
     if (!Detector) return;
     const detector = new Detector({ formats: ['qr_code'] });
@@ -136,16 +159,17 @@ export function Scanner({ onScan }: ScannerProps) {
       cancelled = true;
       window.clearInterval(intervalId);
     };
-  }, [appendStatus, hasBarcodeSupport, isCameraActive, isScanning, onScan, stopCamera]);
+  }, [appendStatus, isCameraActive, isScanning, onScan, scannerMode, stopCamera]);
 
   useEffect(() => {
-    if (!isCameraActive || !isScanning || hasBarcodeSupport) return;
+    if (scannerMode !== 'qr-scanner' || !isCameraActive || !isScanning) return;
     const video = videoRef.current;
     if (!video) return;
+
     const scanner = new QrScanner(
       video,
       (result) => {
-        appendStatus('QR erkannt (Fallback)');
+        appendStatus('QR erkannt');
         onScan(result.data);
         setIsScanning(false);
         stopCamera();
@@ -153,9 +177,9 @@ export function Scanner({ onScan }: ScannerProps) {
       {
         returnDetailedScanResult: true,
         preferredCamera: 'environment',
-        maxScansPerSecond: 12,
-        highlightScanRegion: true,
-        highlightCodeOutline: true,
+        maxScansPerSecond: isAppleTouchDevice() ? 8 : 12,
+        highlightScanRegion: useHighlights,
+        highlightCodeOutline: useHighlights,
         calculateScanRegion,
       }
     );
@@ -164,11 +188,14 @@ export function Scanner({ onScan }: ScannerProps) {
       .start()
       .then(() => {
         scanner.setInversionMode('both');
-        appendStatus('Fallback-Scanner aktiv');
+        appendStatus('Kamera-Scanner aktiv');
       })
-      .catch(() => {
-        setError('QR-Scanner konnte nicht gestartet werden.');
-        appendStatus('Fallback konnte nicht starten');
+      .catch((err: unknown) => {
+        const msg = err instanceof Error ? err.message : String(err);
+        setError(`QR-Scanner konnte nicht gestartet werden. (${msg})`);
+        appendStatus('Scanner-Start fehlgeschlagen');
+        setIsCameraActive(false);
+        setIsScanning(false);
       });
 
     return () => {
@@ -178,52 +205,36 @@ export function Scanner({ onScan }: ScannerProps) {
         qrScannerRef.current = null;
       }
     };
-  }, [appendStatus, hasBarcodeSupport, isCameraActive, isScanning, onScan, stopCamera]);
-
-  // Simulate QR code scanning with manual input for demo purposes
-  const handleManualInput = () => {
-    const value = inputRef.current?.value.trim();
-    if (value) {
-      onScan(value);
-      if (inputRef.current) {
-        inputRef.current.value = '';
-      }
-      setError(null);
-    } else {
-      setError('Bitte gib einen gültigen Code ein');
-    }
-  };
-
-  const quickScanOptions = [
-    { label: 'Faustkämpfer von Quirinal', value: 'faustkaempfer-quirinal' },
-    { label: 'Ringergruppe', value: 'ringergruppe' },
-    { label: 'Hera-Tempel in Paestum', value: 'hera-tempel-paestum' },
-    { label: 'Torso von Belvedere', value: 'torso-belvedere' },
-    { label: 'Satyr & Hermaphrodit', value: 'satyr-hermaphrodit' },
-    { label: 'Athena Parthenos', value: 'athena_parthenos' },
-  ];
+  }, [
+    appendStatus,
+    isCameraActive,
+    isScanning,
+    onScan,
+    scannerMode,
+    stopCamera,
+    useHighlights,
+  ]);
 
   return (
     <div className="h-full flex flex-col bg-white dark:bg-neutral-900 overflow-y-auto">
-      {/* Header */}
       <div className="p-6 border-b border-neutral-200 dark:border-neutral-700 shrink-0">
         <h1 className="text-center mb-2 text-neutral-900 dark:text-white">
           QR-Code scannen
         </h1>
         <p className="text-center text-neutral-600 dark:text-neutral-400 text-sm">
-          Positioniere den QR-Code innerhalb des Rahmens zum Scannen
+          Tippe auf „Kamera starten“, erlaube den Zugriff, und halte den Code ruhig im
+          Rahmen.
         </p>
       </div>
 
-      {/* Scanner Area */}
       <div className="flex-1 flex flex-col items-center justify-center p-6 pb-24">
-        {/* Camera View */}
         <div className="relative w-full max-w-sm aspect-square bg-neutral-900 dark:bg-neutral-950 rounded-2xl overflow-hidden mb-6">
           <video
             ref={videoRef}
             className="absolute inset-0 w-full h-full object-cover"
             muted
             playsInline
+            autoPlay
           />
           {!isCameraActive && (
             <div className="absolute inset-0 flex items-center justify-center">
@@ -231,16 +242,12 @@ export function Scanner({ onScan }: ScannerProps) {
             </div>
           )}
 
-          {/* Scanner Frame */}
-          <div className="absolute inset-0 flex items-center justify-center p-12">
+          <div className="absolute inset-0 flex items-center justify-center p-12 pointer-events-none">
             <div className="relative w-full h-full">
-              {/* Corner brackets */}
               <div className="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-white/80 dark:border-white/40" />
               <div className="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-white/80 dark:border-white/40" />
               <div className="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-white/80 dark:border-white/40" />
               <div className="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-white/80 dark:border-white/40" />
-
-              {/* Scanning line animation */}
               <div className="absolute inset-x-0 top-0 h-1 bg-white/70 dark:bg-white/40 animate-scan" />
             </div>
           </div>
@@ -248,20 +255,22 @@ export function Scanner({ onScan }: ScannerProps) {
 
         <div className="w-full max-w-sm flex flex-col gap-2 mb-4">
           <button
+            type="button"
             onClick={isCameraActive ? stopCamera : startCamera}
             className="w-full px-4 py-2 bg-neutral-900 text-white text-sm hover:bg-neutral-800 transition-colors"
           >
             {isCameraActive ? 'Kamera stoppen' : 'Kamera starten'}
           </button>
           <button
+            type="button"
             onClick={() => setShowStatus((prev) => !prev)}
             className="w-full px-4 py-2 bg-neutral-100 text-neutral-900 text-sm hover:bg-neutral-200 transition-colors"
           >
             {showStatus ? 'Status ausblenden' : 'Status anzeigen'}
           </button>
-          {!hasBarcodeSupport && (
+          {scannerMode === 'qr-scanner' && (
             <span className="text-xs text-neutral-500 dark:text-neutral-400 text-center">
-              QR-Erkennung per Browser-API nicht unterstützt – Fallback aktiv
+              Kamera-Modus: kompatibel mit Safari auf iPhone und iPad
             </span>
           )}
         </div>
@@ -280,51 +289,11 @@ export function Scanner({ onScan }: ScannerProps) {
           </div>
         )}
 
-        {/* Demo Instructions */}
-        <div className="w-full max-w-sm border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 p-4 mb-6">
-          <p className="text-sm text-neutral-700 dark:text-neutral-200 mb-3">
-            Demo-Modus: Gib einen Statuencode ein oder nutze die Schnellscan-Tasten unten.
-          </p>
-          <div className="flex gap-2">
-            <input
-              ref={inputRef}
-              type="text"
-              placeholder="z. B. faustkaempfer-quirinal / ringergruppe / hera-tempel-paestum"
-              className="flex-1 px-3 py-2 border border-neutral-300 dark:border-neutral-600 text-sm bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white"
-              onKeyDown={(e) => e.key === 'Enter' && handleManualInput()}
-            />
-            <button
-              onClick={handleManualInput}
-              className="px-4 py-2 bg-neutral-900 text-white text-sm hover:bg-neutral-800 transition-colors"
-            >
-              Scannen
-            </button>
-          </div>
-        </div>
-
         {error && (
           <div className="w-full max-w-sm bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg p-3 mb-4">
             <p className="text-sm text-red-900 dark:text-red-200">{error}</p>
           </div>
         )}
-
-        {/* Quick Scan Options */}
-        <div className="w-full max-w-sm">
-          <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-3">
-            Schnellscan:
-          </p>
-          <div className="grid grid-cols-2 gap-3">
-            {quickScanOptions.map((option) => (
-              <button
-                key={option.value}
-                onClick={() => onScan(option.value)}
-                className="px-4 py-3 bg-white dark:bg-neutral-800 border-2 border-neutral-200 dark:border-neutral-700 rounded-lg hover:border-neutral-900 dark:hover:border-white hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-all text-sm text-neutral-900 dark:text-white"
-              >
-                {option.label}
-              </button>
-            ))}
-          </div>
-        </div>
       </div>
 
       <style>{`
